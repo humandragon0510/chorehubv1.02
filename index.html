@@ -502,6 +502,116 @@
         margin-top: 4px;
       }
 
+      .top-bar {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+        position: relative;
+        z-index: 3;
+      }
+
+      .session-badge {
+        background: rgba(255, 255, 255, 0.92);
+        border-radius: 999px;
+        padding: 8px 14px;
+        font-size: 0.85rem;
+        font-weight: 700;
+      }
+
+      .session-btn {
+        background: var(--info);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 10px 14px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .auth-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 20000;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        background: rgba(15, 23, 42, 0.76);
+      }
+
+      .auth-card {
+        width: min(420px, 100%);
+        background: rgba(255, 255, 255, 0.97);
+        border-radius: 24px;
+        padding: 28px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
+      }
+
+      .auth-card h2 {
+        margin-top: 0;
+        margin-bottom: 8px;
+      }
+
+      .auth-card p {
+        margin-top: 0;
+        margin-bottom: 18px;
+        color: #475569;
+      }
+
+      .auth-card label {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 0.82rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        color: #475569;
+      }
+
+      .auth-card input {
+        width: 100%;
+        margin-bottom: 14px;
+      }
+
+      .auth-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .auth-primary,
+      .auth-secondary {
+        border: none;
+        border-radius: 10px;
+        padding: 10px 14px;
+        font-weight: 800;
+        cursor: pointer;
+      }
+
+      .auth-primary {
+        background: var(--success);
+        color: white;
+      }
+
+      .auth-secondary {
+        background: #e2e8f0;
+        color: var(--text);
+      }
+
+      .auth-message {
+        min-height: 22px;
+        margin-top: 14px;
+        font-size: 0.9rem;
+        color: #475569;
+      }
+
+      body.auth-required .container {
+        filter: blur(4px);
+        pointer-events: none;
+        user-select: none;
+      }
+
       @media (max-width: 900px) {
         .hero-card {
           padding: 18px 20px;
@@ -515,7 +625,22 @@
       }
     </style>
   </head>
-  <body class="admin-locked">
+  <body class="admin-locked auth-required">
+    <div class="auth-overlay" id="authOverlay">
+      <div class="auth-card">
+        <h2>Sign In</h2>
+        <p>Use your Supabase email and password to keep chores synced across devices.</p>
+        <label for="authEmail">Email</label>
+        <input type="email" id="authEmail" placeholder="you@example.com" autocomplete="email">
+        <label for="authPassword">Password</label>
+        <input type="password" id="authPassword" placeholder="Password" autocomplete="current-password">
+        <div class="auth-actions">
+          <button class="auth-primary" type="button" onclick="handleLogin()">Sign In</button>
+          <button class="auth-secondary" type="button" onclick="handleSignup()">Create Account</button>
+        </div>
+        <div class="auth-message" id="authMessage"></div>
+      </div>
+    </div>
     <div id="ambient-bg"></div>
     <div id="celebration">
       <div id="item-container"></div>
@@ -533,6 +658,10 @@
       </div>
     </div>
     <div class="container">
+      <div class="top-bar">
+        <div class="session-badge" id="sessionInfo">Connecting...</div>
+        <button class="session-btn" type="button" onclick="handleLogout()">Log Out</button>
+      </div>
       <div class="hero-shell">
         <div class="hero-card">
           <div class="hero-row">
@@ -629,10 +758,17 @@
       </div>
     </div>
     <input type="file" id="restoreInput" accept=".json,application/json" style="display:none" onchange="restoreData(event)">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
       const PASS = "parent1";
       const V_KEY = "CHORE_STABLE_V2";
       const LOCK_BACKUP_KEY = V_KEY + '_lock_backup';
+      const SUPABASE_URL = 'https://kzynjfgnrhkxdmkauart.supabase.co';
+      const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt6eW5qZmducmhreGRta2F1YXJ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM5MjA5NTAsImV4cCI6MjA4OTQ5Njk1MH0.3lOTsZ1Kh-9swdAGR_A7XsO4rMOiipTMAkKHY5XBGB8';
+      const APP_URL = 'https://humandragon0510.github.io/chorehubv1.02/';
+      const supabaseClient = window.supabase && SUPABASE_URL.startsWith('https://') && !SUPABASE_ANON_KEY.includes('PASTE_')
+        ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+        : null;
       const defaultList = [{
         name: "Washing Dirty Dishes",
         price: 0.40,
@@ -917,35 +1053,206 @@
       const itemsO = ['🌀', '🧪', '🏎️', '🌌', '⚡', '🧬', '🪐'];
       const itemsZ = ['🦄', '🌈', '💃', '✨', '💖', '🍭', '⭐'];
       const itemsTroll = ['💰', '💸', '💵', '🧌'];
-      let state = {
-        chores: JSON.parse(localStorage.getItem(V_KEY + '_types')) || defaultList.map((c, i) => ({
-          ...c,
-          id: 'c' + i
-        })),
-        history: JSON.parse(localStorage.getItem(V_KEY + '_history')) || [],
-        totals: JSON.parse(localStorage.getItem(V_KEY + '_totals')) || {
-          omni: 0,
-          zaia: 0
-        },
-        balances: JSON.parse(localStorage.getItem(V_KEY + '_balances')) || {
-          omni: 200.0,
-          zaia: 200.0
-        }
-      };
+      let currentUser = null;
+      let saveTimer = null;
+      let state = null;
 
       function saveData() {
+        if (!state) return;
+        localStorage.setItem(V_KEY + '_types', JSON.stringify(state.chores));
+        localStorage.setItem(V_KEY + '_history', JSON.stringify(state.history));
+        localStorage.setItem(V_KEY + '_totals', JSON.stringify(state.totals));
+        localStorage.setItem(V_KEY + '_balances', JSON.stringify(state.balances));
+        queueRemoteSave();
+      }
+
+      function saveLockBackup() {
+        if (!state) return;
+        const payload = {
+          savedAt: new Date().toISOString(),
+          state: JSON.parse(JSON.stringify(state))
+        };
+        localStorage.setItem(LOCK_BACKUP_KEY, JSON.stringify(payload));
+      }
+
+      function loadLocalState() {
+        return {
+          chores: JSON.parse(localStorage.getItem(V_KEY + '_types')) || buildDefaultState().chores,
+          history: JSON.parse(localStorage.getItem(V_KEY + '_history')) || [],
+          totals: JSON.parse(localStorage.getItem(V_KEY + '_totals')) || buildDefaultState().totals,
+          balances: JSON.parse(localStorage.getItem(V_KEY + '_balances')) || buildDefaultState().balances
+        };
+      }
+
+      function setAuthMessage(message, isError = false) {
+        const node = document.getElementById('authMessage');
+        if (!node) return;
+        node.innerText = message || '';
+        node.style.color = isError ? '#b91c1c' : '#475569';
+      }
+
+      function updateSessionBadge() {
+        const node = document.getElementById('sessionInfo');
+        if (!node) return;
+        if (!supabaseClient) {
+          node.innerText = 'Supabase not configured';
+          return;
+        }
+        node.innerText = currentUser ? `Signed in: ${currentUser.email}` : 'Signed out';
+      }
+
+      function setAuthRequired(required) {
+        document.body.classList.toggle('auth-required', required);
+        document.getElementById('authOverlay').style.display = required ? 'flex' : 'none';
+        updateSessionBadge();
+      }
+
+      async function loadRemoteState() {
+        const { data, error } = await supabaseClient
+          .from('app_state')
+          .select('state')
+          .eq('user_id', currentUser.id)
+          .maybeSingle();
+
+        if (error) throw error;
+
+        if (data && data.state) {
+          const remoteState = data.state;
+          state = {
+            chores: sanitizeChores(remoteState.chores),
+            history: sanitizeHistory(remoteState.history),
+            totals: sanitizeTotals(remoteState.totals, sanitizeHistory(remoteState.history)),
+            balances: sanitizeBalances(remoteState.balances)
+          };
+        } else {
+          state = loadLocalState();
+          await persistStateNow();
+        }
+
         localStorage.setItem(V_KEY + '_types', JSON.stringify(state.chores));
         localStorage.setItem(V_KEY + '_history', JSON.stringify(state.history));
         localStorage.setItem(V_KEY + '_totals', JSON.stringify(state.totals));
         localStorage.setItem(V_KEY + '_balances', JSON.stringify(state.balances));
       }
 
-      function saveLockBackup() {
-        const payload = {
-          savedAt: new Date().toISOString(),
-          state: JSON.parse(JSON.stringify(state))
-        };
-        localStorage.setItem(LOCK_BACKUP_KEY, JSON.stringify(payload));
+      async function persistStateNow() {
+        if (!supabaseClient || !currentUser || !state) return;
+        const { error } = await supabaseClient
+          .from('app_state')
+          .upsert({
+            user_id: currentUser.id,
+            state,
+            updated_at: new Date().toISOString()
+          }, {
+            onConflict: 'user_id'
+          });
+
+        if (error) {
+          console.error('Supabase save failed:', error);
+          throw error;
+        }
+      }
+
+      function queueRemoteSave() {
+        if (!supabaseClient || !currentUser || !state) return;
+        clearTimeout(saveTimer);
+        saveTimer = setTimeout(() => {
+          persistStateNow().catch(err => console.error('Queued save failed:', err));
+        }, 300);
+      }
+
+      async function handleLogin() {
+        if (!supabaseClient) {
+          setAuthMessage('Add your Supabase URL and anon key in index.html first.', true);
+          return;
+        }
+
+        const email = document.getElementById('authEmail').value.trim();
+        const password = document.getElementById('authPassword').value;
+        setAuthMessage('Signing in...');
+
+        const { data, error } = await supabaseClient.auth.signInWithPassword({
+          email,
+          password
+        });
+
+        if (error) {
+          setAuthMessage(error.message, true);
+          return;
+        }
+
+        currentUser = data.user;
+        await loadRemoteState();
+        setAuthRequired(false);
+        updateUI();
+        setAuthMessage('');
+      }
+
+      async function handleSignup() {
+        if (!supabaseClient) {
+          setAuthMessage('Add your Supabase URL and anon key in index.html first.', true);
+          return;
+        }
+
+        const email = document.getElementById('authEmail').value.trim();
+        const password = document.getElementById('authPassword').value;
+        setAuthMessage('Creating account...');
+
+        const { error } = await supabaseClient.auth.signUp({
+          email,
+          password,
+          options: {
+            emailRedirectTo: APP_URL
+          }
+        });
+
+        if (error) {
+          setAuthMessage(error.message, true);
+          return;
+        }
+
+        setAuthMessage('Account created. If email confirmation is enabled, verify email and then sign in.');
+      }
+
+      async function handleLogout() {
+        if (!supabaseClient) return;
+        await supabaseClient.auth.signOut();
+        currentUser = null;
+        state = buildDefaultState();
+        setAuthRequired(true);
+        updateUI();
+      }
+
+      async function initializeApp() {
+        state = loadLocalState();
+
+        if (!supabaseClient) {
+          setAuthMessage('Supabase is not configured yet. Add your project URL and anon key.', true);
+          setAuthRequired(true);
+          updateUI();
+          return;
+        }
+
+        const { data, error } = await supabaseClient.auth.getSession();
+        if (error) {
+          console.error('Session load failed:', error);
+        }
+
+        currentUser = data.session ? data.session.user : null;
+
+        supabaseClient.auth.onAuthStateChange(async (_event, session) => {
+          currentUser = session ? session.user : null;
+          updateSessionBadge();
+        });
+
+        if (currentUser) {
+          await loadRemoteState();
+          setAuthRequired(false);
+        } else {
+          setAuthRequired(true);
+        }
+
+        updateUI();
       }
 
       function getChoreIcon(name) {
@@ -970,6 +1277,7 @@
       }
 
       function updateUI() {
+        if (!state) return;
         const now = new Date();
         ['omni', 'zaia'].forEach(child => {
           const items = state.history.filter(r => r.child === child);
@@ -1423,7 +1731,11 @@
       }
 
       spawnAmbientItems();
-      updateUI();
+      initializeApp().catch(err => {
+        console.error('App initialization failed:', err);
+        setAuthMessage(err.message || 'Failed to initialize app.', true);
+        setAuthRequired(true);
+      });
       // Auto-refresh UI every minute to check for expired chores
       setInterval(updateUI, 60000);
     </script>
