@@ -939,6 +939,27 @@
         localStorage.setItem(V_KEY + '_balances', JSON.stringify(state.balances));
       }
 
+      function getChoreIcon(name) {
+        const lowerName = name.toLowerCase();
+        if (lowerName.includes('dish')) return '🍽️';
+        if (lowerName.includes('trash')) return '🗑️';
+        if (lowerName.includes('vaccum') || lowerName.includes('sweep')) return '🧹';
+        if (lowerName.includes('laundry') || lowerName.includes('clothes') || lowerName.includes('dryer')) return '🧺';
+        if (lowerName.includes('bedroom') || lowerName.includes('room') || lowerName.includes('desk')) return '🛏️';
+        if (lowerName.includes('bathroom') || lowerName.includes('toilet') || lowerName.includes('mirror')) return '🛁';
+        if (lowerName.includes('dog')) return '🐶';
+        if (lowerName.includes('yard') || lowerName.includes('weed') || lowerName.includes('creek') || lowerName.includes('branch') || lowerName.includes('bush')) return '🌿';
+        if (lowerName.includes('book') || lowerName.includes('homework') || lowerName.includes('schoolwork')) return '📚';
+        if (lowerName.includes('teeth') || lowerName.includes('floss') || lowerName.includes('shower')) return '🪥';
+        if (lowerName.includes('bedtime') || lowerName.includes('wake up')) return '⏰';
+        if (lowerName.includes('car')) return '🚗';
+        if (lowerName.includes('cord')) return '🔌';
+        if (lowerName.includes('backpack')) return '🎒';
+        if (lowerName.includes('toy')) return '🧸';
+        if (lowerName.includes('table') || lowerName.includes('counter')) return '🧽';
+        return '⭐';
+      }
+
       function updateUI() {
         const now = new Date();
         ['omni', 'zaia'].forEach(child => {
@@ -975,10 +996,14 @@
           // Chore Buttons
           const btnArea = document.getElementById(`${child}-chores`);
           btnArea.innerHTML = '';
-          state.chores.filter(c => c.target === 'both' || c.target === child).forEach(c => {
+          state.chores
+            .filter(c => c.target === 'both' || c.target === child)
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .forEach(c => {
             const isExpired = c.dueDate && now > new Date(c.dueDate);
             const b = document.createElement('button');
             b.className = `chore-btn ${c.price < 0 ? 'spending' : ''}`;
+            const choreIcon = getChoreIcon(c.name);
             let dueText = "";
             if (c.dueDate) {
               const d = new Date(c.dueDate);
@@ -988,7 +1013,7 @@
             b.innerHTML = `
                 
 									<div style="display:flex; justify-content:space-between; align-items:center;">
-										<span>${c.price < 0 ? '👹 ' : ''}${c.name}
+										<span>${c.price < 0 ? '👹 ' : `${choreIcon} `}${c.name}
 										</span>
 										<span>$${Math.abs(c.price).toFixed(2)}</span>
 									</div>
