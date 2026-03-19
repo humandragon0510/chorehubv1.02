@@ -3,11 +3,11 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Omni and Zaia Chores</title>
+    <title>Plague Dr. and Dressy Girl Chores</title>
     <style>
       :root {
-        --omni: #009EDD;
-        --zaia: #4e14e1;
+        --Plague Dr.: #009EDD;
+        --Dressy Girl: #4e14e1;
         --bg: #00000000;
         --card: #ffffff;
         --text: #1e293b;
@@ -66,13 +66,13 @@
         text-align: center;
       }
 
-      .theme-omni {
+      .theme-Plague Dr. {
         background: #000;
         animation: hyperSpeed 0.4s linear infinite;
         background-image: radial-gradient(3px 3px at 20px 30px, #2dd4bf, rgba(0, 0, 0, 0)), radial-gradient(3px 3px at 40px 70px, #a855f7, rgba(0, 0, 0, 0));
       }
 
-      .theme-zaia {
+      .theme-Dressy Girl {
         background: #000;
         animation: disco 0.3s infinite;
       }
@@ -223,12 +223,12 @@
         border-top: 12px solid var(--accent);
       }
 
-      .omni-side {
-        --accent: var(--omni);
+      .Plague Dr.-side {
+        --accent: var(--Plague Dr.);
       }
 
-      .zaia-side {
-        --accent: var(--zaia);
+      .Dressy Girl-side {
+        --accent: var(--Dressy Girl);
       }
 
       .wallet-card {
@@ -457,7 +457,7 @@
             </div>
           </div>
           <details style="margin-top:15px;" open>
-            <summary style="cursor:pointer; font-weight:bold; color:var(--omni)">Master Templates</summary>
+            <summary style="cursor:pointer; font-weight:bold; color:var(--Plague Dr.)">Master Templates</summary>
             <table class="master-table">
               <thead>
                 <tr>
@@ -474,51 +474,51 @@
         </div>
       </div>
       <div class="dashboard">
-        <div class="column omni-side">
-          <div style="font-size:3rem; font-weight:900; text-align:center; color:var(--omni)">OMNI</div>
+        <div class="column Plague Dr.-side">
+          <div style="font-size:3rem; font-weight:900; text-align:center; color:var(--Plague Dr.)">Plague Dr.</div>
           <div class="wallet-card">
             <div class="left-stat">
-              <span class="stat-val-large" id="omni-grand">$0.00</span>
+              <span class="stat-val-large" id="Plague Dr.-grand">$0.00</span>
               <span class="stat-label">Lifetime Earnings</span>
             </div>
             <div class="middle-stat">
-              <span class="stat-val-mid" id="omni-pending">$0.00</span>
+              <span class="stat-val-mid" id="Plague Dr.-pending">$0.00</span>
               <span class="stat-label">Pending</span>
             </div>
             <div class="balance-container">
               <span class="balance-label" style="font-size:0.5rem">BALANCE</span>
-              <span class="balance-value" id="omni-balance">$0.00</span>
+              <span class="balance-value" id="Plague Dr.-balance">$0.00</span>
             </div>
           </div>
-          <div id="omni-chores"></div>
+          <div id="Plague Dr.-chores"></div>
           <h4>Activity Review</h4>
-          <div id="omni-history"></div>
+          <div id="Plague Dr.-history"></div>
         </div>
-        <div class="column zaia-side">
-          <div style="font-size:3rem; font-weight:900; text-align:center; color:var(--zaia)">ZAIA</div>
+        <div class="column Dressy Girl-side">
+          <div style="font-size:3rem; font-weight:900; text-align:center; color:var(--Dressy Girl)">Dressy Girl</div>
           <div class="wallet-card">
             <div class="left-stat">
-              <span class="stat-val-large" id="zaia-grand">$0.00</span>
+              <span class="stat-val-large" id="Dressy Girl-grand">$0.00</span>
               <span class="stat-label">Lifetime Earnings</span>
             </div>
             <div class="middle-stat">
-              <span class="stat-val-mid" id="zaia-pending">$0.00</span>
+              <span class="stat-val-mid" id="Dressy Girl-pending">$0.00</span>
               <span class="stat-label">Pending</span>
             </div>
             <div class="balance-container">
               <span class="balance-label" style="font-size:0.5rem">BALANCE</span>
-              <span class="balance-value" id="zaia-balance">$0.00</span>
+              <span class="balance-value" id="Dressy Girl-balance">$0.00</span>
             </div>
           </div>
-          <div id="zaia-chores"></div>
+          <div id="Dressy Girl-chores"></div>
           <h4>Activity Review</h4>
-          <div id="zaia-history"></div>
+          <div id="Dressy Girl-history"></div>
         </div>
       </div>
     </div>
     <input type="file" id="restoreInput" accept=".json,application/json" style="display:none" onchange="restoreData(event)">
     <script>
-      const PASS = "5291031214";
+      const PASS = "123456";
       const V_KEY = "CHORE_STABLE_V2";
       const defaultList = [{
         name: "Clean the Dishes",
@@ -546,12 +546,12 @@
         })),
         history: JSON.parse(localStorage.getItem(V_KEY + '_history')) || [],
         totals: JSON.parse(localStorage.getItem(V_KEY + '_totals')) || {
-          omni: 0,
-          zaia: 0
+          Plague Dr.: 0,
+          Dressy Girl: 0
         },
         balances: JSON.parse(localStorage.getItem(V_KEY + '_balances')) || {
-          omni: 200.0,
-          zaia: 200.0
+          Plague Dr.: 200.0,
+          Dressy Girl: 200.0
         }
       };
 
@@ -564,7 +564,7 @@
 
       function updateUI() {
         const now = new Date();
-        ['omni', 'zaia'].forEach(child => {
+        ['Plague Dr.', 'Dressy Girl'].forEach(child => {
           const items = state.history.filter(r => r.child === child);
           const pendingVal = items.filter(i => i.status === 'pending').reduce((s, r) => s + r.price, 0);
           document.getElementById(`${child}-pending`).innerText = `$${pendingVal.toFixed(2)}`;
@@ -711,8 +711,8 @@
 												<td>
 													<select onchange="editMaster('${c.id}', 'target', this.value)">
 														<option value="both" ${c.target==='both'?'selected':''}>Both</option>
-														<option value="omni" ${c.target==='omni'?'selected':''}>Omni</option>
-														<option value="zaia" ${c.target==='zaia'?'selected':''}>Zaia</option>
+														<option value="Plague Dr." ${c.target==='Plague Dr.'?'selected':''}>Plague Dr.</option>
+														<option value="Dressy Girl" ${c.target==='Dressy Girl'?'selected':''}>Dressy Girl</option>
 													</select>
 												</td>
 												<td>
@@ -755,12 +755,12 @@
           spawnItems(itemsTroll);
         } else {
           title.innerText = 'WAY TO GO!';
-          if (child === 'omni') {
-            splash.className = 'theme-omni';
+          if (child === 'Plague Dr.') {
+            splash.className = 'theme-Plague Dr.';
             emojiMain.innerText = '🌀⚡🧬';
             spawnItems(itemsO);
           } else {
-            splash.className = 'theme-zaia';
+            splash.className = 'theme-Dressy Girl';
             emojiMain.innerText = '🌈🦄✨';
             spawnItems(itemsZ);
           }
@@ -822,12 +822,12 @@
           })),
           history: [],
           totals: {
-            omni: 0,
-            zaia: 0
+            Plague Dr.: 0,
+            Dressy Girl: 0
           },
           balances: {
-            omni: 200.0,
-            zaia: 200.0
+            Plague Dr.: 200.0,
+            Dressy Girl: 200.0
           }
         };
       }
@@ -844,7 +844,7 @@
           id: String(chore?.id || ('c_restore_' + index + '_' + Date.now())),
           name: String(chore?.name || 'Unnamed Chore'),
           price: sanitizeNumber(chore?.price, 0),
-          target: ['both', 'omni', 'zaia'].includes(chore?.target) ? chore.target : 'both',
+          target: ['both', 'Plague Dr.', 'Dressy Girl'].includes(chore?.target) ? chore.target : 'both',
           dueDate: typeof chore?.dueDate === 'string' ? chore.dueDate : ''
         }));
       }
@@ -854,7 +854,7 @@
 
         return history.map((item, index) => ({
           id: String(item?.id || ('h_restore_' + index + '_' + Date.now())),
-          child: item?.child === 'zaia' ? 'zaia' : 'omni',
+          child: item?.child === 'Dressy Girl' ? 'Dressy Girl' : 'Plague Dr.',
           name: String(item?.name || 'Restored Activity'),
           price: sanitizeNumber(item?.price, 0),
           status: ['pending', 'approved', 'partial', 'declined'].includes(item?.status) ? item.status : 'pending',
@@ -864,19 +864,19 @@
       }
 
       function sanitizeTotals(totals, history) {
-        const approvedOmni = history.filter(item => item.child === 'omni' && item.status !== 'pending').reduce((sum, item) => sum + sanitizeNumber(item.earned, 0), 0);
-        const approvedZaia = history.filter(item => item.child === 'zaia' && item.status !== 'pending').reduce((sum, item) => sum + sanitizeNumber(item.earned, 0), 0);
+        const approvedPlague Dr. = history.filter(item => item.child === 'Plague Dr.' && item.status !== 'pending').reduce((sum, item) => sum + sanitizeNumber(item.earned, 0), 0);
+        const approvedDressy Girl = history.filter(item => item.child === 'Dressy Girl' && item.status !== 'pending').reduce((sum, item) => sum + sanitizeNumber(item.earned, 0), 0);
 
         return {
-          omni: sanitizeNumber(totals?.omni, approvedOmni),
-          zaia: sanitizeNumber(totals?.zaia, approvedZaia)
+          Plague Dr.: sanitizeNumber(totals?.Plague Dr., approvedPlague Dr.),
+          Dressy Girl: sanitizeNumber(totals?.Dressy Girl, approvedDressy Girl)
         };
       }
 
       function sanitizeBalances(balances) {
         return {
-          omni: sanitizeNumber(balances?.omni, 200),
-          zaia: sanitizeNumber(balances?.zaia, 200)
+          Plague Dr.: sanitizeNumber(balances?.Plague Dr., 200),
+          Dressy Girl: sanitizeNumber(balances?.Dressy Girl, 200)
         };
       }
 
