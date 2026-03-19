@@ -765,6 +765,7 @@
       const LOCK_BACKUP_KEY = V_KEY + '_lock_backup';
       const SUPABASE_URL = 'https://kzynjfgnrhkxdmkauart.supabase.co';
       const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt6eW5qZmducmhreGRta2F1YXJ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM5MjA5NTAsImV4cCI6MjA4OTQ5Njk1MH0.3lOTsZ1Kh-9swdAGR_A7XsO4rMOiipTMAkKHY5XBGB8';
+      const APP_URL = 'https://humandragon0510.github.io/chorehubv1.02/';
       const supabaseClient = window.supabase && SUPABASE_URL.startsWith('https://') && !SUPABASE_ANON_KEY.includes('PASTE_')
         ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
         : null;
@@ -1199,7 +1200,10 @@
 
         const { error } = await supabaseClient.auth.signUp({
           email,
-          password
+          password,
+          options: {
+            emailRedirectTo: APP_URL
+          }
         });
 
         if (error) {
