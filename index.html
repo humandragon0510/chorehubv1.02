@@ -632,6 +632,7 @@
     <script>
       const PASS = "parent1";
       const V_KEY = "CHORE_STABLE_V2";
+      const LOCK_BACKUP_KEY = V_KEY + '_lock_backup';
       const defaultList = [{
         name: "Washing Dirty Dishes",
         price: 0.40,
@@ -939,6 +940,14 @@
         localStorage.setItem(V_KEY + '_balances', JSON.stringify(state.balances));
       }
 
+      function saveLockBackup() {
+        const payload = {
+          savedAt: new Date().toISOString(),
+          state: JSON.parse(JSON.stringify(state))
+        };
+        localStorage.setItem(LOCK_BACKUP_KEY, JSON.stringify(payload));
+      }
+
       function getChoreIcon(name) {
         const lowerName = name.toLowerCase();
         if (lowerName.includes('dish')) return '🍽️';
@@ -1207,6 +1216,7 @@
       }
 
       function lockAdmin() {
+        saveLockBackup();
         document.body.className = 'admin-locked';
       }
 
