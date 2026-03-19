@@ -3,11 +3,11 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plague Dr. and Dressy Girl Chores</title>
+    <title>Omni and Zaia Chores</title>
     <style>
       :root {
-        --Plague Dr.: #009EDD;
-        --Dressy Girl: #4e14e1;
+        --omni: #009EDD;
+        --zaia: #4e14e1;
         --bg: #00000000;
         --card: #ffffff;
         --text: #1e293b;
@@ -21,33 +21,94 @@
 
       body {
         font-family: 'Segoe UI', sans-serif;
-        background: var(--bg);
+        background: #000;
         margin: 0;
         padding: 20px;
         overflow-x: hidden;
         color: var(--text);
+        animation: rainbowBackground 15s linear infinite;
       }
 
       .container {
         max-width: 1400px;
         margin: 0 auto;
+        position: relative;
+        z-index: 2;
       }
 
-      .return-bar {
+      #ambient-bg {
+        position: fixed;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .ambient-item {
+        position: absolute;
+        font-size: 5rem;
+        filter: drop-shadow(0 0 20px #EFFF00) drop-shadow(0 0 40px #FFD700);
+        opacity: 0.85;
+        animation: ambientFloat var(--dur) ease-in-out infinite alternate;
+      }
+
+      .hero-shell {
         display: flex;
-        justify-content: flex-end;
-        margin-bottom: 16px;
+        justify-content: center;
+        margin-bottom: 18px;
       }
 
-      .return-btn {
-        display: inline-block;
-        background: var(--info);
+      .hero-card {
+        position: relative;
+        text-align: center;
+        padding: 24px 56px;
+        min-width: min(800px, 100%);
+        max-width: 100%;
+        border: 8px solid white;
+        border-radius: 40px;
+        background: rgba(0, 0, 0, 0.7);
+        box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+      }
+
+      .hero-row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 24px;
+        flex-wrap: wrap;
+      }
+
+      .hero-title {
         color: white;
-        text-decoration: none;
-        border: none;
-        padding: 10px 16px;
-        border-radius: 10px;
-        font-weight: 700;
+        font-size: clamp(2.5rem, 5vw, 5rem);
+        font-weight: 900;
+        line-height: 1.1;
+        text-transform: uppercase;
+        animation: gentlePulse 4s ease-in-out infinite alternate;
+        letter-spacing: -2px;
+        margin: 0;
+        font-family: 'Arial Black', sans-serif;
+      }
+
+      .hero-emoji {
+        display: inline-block;
+        font-size: 3.75rem;
+        animation: slowSpin 12s linear infinite;
+      }
+
+      .hero-subtitle {
+        display: block;
+        font-size: clamp(1.5rem, 3vw, 2.6rem);
+        margin-top: 14px;
+        letter-spacing: 0.45em;
+        font-weight: 900;
+        text-transform: uppercase;
+        color: #FFFFFF;
+        text-shadow: 2px 2px 0 #009EDD, 4px 4px 0 #BF00FF, 0 0 20px rgba(0, 0, 0, 1);
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+        -webkit-background-clip: text;
+        background-clip: text;
+        animation: shine 3s linear infinite;
       }
 
       /* --- CELEBRATIONS & TROLL TAX --- */
@@ -66,13 +127,13 @@
         text-align: center;
       }
 
-      .theme-Plague Dr. {
+      .theme-omni {
         background: #000;
         animation: hyperSpeed 0.4s linear infinite;
         background-image: radial-gradient(3px 3px at 20px 30px, #2dd4bf, rgba(0, 0, 0, 0)), radial-gradient(3px 3px at 40px 70px, #a855f7, rgba(0, 0, 0, 0));
       }
 
-      .theme-Dressy Girl {
+      .theme-zaia {
         background: #000;
         animation: disco 0.3s infinite;
       }
@@ -115,6 +176,37 @@
         to {
           background-position: 0 400px;
         }
+      }
+
+      @keyframes rainbowBackground {
+        0% { background-color: #ff0000; }
+        15% { background-color: #EFFF00; }
+        30% { background-color: #00FF00; }
+        45% { background-color: #009EDD; }
+        60% { background-color: #139EFF; }
+        75% { background-color: #BF00FF; }
+        90% { background-color: #ec4899; }
+        100% { background-color: #ff0000; }
+      }
+
+      @keyframes gentlePulse {
+        from { transform: scale(1); filter: drop-shadow(0 0 10px rgba(255,255,255,0.4)); }
+        to { transform: scale(1.05); filter: drop-shadow(0 0 30px rgba(255,255,255,0.8)); }
+      }
+
+      @keyframes slowSpin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+
+      @keyframes shine {
+        0% { background-position: -100%; }
+        100% { background-position: 100%; }
+      }
+
+      @keyframes ambientFloat {
+        from { transform: translateY(0) scale(0.95) rotate(-8deg); }
+        to { transform: translateY(-20px) scale(1.05) rotate(8deg); }
       }
 
       .giant-text {
@@ -173,7 +265,7 @@
       }
 
       .panel {
-        background: white;
+        background: rgba(255, 255, 255, 0.96);
         margin-bottom: 30px;
         padding: 25px;
         border-radius: 20px;
@@ -217,22 +309,22 @@
       }
 
       .column {
-        background: var(--card);
+        background: rgba(255, 255, 255, 0.96);
         border-radius: 24px;
         padding: 30px;
         border-top: 12px solid var(--accent);
       }
 
-      .Plague Dr.-side {
-        --accent: var(--Plague Dr.);
+      .omni-side {
+        --accent: var(--omni);
       }
 
-      .Dressy Girl-side {
-        --accent: var(--Dressy Girl);
+      .zaia-side {
+        --accent: var(--zaia);
       }
 
       .wallet-card {
-        background: #f8fafc;
+        background: rgba(248, 250, 252, 0.96);
         border-radius: 15px;
         padding: 20px;
         margin: 10px 0;
@@ -328,7 +420,7 @@
       }
 
       .history-item {
-        background: #f8fafc;
+        background: rgba(248, 250, 252, 0.96);
         padding: 15px;
         border-radius: 12px;
         margin-bottom: 12px;
@@ -409,9 +501,22 @@
         display: block;
         margin-top: 4px;
       }
+
+      @media (max-width: 900px) {
+        .hero-card {
+          padding: 18px 20px;
+          border-width: 6px;
+          border-radius: 24px;
+        }
+
+        .hero-subtitle {
+          letter-spacing: 0.18em;
+        }
+      }
     </style>
   </head>
   <body class="admin-locked">
+    <div id="ambient-bg"></div>
     <div id="celebration">
       <div id="item-container"></div>
       <div class="splash-content">
@@ -428,8 +533,15 @@
       </div>
     </div>
     <div class="container">
-      <div class="return-bar">
-        <a class="return-btn" href="https://www.google.com">Back to Family Hub</a>
+      <div class="hero-shell">
+        <div class="hero-card">
+          <div class="hero-row">
+            <span class="hero-emoji">💰</span>
+            <h1 class="hero-title">Financial Gain</h1>
+            <span class="hero-emoji" style="animation-delay:-6s;">🌈</span>
+          </div>
+          <div class="hero-subtitle">Chores!</div>
+        </div>
       </div>
       <div class="panel">
         <div class="lock-overlay">
@@ -457,7 +569,7 @@
             </div>
           </div>
           <details style="margin-top:15px;" open>
-            <summary style="cursor:pointer; font-weight:bold; color:var(--Plague Dr.)">Master Templates</summary>
+            <summary style="cursor:pointer; font-weight:bold; color:var(--omni)">Master Templates</summary>
             <table class="master-table">
               <thead>
                 <tr>
@@ -474,65 +586,330 @@
         </div>
       </div>
       <div class="dashboard">
-        <div class="column Plague Dr.-side">
-          <div style="font-size:3rem; font-weight:900; text-align:center; color:var(--Plague Dr.)">Plague Dr.</div>
+        <div class="column omni-side">
+          <div style="font-size:3rem; font-weight:900; text-align:center; color:var(--omni)">DR. PLAGUE</div>
           <div class="wallet-card">
             <div class="left-stat">
-              <span class="stat-val-large" id="Plague Dr.-grand">$0.00</span>
+              <span class="stat-val-large" id="omni-grand">$0.00</span>
               <span class="stat-label">Lifetime Earnings</span>
             </div>
             <div class="middle-stat">
-              <span class="stat-val-mid" id="Plague Dr.-pending">$0.00</span>
+              <span class="stat-val-mid" id="omni-pending">$0.00</span>
               <span class="stat-label">Pending</span>
             </div>
             <div class="balance-container">
               <span class="balance-label" style="font-size:0.5rem">BALANCE</span>
-              <span class="balance-value" id="Plague Dr.-balance">$0.00</span>
+              <span class="balance-value" id="omni-balance">$0.00</span>
             </div>
           </div>
-          <div id="Plague Dr.-chores"></div>
+          <div id="omni-chores"></div>
           <h4>Activity Review</h4>
-          <div id="Plague Dr.-history"></div>
+          <div id="omni-history"></div>
         </div>
-        <div class="column Dressy Girl-side">
-          <div style="font-size:3rem; font-weight:900; text-align:center; color:var(--Dressy Girl)">Dressy Girl</div>
+        <div class="column zaia-side">
+          <div style="font-size:3rem; font-weight:900; text-align:center; color:var(--zaia)">DRESSY GIRL</div>
           <div class="wallet-card">
             <div class="left-stat">
-              <span class="stat-val-large" id="Dressy Girl-grand">$0.00</span>
+              <span class="stat-val-large" id="zaia-grand">$0.00</span>
               <span class="stat-label">Lifetime Earnings</span>
             </div>
             <div class="middle-stat">
-              <span class="stat-val-mid" id="Dressy Girl-pending">$0.00</span>
+              <span class="stat-val-mid" id="zaia-pending">$0.00</span>
               <span class="stat-label">Pending</span>
             </div>
             <div class="balance-container">
               <span class="balance-label" style="font-size:0.5rem">BALANCE</span>
-              <span class="balance-value" id="Dressy Girl-balance">$0.00</span>
+              <span class="balance-value" id="zaia-balance">$0.00</span>
             </div>
           </div>
-          <div id="Dressy Girl-chores"></div>
+          <div id="zaia-chores"></div>
           <h4>Activity Review</h4>
-          <div id="Dressy Girl-history"></div>
+          <div id="zaia-history"></div>
         </div>
       </div>
     </div>
     <input type="file" id="restoreInput" accept=".json,application/json" style="display:none" onchange="restoreData(event)">
     <script>
-      const PASS = "123456";
+      const PASS = "5291031214";
       const V_KEY = "CHORE_STABLE_V2";
       const defaultList = [{
-        name: "Clean the Dishes",
-        price: 5,
+        name: "Washing Dirty Dishes",
+        price: 0.40,
         target: 'both',
         dueDate: ''
       }, {
-        name: "Clean Room",
-        price: 1,
+        name: "Put Away Clean Dishes",
+        price: 0.40,
         target: 'both',
         dueDate: ''
       }, {
-        name: "Laundry",
-        price: 3,
+        name: "Take Kitchen Trash Out",
+        price: 0.35,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Take Bathroom Trash Out",
+        price: 0.35,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Take Office Trash Out",
+        price: 0.35,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Take Craft Room Trash Out",
+        price: 0.35,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Take trash to Curb on Monday evenings",
+        price: 0.45,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Vaccum Living Room",
+        price: 0.45,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Vaccum Kitchen",
+        price: 0.40,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Vaccum Office",
+        price: 0.40,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Vaccum Bedroom",
+        price: 0.40,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Vaccum Craft Room",
+        price: 0.45,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Gather and Collect Laundry",
+        price: 0.50,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Wash Clothes",
+        price: 0.60,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Move clothes to Dryer",
+        price: 0.50,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Sort clothes from Dryer",
+        price: 0.50,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Fold and put your clothes away",
+        price: 0.65,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Clean and Pick up toys upstairs",
+        price: 0.50,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Clean and Pick up Bedroom toys",
+        price: 0.50,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Clean and Pick up Yard toys",
+        price: 0.50,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Keep shoes clear of all doorways and put away",
+        price: 0.45,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Wipe kitchen Counter Tops",
+        price: 0.45,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Clean and Scrub toilet",
+        price: 0.55,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Clean bathroom counter tops",
+        price: 0.45,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Keep dirty clothes off bathroom floors",
+        price: 0.45,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Keep video games and controllers put away",
+        price: 0.45,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Wipe Dining Room Table and Clear off",
+        price: 0.45,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Pick up dog poop",
+        price: 0.60,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Pick up yard branches and sticks",
+        price: 0.55,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Keep Hammock area clean",
+        price: 0.50,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Pull weeds",
+        price: 0.60,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Clean up creek",
+        price: 0.70,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Clean up your Desk",
+        price: 0.40,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Clean Bedroom everything off floor",
+        price: 0.60,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Chop and cut Prickly bushes",
+        price: 0.70,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Feed and Water dogs",
+        price: 0.35,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Read a book",
+        price: 0.35,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Shower at 7pm",
+        price: 0.30,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Bedtime at 8pm",
+        price: 0.30,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Wake up at 5 am",
+        price: 0.30,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Sweep kitchen",
+        price: 0.35,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Sweep upstairs living room",
+        price: 0.40,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Sweep Bathroom",
+        price: 0.35,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Sweep downstairs laundry and hallway",
+        price: 0.40,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Windex Mirrors",
+        price: 0.40,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Windew Windows",
+        price: 0.45,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Lysol door and light switches",
+        price: 0.50,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Clean and pick up your trash",
+        price: 0.40,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Clean out toys and jackets from Car",
+        price: 0.50,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Organize your charging cords in room",
+        price: 0.40,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Complete Homework without stopping",
+        price: 0.60,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Complete Homework by Tuesday",
+        price: 0.60,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Make sure backpack is put away",
+        price: 0.40,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Have Monday - Friday clothes ready",
+        price: 0.40,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Brush your teeth and Floss",
+        price: 0.35,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Delay in Schoolwork",
+        price: 0,
         target: 'both',
         dueDate: ''
       }];
@@ -546,12 +923,12 @@
         })),
         history: JSON.parse(localStorage.getItem(V_KEY + '_history')) || [],
         totals: JSON.parse(localStorage.getItem(V_KEY + '_totals')) || {
-          Plague Dr.: 0,
-          Dressy Girl: 0
+          omni: 0,
+          zaia: 0
         },
         balances: JSON.parse(localStorage.getItem(V_KEY + '_balances')) || {
-          Plague Dr.: 200.0,
-          Dressy Girl: 200.0
+          omni: 200.0,
+          zaia: 200.0
         }
       };
 
@@ -564,7 +941,7 @@
 
       function updateUI() {
         const now = new Date();
-        ['Plague Dr.', 'Dressy Girl'].forEach(child => {
+        ['omni', 'zaia'].forEach(child => {
           const items = state.history.filter(r => r.child === child);
           const pendingVal = items.filter(i => i.status === 'pending').reduce((s, r) => s + r.price, 0);
           document.getElementById(`${child}-pending`).innerText = `$${pendingVal.toFixed(2)}`;
@@ -711,8 +1088,8 @@
 												<td>
 													<select onchange="editMaster('${c.id}', 'target', this.value)">
 														<option value="both" ${c.target==='both'?'selected':''}>Both</option>
-														<option value="Plague Dr." ${c.target==='Plague Dr.'?'selected':''}>Plague Dr.</option>
-														<option value="Dressy Girl" ${c.target==='Dressy Girl'?'selected':''}>Dressy Girl</option>
+														<option value="omni" ${c.target==='omni'?'selected':''}>Omni</option>
+														<option value="zaia" ${c.target==='zaia'?'selected':''}>Zaia</option>
 													</select>
 												</td>
 												<td>
@@ -755,12 +1132,12 @@
           spawnItems(itemsTroll);
         } else {
           title.innerText = 'WAY TO GO!';
-          if (child === 'Plague Dr.') {
-            splash.className = 'theme-Plague Dr.';
+          if (child === 'omni') {
+            splash.className = 'theme-omni';
             emojiMain.innerText = '🌀⚡🧬';
             spawnItems(itemsO);
           } else {
-            splash.className = 'theme-Dressy Girl';
+            splash.className = 'theme-zaia';
             emojiMain.innerText = '🌈🦄✨';
             spawnItems(itemsZ);
           }
@@ -822,12 +1199,12 @@
           })),
           history: [],
           totals: {
-            Plague Dr.: 0,
-            Dressy Girl: 0
+            omni: 0,
+            zaia: 0
           },
           balances: {
-            Plague Dr.: 200.0,
-            Dressy Girl: 200.0
+            omni: 200.0,
+            zaia: 200.0
           }
         };
       }
@@ -844,7 +1221,7 @@
           id: String(chore?.id || ('c_restore_' + index + '_' + Date.now())),
           name: String(chore?.name || 'Unnamed Chore'),
           price: sanitizeNumber(chore?.price, 0),
-          target: ['both', 'Plague Dr.', 'Dressy Girl'].includes(chore?.target) ? chore.target : 'both',
+          target: ['both', 'omni', 'zaia'].includes(chore?.target) ? chore.target : 'both',
           dueDate: typeof chore?.dueDate === 'string' ? chore.dueDate : ''
         }));
       }
@@ -854,7 +1231,7 @@
 
         return history.map((item, index) => ({
           id: String(item?.id || ('h_restore_' + index + '_' + Date.now())),
-          child: item?.child === 'Dressy Girl' ? 'Dressy Girl' : 'Plague Dr.',
+          child: item?.child === 'zaia' ? 'zaia' : 'omni',
           name: String(item?.name || 'Restored Activity'),
           price: sanitizeNumber(item?.price, 0),
           status: ['pending', 'approved', 'partial', 'declined'].includes(item?.status) ? item.status : 'pending',
@@ -864,19 +1241,19 @@
       }
 
       function sanitizeTotals(totals, history) {
-        const approvedPlague Dr. = history.filter(item => item.child === 'Plague Dr.' && item.status !== 'pending').reduce((sum, item) => sum + sanitizeNumber(item.earned, 0), 0);
-        const approvedDressy Girl = history.filter(item => item.child === 'Dressy Girl' && item.status !== 'pending').reduce((sum, item) => sum + sanitizeNumber(item.earned, 0), 0);
+        const approvedOmni = history.filter(item => item.child === 'omni' && item.status !== 'pending').reduce((sum, item) => sum + sanitizeNumber(item.earned, 0), 0);
+        const approvedZaia = history.filter(item => item.child === 'zaia' && item.status !== 'pending').reduce((sum, item) => sum + sanitizeNumber(item.earned, 0), 0);
 
         return {
-          Plague Dr.: sanitizeNumber(totals?.Plague Dr., approvedPlague Dr.),
-          Dressy Girl: sanitizeNumber(totals?.Dressy Girl, approvedDressy Girl)
+          omni: sanitizeNumber(totals?.omni, approvedOmni),
+          zaia: sanitizeNumber(totals?.zaia, approvedZaia)
         };
       }
 
       function sanitizeBalances(balances) {
         return {
-          Plague Dr.: sanitizeNumber(balances?.Plague Dr., 200),
-          Dressy Girl: sanitizeNumber(balances?.Dressy Girl, 200)
+          omni: sanitizeNumber(balances?.omni, 200),
+          zaia: sanitizeNumber(balances?.zaia, 200)
         };
       }
 
@@ -987,6 +1364,30 @@
 
         alert('Backup could not be downloaded automatically in this browser.');
       }
+
+      function spawnAmbientItems() {
+        const container = document.getElementById('ambient-bg');
+        if (!container) return;
+        container.innerHTML = '';
+
+        const icons = ['💰', '$', '💵', '✨', '💎'];
+        for (let i = 0; i < 18; i++) {
+          const item = document.createElement('div');
+          item.className = 'ambient-item';
+          item.innerText = icons[Math.floor(Math.random() * icons.length)];
+          item.style.left = Math.random() * 100 + 'vw';
+          item.style.top = Math.random() * 100 + 'vh';
+          item.style.transform = `rotate(${Math.random() * 360}deg)`;
+          item.style.setProperty('--dur', (8 + Math.random() * 10) + 's');
+          if (item.innerText === '$') {
+            item.style.color = '#00FF00';
+            item.style.fontWeight = 'bold';
+          }
+          container.appendChild(item);
+        }
+      }
+
+      spawnAmbientItems();
       updateUI();
       // Auto-refresh UI every minute to check for expired chores
       setInterval(updateUI, 60000);
