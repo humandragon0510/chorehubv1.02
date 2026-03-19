@@ -2021,11 +2021,27 @@
         getChildren().forEach((child, index) => {
           const row = document.createElement('div');
           row.style.cssText = 'display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;';
-          row.innerHTML = `
-            <input type="text" value="${child.name.replace(/"/g, '&quot;')}" onchange="updateChildName('${child.id}', this.value)" style="flex:2">
-            <button onclick="removeChild('${child.id}')" style="padding:10px; background:var(--danger); color:white; border:none; border-radius:8px; cursor:pointer;" ${getChildren().length <= 1 ? 'disabled' : ''}>Remove</button>
-            <span style="align-self:center; color:#64748b; font-size:0.85rem;">Child ${index + 1}</span>
-          `;
+
+          const input = document.createElement('input');
+          input.type = 'text';
+          input.value = child.name;
+          input.style.flex = '2';
+          input.addEventListener('change', () => updateChildName(child.id, input.value));
+
+          const removeButton = document.createElement('button');
+          removeButton.type = 'button';
+          removeButton.textContent = 'Remove';
+          removeButton.style.cssText = 'padding:10px; background:var(--danger); color:white; border:none; border-radius:8px; cursor:pointer;';
+          removeButton.disabled = getChildren().length <= 1;
+          removeButton.addEventListener('click', () => removeChild(child.id));
+
+          const label = document.createElement('span');
+          label.style.cssText = 'align-self:center; color:#64748b; font-size:0.85rem;';
+          label.textContent = `Child ${index + 1}`;
+
+          row.appendChild(input);
+          row.appendChild(removeButton);
+          row.appendChild(label);
           list.appendChild(row);
         });
       }
