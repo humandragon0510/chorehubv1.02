@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Treasure Tasks</title>
+    <title>Omni and Zaia Chores</title>
     <style>
       :root {
         --omni: #009EDD;
@@ -623,6 +623,44 @@
       }
 
       @media (max-width: 900px) {
+        body {
+          padding: 14px;
+        }
+
+        .top-bar {
+          justify-content: center;
+          flex-wrap: wrap;
+        }
+
+        .lock-overlay {
+          flex-direction: column;
+          align-items: stretch;
+          gap: 12px;
+          text-align: center;
+        }
+
+        .dashboard {
+          grid-template-columns: 1fr;
+          gap: 18px;
+        }
+
+        .wallet-card {
+          flex-direction: column;
+          align-items: stretch;
+          gap: 16px;
+        }
+
+        .left-stat,
+        .middle-stat {
+          text-align: center;
+        }
+
+        .balance-container {
+          position: static;
+          text-align: center;
+          margin-top: 8px;
+        }
+
         .hero-card {
           padding: 18px 20px;
           border-width: 6px;
@@ -631,6 +669,118 @@
 
         .hero-subtitle {
           letter-spacing: 0.18em;
+        }
+      }
+
+      @media (max-width: 640px) {
+        body {
+          padding: 10px;
+        }
+
+        .container {
+          max-width: 100%;
+        }
+
+        .panel,
+        .column {
+          padding: 16px;
+          border-radius: 18px;
+        }
+
+        .hero-card {
+          padding: 14px 12px;
+        }
+
+        .hero-row {
+          gap: 10px;
+        }
+
+        .hero-emoji {
+          font-size: 2.4rem;
+        }
+
+        .hero-subtitle {
+          margin-top: 10px;
+          letter-spacing: 0.12em;
+        }
+
+        .session-badge,
+        .session-btn {
+          width: 100%;
+          text-align: center;
+        }
+
+        .auth-card {
+          padding: 20px;
+          border-radius: 18px;
+        }
+
+        .auth-actions {
+          flex-direction: column;
+        }
+
+        .auth-primary,
+        .auth-secondary {
+          width: 100%;
+        }
+
+        .modal-box {
+          width: calc(100vw - 20px);
+          padding: 20px;
+        }
+
+        .stat-val-large {
+          font-size: 1.8rem;
+        }
+
+        .stat-val-mid {
+          font-size: 1.4rem;
+        }
+
+        .chore-btn {
+          padding: 13px;
+          font-size: 1rem;
+        }
+
+        .master-table,
+        .master-table thead,
+        .master-table tbody,
+        .master-table th,
+        .master-table td,
+        .master-table tr {
+          display: block;
+          width: 100%;
+        }
+
+        .master-table thead {
+          display: none;
+        }
+
+        .master-table tr {
+          margin-bottom: 14px;
+          padding: 12px;
+          background: #f8fafc;
+          border-radius: 14px;
+          border: 1px solid #e2e8f0;
+        }
+
+        .master-table td {
+          border-bottom: none;
+          padding: 6px 0;
+        }
+
+        .master-table td input,
+        .master-table td select,
+        .master-table td button {
+          width: 100%;
+        }
+
+        .master-table td button {
+          padding: 10px;
+        }
+
+        .history-item {
+          padding: 12px;
         }
       }
     </style>
