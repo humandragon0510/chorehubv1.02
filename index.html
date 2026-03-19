@@ -580,6 +580,16 @@
         flex-wrap: wrap;
       }
 
+      .auth-link-btn {
+        background: transparent;
+        border: none;
+        padding: 0;
+        margin-top: 10px;
+        color: var(--info);
+        font-weight: 700;
+        cursor: pointer;
+      }
+
       .auth-primary,
       .auth-secondary {
         border: none;
@@ -637,6 +647,12 @@
         <div class="auth-actions">
           <button class="auth-primary" type="button" onclick="handleLogin()">Sign In</button>
           <button class="auth-secondary" type="button" onclick="handleSignup()">Create Account</button>
+        </div>
+        <button class="auth-link-btn" type="button" onclick="handlePasswordResetRequest()">Forgot Password?</button>
+        <div id="resetPasswordBox" style="display:none; margin-top:16px;">
+          <label for="newPassword">New Password</label>
+          <input type="password" id="newPassword" placeholder="Enter a new password" autocomplete="new-password">
+          <button class="auth-primary" type="button" onclick="handlePasswordUpdate()">Update Password</button>
         </div>
         <div class="auth-message" id="authMessage"></div>
       </div>
@@ -1091,6 +1107,12 @@
         node.style.color = isError ? '#b91c1c' : '#475569';
       }
 
+      function showPasswordResetBox(show) {
+        const box = document.getElementById('resetPasswordBox');
+        if (!box) return;
+        box.style.display = show ? 'block' : 'none';
+      }
+
       function updateSessionBadge() {
         const node = document.getElementById('sessionInfo');
         if (!node) return;
@@ -1214,6 +1236,54 @@
         setAuthMessage('Account created. If email confirmation is enabled, verify email and then sign in.');
       }
 
+      async function handlePasswordResetRequest() {
+        if (!supabaseClient) {
+          setAuthMessage('Add your Supabase URL and anon key in index.html first.', true);
+          return;
+        }
+
+        const email = document.getElementById('authEmail').value.trim();
+        if (!email) {
+          setAuthMessage('Enter your email first, then click Forgot Password.', true);
+          return;
+        }
+
+        setAuthMessage('Sending password reset email...');
+        const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+          redirectTo: APP_URL
+        });
+
+        if (error) {
+          setAuthMessage(error.message, true);
+          return;
+        }
+
+        setAuthMessage('Password reset email sent. Open the link in your email to set a new password.');
+      }
+
+      async function handlePasswordUpdate() {
+        if (!supabaseClient) return;
+        const newPassword = document.getElementById('newPassword').value;
+        if (!newPassword) {
+          setAuthMessage('Enter a new password.', true);
+          return;
+        }
+
+        setAuthMessage('Updating password...');
+        const { error } = await supabaseClient.auth.updateUser({
+          password: newPassword
+        });
+
+        if (error) {
+          setAuthMessage(error.message, true);
+          return;
+        }
+
+        showPasswordResetBox(false);
+        document.getElementById('newPassword').value = '';
+        setAuthMessage('Password updated. You can now sign in with the new password.');
+      }
+
       async function handleLogout() {
         if (!supabaseClient) return;
         await supabaseClient.auth.signOut();
@@ -1240,8 +1310,13 @@
 
         currentUser = data.session ? data.session.user : null;
 
-        supabaseClient.auth.onAuthStateChange(async (_event, session) => {
+        supabaseClient.auth.onAuthStateChange(async (event, session) => {
           currentUser = session ? session.user : null;
+          if (event === 'PASSWORD_RECOVERY') {
+            setAuthRequired(true);
+            showPasswordResetBox(true);
+            setAuthMessage('Enter your new password below.');
+          }
           updateSessionBadge();
         });
 
