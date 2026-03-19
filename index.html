@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Omni and Zaia Chores</title>
+    <title>Treasure List Fun</title>
     <style>
       :root {
         --omni: #009EDD;
@@ -304,7 +304,7 @@
 
       .dashboard {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
         gap: 30px;
       }
 
@@ -832,10 +832,10 @@
         <div class="hero-card">
           <div class="hero-row">
             <span class="hero-emoji">💰</span>
-            <h1 class="hero-title">Financial Gain</h1>
+            <h1 class="hero-title" id="appTitleDisplay">Treasure List Fun</h1>
             <span class="hero-emoji" style="animation-delay:-6s;">🌈</span>
           </div>
-          <div class="hero-subtitle">Chores!</div>
+          <div class="hero-subtitle" id="appSubtitleDisplay">Quest Board</div>
         </div>
       </div>
       <div class="panel">
@@ -863,6 +863,26 @@
               <button onclick="addNewChore()" style="padding:10px; background:var(--success); color:white; border:none; border-radius:8px; cursor:pointer;">Assign</button>
             </div>
           </div>
+          <div style="margin-top:15px; background:#f8fafc; padding:15px; border-radius:15px;">
+            <strong>Parent Password:</strong>
+            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+              <input type="password" id="newParentPass" placeholder="New parent password" style="flex:2">
+              <button onclick="updateParentPassword()" style="padding:10px; background:var(--lock); color:white; border:none; border-radius:8px; cursor:pointer;">Update Password</button>
+            </div>
+            <div id="parentPassMsg" style="margin-top:8px; font-size:0.85rem; color:#475569;"></div>
+          </div>
+          <div style="margin-top:15px; background:#f8fafc; padding:15px; border-radius:15px;">
+            <strong>App Configuration:</strong>
+            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+              <input type="text" id="appTitleInput" placeholder="App title" style="flex:2">
+              <button onclick="updateAppTitle()" style="padding:10px; background:var(--info); color:white; border:none; border-radius:8px; cursor:pointer;">Update Title</button>
+            </div>
+            <div id="childrenConfigList" style="margin-top:12px;"></div>
+            <div style="margin-top:10px;">
+              <button onclick="addChild()" style="padding:10px; background:var(--success); color:white; border:none; border-radius:8px; cursor:pointer;">Add Child</button>
+            </div>
+            <div id="childrenConfigMsg" style="margin-top:8px; font-size:0.85rem; color:#475569;"></div>
+          </div>
           <details style="margin-top:15px;" open>
             <summary style="cursor:pointer; font-weight:bold; color:var(--omni)">Master Templates</summary>
             <table class="master-table">
@@ -880,48 +900,7 @@
           </details>
         </div>
       </div>
-      <div class="dashboard">
-        <div class="column omni-side">
-          <div style="font-size:3rem; font-weight:900; text-align:center; color:var(--omni)">DR. PLAGUE</div>
-          <div class="wallet-card">
-            <div class="left-stat">
-              <span class="stat-val-large" id="omni-grand">$0.00</span>
-              <span class="stat-label">Lifetime Earnings</span>
-            </div>
-            <div class="middle-stat">
-              <span class="stat-val-mid" id="omni-pending">$0.00</span>
-              <span class="stat-label">Pending</span>
-            </div>
-            <div class="balance-container">
-              <span class="balance-label" style="font-size:0.5rem">BALANCE</span>
-              <span class="balance-value" id="omni-balance">$0.00</span>
-            </div>
-          </div>
-          <div id="omni-chores"></div>
-          <h4>Activity Review</h4>
-          <div id="omni-history"></div>
-        </div>
-        <div class="column zaia-side">
-          <div style="font-size:3rem; font-weight:900; text-align:center; color:var(--zaia)">DRESSY GIRL</div>
-          <div class="wallet-card">
-            <div class="left-stat">
-              <span class="stat-val-large" id="zaia-grand">$0.00</span>
-              <span class="stat-label">Lifetime Earnings</span>
-            </div>
-            <div class="middle-stat">
-              <span class="stat-val-mid" id="zaia-pending">$0.00</span>
-              <span class="stat-label">Pending</span>
-            </div>
-            <div class="balance-container">
-              <span class="balance-label" style="font-size:0.5rem">BALANCE</span>
-              <span class="balance-value" id="zaia-balance">$0.00</span>
-            </div>
-          </div>
-          <div id="zaia-chores"></div>
-          <h4>Activity Review</h4>
-          <div id="zaia-history"></div>
-        </div>
-      </div>
+      <div class="dashboard" id="childDashboard"></div>
     </div>
     <input type="file" id="restoreInput" accept=".json,application/json" style="display:none" onchange="restoreData(event)">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -1216,9 +1195,34 @@
         target: 'both',
         dueDate: ''
       }];
+      const DEFAULT_APP_TITLE = 'Treasure List Fun';
       const itemsO = ['🌀', '🧪', '🏎️', '🌌', '⚡', '🧬', '🪐'];
       const itemsZ = ['🦄', '🌈', '💃', '✨', '💖', '🍭', '⭐'];
       const itemsTroll = ['💰', '💸', '💵', '🧌'];
+      const childThemes = [{
+        accent: '#009EDD',
+        items: itemsO,
+        emoji: '🌀⚡🧬'
+      }, {
+        accent: '#4e14e1',
+        items: itemsZ,
+        emoji: '🌈🦄✨'
+      }, {
+        accent: '#ec4899',
+        items: ['💖', '🎀', '✨', '🌟', '🦋', '🍭'],
+        emoji: '💖✨🌟'
+      }, {
+        accent: '#16a34a',
+        items: ['🌿', '🍀', '🐸', '🌳', '🪴', '🌞'],
+        emoji: '🌿🍀🌞'
+      }];
+      const defaultChildren = [{
+        id: 'child1',
+        name: 'Dr. Plague'
+      }, {
+        id: 'child2',
+        name: 'Dressy Girl'
+      }];
       let currentUser = null;
       let saveTimer = null;
       let state = null;
@@ -1229,6 +1233,9 @@
         localStorage.setItem(V_KEY + '_history', JSON.stringify(state.history));
         localStorage.setItem(V_KEY + '_totals', JSON.stringify(state.totals));
         localStorage.setItem(V_KEY + '_balances', JSON.stringify(state.balances));
+        localStorage.setItem(V_KEY + '_parentPassword', getParentPassword());
+        localStorage.setItem(V_KEY + '_children', JSON.stringify(getChildren()));
+        localStorage.setItem(V_KEY + '_appTitle', getAppTitle());
         queueRemoteSave();
       }
 
@@ -1242,12 +1249,56 @@
       }
 
       function loadLocalState() {
+        const base = buildDefaultState();
+        const children = sanitizeChildren(JSON.parse(localStorage.getItem(V_KEY + '_children')) || base.children);
+        const history = sanitizeHistory(JSON.parse(localStorage.getItem(V_KEY + '_history')) || [], children);
         return {
-          chores: JSON.parse(localStorage.getItem(V_KEY + '_types')) || buildDefaultState().chores,
-          history: JSON.parse(localStorage.getItem(V_KEY + '_history')) || [],
-          totals: JSON.parse(localStorage.getItem(V_KEY + '_totals')) || buildDefaultState().totals,
-          balances: JSON.parse(localStorage.getItem(V_KEY + '_balances')) || buildDefaultState().balances
+          chores: sanitizeChoresWithChildren(JSON.parse(localStorage.getItem(V_KEY + '_types')) || base.chores, children),
+          history,
+          totals: sanitizeTotals(JSON.parse(localStorage.getItem(V_KEY + '_totals')) || base.totals, history, children),
+          balances: sanitizeBalances(JSON.parse(localStorage.getItem(V_KEY + '_balances')) || base.balances, children),
+          parentPassword: localStorage.getItem(V_KEY + '_parentPassword') || PASS,
+          children,
+          appTitle: localStorage.getItem(V_KEY + '_appTitle') || base.appTitle
         };
+      }
+
+      function getParentPassword() {
+        return state && state.parentPassword ? state.parentPassword : PASS;
+      }
+
+      function getAppTitle() {
+        return state && state.appTitle ? state.appTitle : DEFAULT_APP_TITLE;
+      }
+
+      function getChildren() {
+        return state && Array.isArray(state.children) && state.children.length ? state.children : defaultChildren;
+      }
+
+      function getThemeForChild(childId) {
+        const index = getChildren().findIndex(child => child.id === childId);
+        return childThemes[(index >= 0 ? index : 0) % childThemes.length];
+      }
+
+      function buildTotalsForChildren(children, source = {}) {
+        return children.reduce((acc, child) => {
+          acc[child.id] = sanitizeNumber(source[child.id], 0);
+          return acc;
+        }, {});
+      }
+
+      function buildBalancesForChildren(children, source = {}) {
+        return children.reduce((acc, child) => {
+          acc[child.id] = sanitizeNumber(source[child.id], 200);
+          return acc;
+        }, {});
+      }
+
+      function setParentPasswordMessage(message, isError = false) {
+        const node = document.getElementById('parentPassMsg');
+        if (!node) return;
+        node.innerText = message || '';
+        node.style.color = isError ? '#b91c1c' : '#475569';
       }
 
       function setAuthMessage(message, isError = false) {
@@ -1290,11 +1341,16 @@
 
         if (data && data.state) {
           const remoteState = data.state;
+          const sanitizedChildren = sanitizeChildren(remoteState.children);
+          const sanitizedHistory = sanitizeHistory(remoteState.history, sanitizedChildren);
           state = {
-            chores: sanitizeChores(remoteState.chores),
-            history: sanitizeHistory(remoteState.history),
-            totals: sanitizeTotals(remoteState.totals, sanitizeHistory(remoteState.history)),
-            balances: sanitizeBalances(remoteState.balances)
+            chores: sanitizeChoresWithChildren(remoteState.chores, sanitizedChildren),
+            history: sanitizedHistory,
+            totals: sanitizeTotals(remoteState.totals, sanitizedHistory, sanitizedChildren),
+            balances: sanitizeBalances(remoteState.balances, sanitizedChildren),
+            children: sanitizedChildren,
+            appTitle: sanitizeAppTitle(remoteState.appTitle),
+            parentPassword: typeof remoteState.parentPassword === 'string' && remoteState.parentPassword ? remoteState.parentPassword : PASS
           };
         } else {
           state = loadLocalState();
@@ -1305,6 +1361,9 @@
         localStorage.setItem(V_KEY + '_history', JSON.stringify(state.history));
         localStorage.setItem(V_KEY + '_totals', JSON.stringify(state.totals));
         localStorage.setItem(V_KEY + '_balances', JSON.stringify(state.balances));
+        localStorage.setItem(V_KEY + '_parentPassword', getParentPassword());
+        localStorage.setItem(V_KEY + '_children', JSON.stringify(getChildren()));
+        localStorage.setItem(V_KEY + '_appTitle', getAppTitle());
       }
 
       async function persistStateNow() {
@@ -1731,6 +1790,30 @@
         }
       }
 
+      function triggerSplash(child, price) {
+        const splash = document.getElementById('celebration');
+        const container = document.getElementById('item-container');
+        const title = document.getElementById('splash-title');
+        const emojiMain = document.getElementById('splash-emojis');
+        const theme = getThemeForChild(child);
+        container.innerHTML = '';
+        if (price < 0) {
+          splash.className = 'theme-troll';
+          title.innerText = 'TROLL TAX!';
+          emojiMain.innerText = '🧌';
+          spawnItems(itemsTroll);
+        } else {
+          title.innerText = 'WAY TO GO!';
+          splash.className = theme.accent === '#4e14e1' ? 'theme-zaia' : 'theme-omni';
+          emojiMain.innerText = theme.emoji;
+          spawnItems(theme.items);
+        }
+        splash.style.display = 'flex';
+        setTimeout(() => {
+          splash.style.display = 'none';
+        }, 4000);
+      }
+
       function openModal() {
         document.getElementById('passModal').style.display = 'flex';
       }
@@ -1741,11 +1824,26 @@
       }
 
       function submitPass() {
-        if (document.getElementById('passInput').value === PASS) {
+        if (document.getElementById('passInput').value === getParentPassword()) {
           document.body.className = 'admin-unlocked';
           closeModal();
           updateUI();
+          setParentPasswordMessage('');
         }
+      }
+
+      function updateParentPassword() {
+        const input = document.getElementById('newParentPass');
+        const newPassword = input.value.trim();
+        if (!newPassword) {
+          setParentPasswordMessage('Enter a new parent password first.', true);
+          return;
+        }
+
+        state.parentPassword = newPassword;
+        saveData();
+        input.value = '';
+        setParentPasswordMessage('Parent password updated.');
       }
 
       function lockAdmin() {
@@ -1760,20 +1858,18 @@
       }
 
       function buildDefaultState() {
+        const children = defaultChildren.map(child => ({ ...child }));
         return {
           chores: defaultList.map((c, i) => ({
             ...c,
             id: 'c' + i
           })),
           history: [],
-          totals: {
-            omni: 0,
-            zaia: 0
-          },
-          balances: {
-            omni: 200.0,
-            zaia: 200.0
-          }
+          totals: buildTotalsForChildren(children),
+          balances: buildBalancesForChildren(children),
+          parentPassword: PASS,
+          children,
+          appTitle: DEFAULT_APP_TITLE
         };
       }
 
@@ -1782,24 +1878,59 @@
         return Number.isFinite(num) ? num : fallback;
       }
 
+      function sanitizeAppTitle(title) {
+        return typeof title === 'string' && title.trim() ? title.trim() : DEFAULT_APP_TITLE;
+      }
+
+      function sanitizeChildren(children) {
+        if (!Array.isArray(children) || !children.length) {
+          return defaultChildren.map(child => ({ ...child }));
+        }
+
+        return children.map((child, index) => ({
+          id: String(child?.id || ('child' + (index + 1))),
+          name: String(child?.name || ('Child ' + (index + 1))).trim() || ('Child ' + (index + 1))
+        }));
+      }
+
       function sanitizeChores(chores) {
         if (!Array.isArray(chores)) return buildDefaultState().chores;
 
+        const validTargets = new Set(['both', ...getChildren().map(child => child.id)]);
         return chores.map((chore, index) => ({
           id: String(chore?.id || ('c_restore_' + index + '_' + Date.now())),
           name: String(chore?.name || 'Unnamed Chore'),
           price: sanitizeNumber(chore?.price, 0),
-          target: ['both', 'omni', 'zaia'].includes(chore?.target) ? chore.target : 'both',
+          target: validTargets.has(chore?.target) ? chore.target : 'both',
           dueDate: typeof chore?.dueDate === 'string' ? chore.dueDate : ''
         }));
       }
 
-      function sanitizeHistory(history) {
+      function sanitizeChoresWithChildren(chores, children) {
+        if (!Array.isArray(chores)) return buildDefaultState().chores;
+
+        const validTargets = new Set(['both', ...children.map(child => child.id)]);
+        return chores.map((chore, index) => ({
+          id: String(chore?.id || ('c_restore_' + index + '_' + Date.now())),
+          name: String(chore?.name || 'Unnamed Chore'),
+          price: sanitizeNumber(chore?.price, 0),
+          target: validTargets.has(chore?.target) ? chore.target : 'both',
+          dueDate: typeof chore?.dueDate === 'string' ? chore.dueDate : ''
+        }));
+      }
+
+      function sanitizeHistory(history, children = getChildren()) {
         if (!Array.isArray(history)) return [];
+
+        const validIds = children.map(child => child.id);
+        const legacyMap = {
+          omni: validIds[0] || 'child1',
+          zaia: validIds[1] || validIds[0] || 'child1'
+        };
 
         return history.map((item, index) => ({
           id: String(item?.id || ('h_restore_' + index + '_' + Date.now())),
-          child: item?.child === 'zaia' ? 'zaia' : 'omni',
+          child: validIds.includes(item?.child) ? item.child : (legacyMap[item?.child] || validIds[0]),
           name: String(item?.name || 'Restored Activity'),
           price: sanitizeNumber(item?.price, 0),
           status: ['pending', 'approved', 'partial', 'declined'].includes(item?.status) ? item.status : 'pending',
@@ -1808,21 +1939,228 @@
         }));
       }
 
-      function sanitizeTotals(totals, history) {
-        const approvedOmni = history.filter(item => item.child === 'omni' && item.status !== 'pending').reduce((sum, item) => sum + sanitizeNumber(item.earned, 0), 0);
-        const approvedZaia = history.filter(item => item.child === 'zaia' && item.status !== 'pending').reduce((sum, item) => sum + sanitizeNumber(item.earned, 0), 0);
-
-        return {
-          omni: sanitizeNumber(totals?.omni, approvedOmni),
-          zaia: sanitizeNumber(totals?.zaia, approvedZaia)
-        };
+      function sanitizeTotals(totals, history, children = getChildren()) {
+        return children.reduce((acc, child) => {
+          const approved = history
+            .filter(item => item.child === child.id && item.status !== 'pending')
+            .reduce((sum, item) => sum + sanitizeNumber(item.earned, 0), 0);
+          acc[child.id] = sanitizeNumber(totals?.[child.id], approved);
+          return acc;
+        }, {});
       }
 
-      function sanitizeBalances(balances) {
-        return {
-          omni: sanitizeNumber(balances?.omni, 200),
-          zaia: sanitizeNumber(balances?.zaia, 200)
-        };
+      function sanitizeBalances(balances, children = getChildren()) {
+        return children.reduce((acc, child) => {
+          acc[child.id] = sanitizeNumber(balances?.[child.id], 200);
+          return acc;
+        }, {});
+      }
+
+      function setChildrenConfigMessage(message, isError = false) {
+        const node = document.getElementById('childrenConfigMsg');
+        if (!node) return;
+        node.innerText = message || '';
+        node.style.color = isError ? '#b91c1c' : '#475569';
+      }
+
+      function updateAppTitle() {
+        const input = document.getElementById('appTitleInput');
+        const nextTitle = sanitizeAppTitle(input.value);
+        state.appTitle = nextTitle;
+        saveData();
+        updateUI();
+        setChildrenConfigMessage('App title updated.');
+      }
+
+      function updateChildName(childId, value) {
+        const child = getChildren().find(entry => entry.id === childId);
+        if (!child) return;
+        child.name = value.trim() || child.name;
+        saveData();
+        updateUI();
+      }
+
+      function addChild() {
+        const nextIndex = getChildren().length + 1;
+        const nextId = 'child' + Date.now();
+        state.children.push({
+          id: nextId,
+          name: `Child ${nextIndex}`
+        });
+        state.totals[nextId] = 0;
+        state.balances[nextId] = 200;
+        saveData();
+        updateUI();
+        setChildrenConfigMessage('Child added.');
+      }
+
+      function removeChild(childId) {
+        if (getChildren().length <= 1) {
+          setChildrenConfigMessage('At least one child is required.', true);
+          return;
+        }
+        if (!confirm('Remove this child? Their activity history will be removed and their assigned quests will reset to Both.')) return;
+
+        state.children = state.children.filter(child => child.id !== childId);
+        state.history = state.history.filter(item => item.child !== childId);
+        state.chores = state.chores.map(chore => chore.target === childId ? { ...chore, target: 'both' } : chore);
+        delete state.totals[childId];
+        delete state.balances[childId];
+        state.totals = sanitizeTotals(state.totals, state.history, state.children);
+        state.balances = sanitizeBalances(state.balances, state.children);
+        saveData();
+        updateUI();
+        setChildrenConfigMessage('Child removed.');
+      }
+
+      function renderChildrenConfig() {
+        const list = document.getElementById('childrenConfigList');
+        if (!list) return;
+        list.innerHTML = '';
+
+        getChildren().forEach((child, index) => {
+          const row = document.createElement('div');
+          row.style.cssText = 'display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;';
+          row.innerHTML = `
+            <input type="text" value="${child.name.replace(/"/g, '&quot;')}" onchange="updateChildName('${child.id}', this.value)" style="flex:2">
+            <button onclick="removeChild('${child.id}')" style="padding:10px; background:var(--danger); color:white; border:none; border-radius:8px; cursor:pointer;" ${getChildren().length <= 1 ? 'disabled' : ''}>Remove</button>
+            <span style="align-self:center; color:#64748b; font-size:0.85rem;">Child ${index + 1}</span>
+          `;
+          list.appendChild(row);
+        });
+      }
+
+      function renderDashboard() {
+        const now = new Date();
+        const dashboard = document.getElementById('childDashboard');
+        if (!dashboard) return;
+        dashboard.innerHTML = '';
+
+        getChildren().forEach(child => {
+          const theme = getThemeForChild(child.id);
+          const items = state.history.filter(r => r.child === child.id);
+          const pendingVal = items.filter(i => i.status === 'pending').reduce((s, r) => s + r.price, 0);
+          const totalVal = sanitizeNumber(state.totals?.[child.id], 0);
+          const balanceVal = sanitizeNumber(state.balances?.[child.id], 200);
+
+          const column = document.createElement('div');
+          column.className = 'column';
+          column.style.borderTopColor = theme.accent;
+          column.innerHTML = `
+            <div style="font-size:3rem; font-weight:900; text-align:center; color:${theme.accent}">${child.name}</div>
+            <div class="wallet-card">
+              <div class="left-stat">
+                <span class="stat-val-large">$${totalVal.toFixed(2)}</span>
+                <span class="stat-label">Lifetime Earnings</span>
+              </div>
+              <div class="middle-stat">
+                <span class="stat-val-mid">$${pendingVal.toFixed(2)}</span>
+                <span class="stat-label">Pending</span>
+              </div>
+              <div class="balance-container">
+                <span class="balance-label" style="font-size:0.5rem">BALANCE</span>
+                <span class="balance-value">$${balanceVal.toFixed(2)}</span>
+              </div>
+            </div>
+            <div id="chores-${child.id}"></div>
+            <h4>Activity Review</h4>
+            <div id="history-${child.id}"></div>
+          `;
+          dashboard.appendChild(column);
+
+          const logArea = column.querySelector(`#history-${child.id}`);
+          [...items].reverse().slice(0, 15).forEach(r => {
+            const isPending = r.status === 'pending';
+            logArea.innerHTML += `
+              <div class="history-item">
+                <span class="status-tag status-${r.status}">${r.status} ${r.earned ? '($'+r.earned.toFixed(2)+')' : ''}</span>
+                <strong>${r.name}</strong> ($${Math.abs(r.price)})
+                <br>
+                <small>${r.time}</small>
+                <div class="parent-actions">
+                  ${isPending ? `
+                    <button class="rev-btn" style="background:var(--success)" onclick="reviewChore('${r.id}', 1, 'approved')">100%</button>
+                    <button class="rev-btn" style="background:var(--info)" onclick="reviewChore('${r.id}', 0.5, 'partial')">50%</button>
+                    <button class="rev-btn" style="background:var(--danger)" onclick="reviewChore('${r.id}', 0, 'declined')">Decline</button>` :
+                    `
+                    <button class="undo-btn" onclick="undoReview('${r.id}')">↩ Undo</button>
+                    <button class="rev-btn" style="background:var(--lock)" onclick="archiveItem('${r.id}')">Clear</button>`}
+                </div>
+              </div>`;
+          });
+
+          const btnArea = column.querySelector(`#chores-${child.id}`);
+          state.chores
+            .filter(c => c.target === 'both' || c.target === child.id)
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .forEach(c => {
+              const isExpired = c.dueDate && now > new Date(c.dueDate);
+              const b = document.createElement('button');
+              b.className = `chore-btn ${c.price < 0 ? 'spending' : ''}`;
+              const choreIcon = getChoreIcon(c.name);
+              let dueText = "";
+              if (c.dueDate) {
+                const d = new Date(c.dueDate);
+                dueText = `<span class="due-label">Due: ${d.toLocaleDateString()} ${d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} ${isExpired ? '🚨 EXPIRED' : ''}</span>`;
+              }
+              b.innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <span>${c.price < 0 ? '👹 ' : `${choreIcon} `}${c.name}</span>
+                  <span>$${Math.abs(c.price).toFixed(2)}</span>
+                </div>
+                ${dueText}`;
+              b.disabled = isExpired;
+              b.onclick = () => addRecord(child.id, c);
+              btnArea.appendChild(b);
+            });
+        });
+      }
+
+      function updateUI() {
+        if (!state) return;
+        document.title = getAppTitle();
+        const titleNode = document.getElementById('appTitleDisplay');
+        const subtitleNode = document.getElementById('appSubtitleDisplay');
+        const titleInput = document.getElementById('appTitleInput');
+        if (titleNode) titleNode.innerText = getAppTitle();
+        if (subtitleNode) subtitleNode.innerText = `${getChildren().length} ${getChildren().length === 1 ? 'Explorer' : 'Explorers'}`;
+        if (titleInput) titleInput.value = getAppTitle();
+        renderChildrenConfig();
+        renderDashboard();
+        renderMaster();
+      }
+
+      function renderMaster() {
+        const body = document.getElementById('master-body');
+        body.innerHTML = '';
+
+        state.chores.forEach(c => {
+          const dateVal = c.dueDate ? c.dueDate : '';
+          const childOptions = getChildren()
+            .map(child => `<option value="${child.id}" ${c.target===child.id?'selected':''}>${child.name}</option>`)
+            .join('');
+          body.innerHTML += `
+            <tr>
+              <td>
+                <input type="text" value="${c.name}" onchange="editMaster('${c.id}', 'name', this.value)" style="width:100%">
+              </td>
+              <td>
+                <input type="number" value="${c.price}" onchange="editMaster('${c.id}', 'price', this.value)" style="width:60px">
+              </td>
+              <td>
+                <select onchange="editMaster('${c.id}', 'target', this.value)">
+                  <option value="both" ${c.target==='both'?'selected':''}>Both</option>
+                  ${childOptions}
+                </select>
+              </td>
+              <td>
+                <input type="datetime-local" value="${dateVal}" onchange="editMaster('${c.id}', 'dueDate', this.value)">
+              </td>
+              <td>
+                <button onclick="remChoreType('${c.id}')" style="color:red; border:none; background:none; font-weight:bold; cursor:pointer;">X</button>
+              </td>
+            </tr>`;
+        });
       }
 
       async function restoreData(event) {
@@ -1832,13 +2170,17 @@
         try {
           const rawText = await file.text();
           const parsed = JSON.parse(rawText);
-          const restoredHistory = sanitizeHistory(parsed.history);
+          const restoredChildren = sanitizeChildren(parsed.children);
+          const restoredHistory = sanitizeHistory(parsed.history, restoredChildren);
 
           state = {
-            chores: sanitizeChores(parsed.chores),
+            chores: sanitizeChoresWithChildren(parsed.chores, restoredChildren),
             history: restoredHistory,
-            totals: sanitizeTotals(parsed.totals, restoredHistory),
-            balances: sanitizeBalances(parsed.balances)
+            totals: sanitizeTotals(parsed.totals, restoredHistory, restoredChildren),
+            balances: sanitizeBalances(parsed.balances, restoredChildren),
+            children: restoredChildren,
+            appTitle: sanitizeAppTitle(parsed.appTitle),
+            parentPassword: typeof parsed.parentPassword === 'string' && parsed.parentPassword ? parsed.parentPassword : PASS
           };
 
           saveData();
