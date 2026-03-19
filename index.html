@@ -2031,9 +2031,9 @@
           const removeButton = document.createElement('button');
           removeButton.type = 'button';
           removeButton.textContent = 'Remove';
+          removeButton.dataset.childId = child.id;
           removeButton.style.cssText = 'padding:10px; background:var(--danger); color:white; border:none; border-radius:8px; cursor:pointer;';
           removeButton.disabled = getChildren().length <= 1;
-          removeButton.addEventListener('click', () => removeChild(child.id));
 
           const label = document.createElement('span');
           label.style.cssText = 'align-self:center; color:#64748b; font-size:0.85rem;';
@@ -2045,6 +2045,14 @@
           list.appendChild(row);
         });
       }
+
+      document.addEventListener('click', event => {
+        const target = event.target;
+        if (!(target instanceof HTMLElement)) return;
+        if (target.matches('#childrenConfigList button[data-child-id]')) {
+          removeChild(target.dataset.childId);
+        }
+      });
 
       function renderDashboard() {
         const now = new Date();
