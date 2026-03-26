@@ -622,6 +622,56 @@
         user-select: none;
       }
 
+      .search-panel {
+        background: rgba(255, 255, 255, 0.96);
+        margin-bottom: 20px;
+        padding: 18px 20px;
+        border-radius: 18px;
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .search-controls {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      .search-input {
+        flex: 1 1 280px;
+        min-width: 220px;
+        padding: 12px 14px;
+        border: 2px solid #cbd5e1;
+        border-radius: 12px;
+        font-size: 1rem;
+      }
+
+      .search-clear-btn {
+        border: none;
+        border-radius: 12px;
+        padding: 12px 14px;
+        font-weight: 800;
+        background: #e2e8f0;
+        color: var(--text);
+        cursor: pointer;
+      }
+
+      .search-status {
+        margin-top: 10px;
+        color: #475569;
+        font-size: 0.9rem;
+      }
+
+      .empty-search-state {
+        margin: 12px 0 4px;
+        padding: 12px 14px;
+        border-radius: 12px;
+        background: #f8fafc;
+        color: #64748b;
+        font-weight: 700;
+        text-align: center;
+      }
+
       @media (max-width: 900px) {
         body {
           padding: 14px;
@@ -669,6 +719,15 @@
 
         .hero-subtitle {
           letter-spacing: 0.18em;
+        }
+
+        .search-controls {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .search-clear-btn {
+          width: 100%;
         }
       }
 
@@ -899,6 +958,13 @@
             </table>
           </details>
         </div>
+      </div>
+      <div class="search-panel">
+        <div class="search-controls">
+          <input type="search" id="choreSearchInput" class="search-input" placeholder="Search chores by name or assigned child" oninput="updateChoreSearch(this.value)">
+          <button type="button" class="search-clear-btn" onclick="clearChoreSearch()">Clear Search</button>
+        </div>
+        <div class="search-status" id="choreSearchStatus">Showing all chores.</div>
       </div>
       <div class="dashboard" id="childDashboard"></div>
     </div>
@@ -1226,6 +1292,7 @@
       let currentUser = null;
       let saveTimer = null;
       let state = null;
+      let choreSearchTerm = '';
 
       function saveData() {
         if (!state) return;
@@ -1261,6 +1328,44 @@
           children,
           appTitle: localStorage.getItem(V_KEY + '_appTitle') || base.appTitle
         };
+      }
+
+      function normalizeSearchTerm(value) {
+        return String(value || '').trim().toLowerCase();
+      }
+
+      function getChoreSearchStatus(matches) {
+        if (!choreSearchTerm) {
+          return `Showing all chores (${matches} total).`;
+        }
+        return `Showing ${matches} ${matches === 1 ? 'match' : 'matches'} for "${choreSearchTerm}".`;
+      }
+
+      function updateSearchStatus(matchCount = state?.chores?.length || 0) {
+        const node = document.getElementById('choreSearchStatus');
+        if (!node) return;
+        node.innerText = getChoreSearchStatus(matchCount);
+      }
+
+      function choreMatchesSearch(chore) {
+        if (!choreSearchTerm) return true;
+        const assignedChild = chore.target === 'both'
+          ? 'both everyone all'
+          : (getChildren().find(child => child.id === chore.target)?.name || '');
+        const searchableText = `${chore.name} ${assignedChild}`.toLowerCase();
+        return searchableText.includes(choreSearchTerm);
+      }
+
+      function updateChoreSearch(value) {
+        choreSearchTerm = normalizeSearchTerm(value);
+        updateUI();
+      }
+
+      function clearChoreSearch() {
+        choreSearchTerm = '';
+        const input = document.getElementById('choreSearchInput');
+        if (input) input.value = '';
+        updateUI();
       }
 
       function getParentPassword() {
@@ -2114,9 +2219,16 @@
           });
 
           const btnArea = column.querySelector(`#chores-${child.id}`);
-          state.chores
+          const matchingChores = state.chores
             .filter(c => c.target === 'both' || c.target === child.id)
             .sort((a, b) => a.name.localeCompare(b.name))
+            .filter(choreMatchesSearch);
+
+          if (!matchingChores.length) {
+            btnArea.innerHTML = `<div class="empty-search-state">No chores match this search right now.</div>`;
+          }
+
+          matchingChores
             .forEach(c => {
               const isExpired = c.dueDate && now > new Date(c.dueDate);
               const b = document.createElement('button');
@@ -2146,19 +2258,33 @@
         const titleNode = document.getElementById('appTitleDisplay');
         const subtitleNode = document.getElementById('appSubtitleDisplay');
         const titleInput = document.getElementById('appTitleInput');
+        const searchInput = document.getElementById('choreSearchInput');
         if (titleNode) titleNode.innerText = getAppTitle();
         if (subtitleNode) subtitleNode.innerText = `${getChildren().length} ${getChildren().length === 1 ? 'Explorer' : 'Explorers'}`;
         if (titleInput) titleInput.value = getAppTitle();
+        if (searchInput) searchInput.value = choreSearchTerm;
         renderChildrenConfig();
         renderDashboard();
         renderMaster();
+        updateSearchStatus(state.chores.filter(choreMatchesSearch).length);
       }
 
       function renderMaster() {
         const body = document.getElementById('master-body');
         body.innerHTML = '';
 
-        state.chores.forEach(c => {
+        const matchingChores = state.chores.filter(choreMatchesSearch);
+        if (!matchingChores.length) {
+          body.innerHTML = `
+            <tr>
+              <td colspan="5">
+                <div class="empty-search-state">No master chore templates match this search.</div>
+              </td>
+            </tr>`;
+          return;
+        }
+
+        matchingChores.forEach(c => {
           const dateVal = c.dueDate ? c.dueDate : '';
           const childOptions = getChildren()
             .map(child => `<option value="${child.id}" ${c.target===child.id?'selected':''}>${child.name}</option>`)
