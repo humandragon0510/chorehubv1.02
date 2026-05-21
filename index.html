@@ -7,13 +7,10 @@
     <style>
       :root {
         --omni: #009EDD;
-        --omni-rgb: 0, 158, 221;
         --zaia: #4e14e1;
-        --zaia-rgb: 78, 20, 225;
         --bg: #00000000;
-        --card: rgba(30, 41, 59, 0.7);
-        --text: #f8fafc;
-        --text-muted: #94a3b8;
+        --card: #ffffff;
+        --text: #1e293b;
         --danger: #ef4444;
         --success: #22c55e;
         --warning: #f59e0b;
@@ -22,22 +19,14 @@
         --info: #0ea5e9;
       }
 
-      @keyframes auroraShift {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-      }
-
       body {
-        font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
-        background: linear-gradient(135deg, #090d16, #0d1222, #180922, #0d1222, #090d16);
-        background-size: 400% 400%;
+        font-family: 'Segoe UI', sans-serif;
+        background: #000;
         margin: 0;
         padding: 20px;
         overflow-x: hidden;
         color: var(--text);
-        animation: auroraShift 25s ease infinite;
-        min-height: 100vh;
+        animation: rainbowBackground 15s linear infinite;
       }
 
       .container {
@@ -58,29 +47,27 @@
       .ambient-item {
         position: absolute;
         font-size: 5rem;
-        filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.3));
-        opacity: 0.12;
+        filter: drop-shadow(0 0 20px #EFFF00) drop-shadow(0 0 40px #FFD700);
+        opacity: 0.85;
         animation: ambientFloat var(--dur) ease-in-out infinite alternate;
       }
 
       .hero-shell {
         display: flex;
         justify-content: center;
-        margin-bottom: 24px;
+        margin-bottom: 18px;
       }
 
       .hero-card {
         position: relative;
         text-align: center;
-        padding: 28px 56px;
+        padding: 24px 56px;
         min-width: min(800px, 100%);
         max-width: 100%;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 8px solid white;
         border-radius: 40px;
-        background: rgba(15, 23, 42, 0.6);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        background: rgba(0, 0, 0, 0.7);
+        box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
       }
 
       .hero-row {
@@ -93,41 +80,35 @@
 
       .hero-title {
         color: white;
-        font-size: clamp(2.5rem, 5vw, 4.5rem);
+        font-size: clamp(2.5rem, 5vw, 5rem);
         font-weight: 900;
         line-height: 1.1;
         text-transform: uppercase;
         animation: gentlePulse 4s ease-in-out infinite alternate;
-        letter-spacing: -1px;
+        letter-spacing: -2px;
         margin: 0;
         font-family: 'Arial Black', sans-serif;
-        background: linear-gradient(to bottom, #ffffff, #e2e8f0);
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
       }
 
       .hero-emoji {
         display: inline-block;
-        font-size: 3.5rem;
-        animation: slowSpin 16s linear infinite;
+        font-size: 3.75rem;
+        animation: slowSpin 12s linear infinite;
       }
 
       .hero-subtitle {
         display: block;
-        font-size: clamp(1.3rem, 2.5vw, 2.0rem);
+        font-size: clamp(1.5rem, 3vw, 2.6rem);
         margin-top: 14px;
-        letter-spacing: 0.35em;
+        letter-spacing: 0.45em;
         font-weight: 900;
         text-transform: uppercase;
         color: #FFFFFF;
-        text-shadow: 0 0 10px rgba(0, 158, 221, 0.4), 0 0 20px rgba(78, 20, 225, 0.4);
-        background: linear-gradient(90deg, #009EDD, #ca8a04, #4e14e1);
+        text-shadow: 2px 2px 0 #009EDD, 4px 4px 0 #BF00FF, 0 0 20px rgba(0, 0, 0, 1);
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
         -webkit-background-clip: text;
         background-clip: text;
-        -webkit-text-fill-color: transparent;
-        animation: shine 5s linear infinite;
-        background-size: 200% auto;
+        animation: shine 3s linear infinite;
       }
 
       /* --- CELEBRATIONS & TROLL TAX --- */
@@ -144,9 +125,6 @@
         justify-content: center;
         overflow: hidden;
         text-align: center;
-        background: rgba(15, 23, 42, 0.85);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
       }
 
       .theme-omni {
@@ -161,40 +139,59 @@
       }
 
       .theme-troll {
-        background: #310707;
-        background-image: repeating-linear-gradient(45deg, #310707, #310707 15px, #581c1c 15px, #581c1c 30px);
-        animation: trollShake 0.15s infinite;
+        background: #450a0a;
+        background-image: repeating-linear-gradient(45deg, #450a0a, #450a0a 10px, #7f1d1d 10px, #7f1d1d 20px);
+        animation: trollShake 0.1s infinite;
       }
 
       @keyframes trollShake {
-        0% { transform: translate(1px, 1px) rotate(0deg); }
-        10% { transform: translate(-1px, -2px) rotate(-1deg); }
-        20% { transform: translate(-3px, 0px) rotate(1deg); }
-        30% { transform: translate(0px, 2px) rotate(0deg); }
-        40% { transform: translate(1px, -1px) rotate(1deg); }
-        50% { transform: translate(-1px, 2px) rotate(-1deg); }
-        60% { transform: translate(-3px, 1px) rotate(0deg); }
-        70% { transform: translate(2px, 1px) rotate(-1deg); }
-        80% { transform: translate(-1px, -1px) rotate(1deg); }
-        90% { transform: translate(2px, 2px) rotate(0deg); }
-        100% { transform: translate(1px, -2px) rotate(-1deg); }
+        0% {
+          background-position: 0 0;
+        }
+
+        100% {
+          background-position: 10px 10px;
+        }
       }
 
       @keyframes disco {
-        0% { background-color: #3b0764; }
-        33% { background-color: #0c4a6e; }
-        66% { background-color: #14532d; }
-        100% { background-color: #3b0764; }
+        0% {
+          background-color: #ff00ff;
+        }
+
+        33% {
+          background-color: #00ffff;
+        }
+
+        66% {
+          background-color: #ffff00;
+        }
       }
 
       @keyframes hyperSpeed {
-        from { background-position: 0 0; }
-        to { background-position: 0 400px; }
+        from {
+          background-position: 0 0;
+        }
+
+        to {
+          background-position: 0 400px;
+        }
+      }
+
+      @keyframes rainbowBackground {
+        0% { background-color: #ff0000; }
+        15% { background-color: #EFFF00; }
+        30% { background-color: #00FF00; }
+        45% { background-color: #009EDD; }
+        60% { background-color: #139EFF; }
+        75% { background-color: #BF00FF; }
+        90% { background-color: #ec4899; }
+        100% { background-color: #ff0000; }
       }
 
       @keyframes gentlePulse {
-        from { transform: scale(1); filter: drop-shadow(0 0 10px rgba(255,255,255,0.2)); }
-        to { transform: scale(1.03); filter: drop-shadow(0 0 25px rgba(255,255,255,0.5)); }
+        from { transform: scale(1); filter: drop-shadow(0 0 10px rgba(255,255,255,0.4)); }
+        to { transform: scale(1.05); filter: drop-shadow(0 0 30px rgba(255,255,255,0.8)); }
       }
 
       @keyframes slowSpin {
@@ -203,8 +200,8 @@
       }
 
       @keyframes shine {
-        0% { background-position: -200%; }
-        100% { background-position: 200%; }
+        0% { background-position: -100%; }
+        100% { background-position: 100%; }
       }
 
       @keyframes ambientFloat {
@@ -213,26 +210,29 @@
       }
 
       .giant-text {
-        font-size: clamp(4rem, 10vw, 7.5rem);
+        font-size: 8rem;
         font-weight: 900;
         background: linear-gradient(#fff, #fbbf24);
         -webkit-background-clip: text;
-        background-clip: text;
         color: transparent;
-        -webkit-text-stroke: 2px #000;
-        text-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
-        animation: rumble 0.15s infinite;
+        -webkit-text-stroke: 3px #000;
+        animation: rumble 0.1s infinite;
         z-index: 1000;
       }
 
       @keyframes rumble {
-        0% { transform: translate(2px, 2px); }
-        50% { transform: translate(-2px, -2px); }
+        0% {
+          transform: translate(3px, 3px);
+        }
+
+        50% {
+          transform: translate(-3px, -3px);
+        }
       }
 
       .flying-item {
         position: absolute;
-        font-size: 5rem;
+        font-size: 6rem;
         pointer-events: none;
         animation: flyOut var(--d) linear infinite;
         z-index: 50;
@@ -240,13 +240,14 @@
 
       @keyframes flyOut {
         0% {
-          transform: scale(0.3) translate(-50%, -50%);
+          transform: scale(0.5) translate(-50%, -50%);
           opacity: 1;
           left: 50%;
           top: 55%;
         }
+
         100% {
-          transform: scale(2.5) translate(var(--tx), var(--ty)) rotate(var(--rot));
+          transform: scale(3) translate(var(--tx), var(--ty)) rotate(var(--rot));
           opacity: 0;
           left: 50%;
           top: 50%;
@@ -264,43 +265,20 @@
       }
 
       .panel {
-        background: rgba(15, 23, 42, 0.45);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
+        background: rgba(255, 255, 255, 0.96);
         margin-bottom: 30px;
         padding: 25px;
-        border-radius: 24px;
-        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
-        color: var(--text);
+        border-radius: 20px;
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
       }
 
       .lock-overlay {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        background: rgba(255, 255, 255, 0.04);
-        border: 1px solid rgba(255, 255, 255, 0.06);
-        padding: 18px 25px;
-        border-radius: 16px;
-        color: #cbd5e1;
-      }
-
-      .lock-overlay button {
-        background: linear-gradient(135deg, var(--info), var(--zaia));
-        color: white;
-        border: none;
-        padding: 10px 22px;
-        border-radius: 10px;
-        font-weight: 700;
-        cursor: pointer;
-        box-shadow: 0 4px 15px rgba(78, 20, 225, 0.35);
-        transition: all 0.2s;
-      }
-
-      .lock-overlay button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(78, 20, 225, 0.55);
+        background: #f1f5f9;
+        padding: 15px 25px;
+        border-radius: 12px;
       }
 
       #passModal {
@@ -310,23 +288,18 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(15, 23, 42, 0.85);
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
+        background: rgba(0, 0, 0, 0.9);
         z-index: 10001;
         align-items: center;
         justify-content: center;
       }
 
       .modal-box {
-        background: rgba(30, 41, 59, 0.95);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        background: white;
         padding: 30px;
-        border-radius: 24px;
+        border-radius: 20px;
         width: 350px;
         text-align: center;
-        color: #f8fafc;
       }
 
       .dashboard {
@@ -336,44 +309,31 @@
       }
 
       .column {
-        background: rgba(15, 23, 42, 0.5);
-        border: 1px solid rgba(255, 255, 255, 0.06);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        border-radius: 28px;
+        background: rgba(255, 255, 255, 0.96);
+        border-radius: 24px;
         padding: 30px;
         border-top: 12px solid var(--accent);
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      }
-
-      .column:hover {
-        transform: translateY(-5px);
-        border-color: rgba(255, 255, 255, 0.15);
       }
 
       .omni-side {
         --accent: var(--omni);
-        --accent-rgb: var(--omni-rgb);
       }
 
       .zaia-side {
         --accent: var(--zaia);
-        --accent-rgb: var(--zaia-rgb);
       }
 
       .wallet-card {
-        background: rgba(15, 23, 42, 0.4);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 20px;
+        background: rgba(248, 250, 252, 0.96);
+        border-radius: 15px;
         padding: 20px;
-        margin: 18px 0;
+        margin: 10px 0;
+        border: 2px solid #e2e8f0;
         position: relative;
         display: flex;
         justify-content: space-between;
         align-items: center;
         min-height: 100px;
-        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
       }
 
       .left-stat {
@@ -387,14 +347,14 @@
       }
 
       .stat-val-large {
-        font-size: 2.1rem;
+        font-size: 2.2rem;
         font-weight: 900;
         color: var(--text);
         line-height: 1;
       }
 
       .stat-val-mid {
-        font-size: 1.7rem;
+        font-size: 1.8rem;
         font-weight: 900;
         color: var(--warning);
         line-height: 1;
@@ -402,7 +362,7 @@
 
       .stat-label {
         font-size: 0.65rem;
-        color: var(--text-muted);
+        color: #64748b;
         font-weight: 800;
         text-transform: uppercase;
         letter-spacing: 0.5px;
@@ -418,7 +378,7 @@
         background: var(--success);
         padding: 8px 12px;
         border-radius: 12px;
-        box-shadow: 0 4px 10px rgba(34, 197, 94, 0.25);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         color: white;
       }
 
@@ -428,302 +388,61 @@
         display: block;
       }
 
-      /* SVG PROGRESS RING Visuals */
-      .progress-ring-container {
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 120px;
-        height: 120px;
-      }
-
-      .progress-ring {
-        transform: rotate(-90deg);
-      }
-
-      .progress-ring__circle {
-        stroke-dasharray: 301.6;
-        stroke-dashoffset: 301.6;
-        stroke-linecap: round;
-        transition: stroke-dashoffset 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-      }
-
-      .progress-ring__text {
-        position: absolute;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        inset: 0;
-        pointer-events: none;
-      }
-
-      .progress-ring__percent {
-        font-size: 1.4rem;
-        font-weight: 800;
-        color: #ffffff;
-        line-height: 1;
-      }
-
-      .progress-ring__label {
-        font-size: 0.55rem;
-        color: #94a3b8;
-        text-transform: uppercase;
-        margin-top: 2px;
-      }
-
-      /* Savings Target Config visuals */
-      .goal-hub {
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(255, 255, 255, 0.05);
-        border-radius: 16px;
-        padding: 14px 18px;
-        margin-top: 14px;
-        margin-bottom: 14px;
-      }
-
-      .goal-hub-title {
-        font-size: 0.65rem;
-        color: #94a3b8;
-        font-weight: 800;
-        letter-spacing: 1px;
-      }
-
-      .goal-edit-btn {
-        background: transparent;
-        border: none;
-        color: var(--info);
-        font-size: 0.75rem;
-        font-weight: 700;
-        cursor: pointer;
-        padding: 0;
-        transition: opacity 0.2s;
-      }
-
-      .goal-edit-btn:hover {
-        opacity: 0.8;
-      }
-
-      .goal-display {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 4px;
-      }
-
-      .goal-prize {
-        font-size: 1.05rem;
-        font-weight: 800;
-        color: #f8fafc;
-        max-width: 65%;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-
-      .goal-cost {
-        font-size: 1.15rem;
-        font-weight: 900;
-        color: #fbbf24;
-      }
-
-      .goal-edit-form {
-        margin-top: 8px;
-      }
-
-      .goal-edit-form input {
-        background: rgba(15, 23, 42, 0.6);
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        border-radius: 8px;
-        color: #f8fafc;
-        padding: 8px 12px;
-        font-size: 0.9rem;
-        width: 100%;
-        margin-bottom: 8px;
-        box-sizing: border-box;
-      }
-
-      .goal-save-btn {
-        background: var(--success);
-        color: white;
-        border: none;
-        padding: 6px 12px;
-        border-radius: 6px;
-        font-size: 0.75rem;
-        font-weight: 700;
-        cursor: pointer;
-      }
-
-      .goal-cancel-btn {
-        background: rgba(255, 255, 255, 0.08);
-        color: #cbd5e1;
-        border: none;
-        padding: 6px 12px;
-        border-radius: 6px;
-        font-size: 0.75rem;
-        font-weight: 700;
-        cursor: pointer;
-      }
-
-      .goal-claim-btn {
-        width: 100%;
-        background: linear-gradient(135deg, #fbbf24, #d97706);
-        color: #0f172a;
-        border: none;
-        padding: 11px;
-        border-radius: 12px;
-        font-size: 0.85rem;
-        font-weight: 900;
-        cursor: pointer;
-        box-shadow: 0 4px 15px rgba(251, 191, 36, 0.35);
-        animation: activePulse 1.5s infinite alternate;
-        transition: all 0.2s;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-      }
-
-      .goal-claim-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(251, 191, 36, 0.55);
-      }
-
-      @keyframes activePulse {
-        from { transform: scale(1); filter: brightness(1); }
-        to { transform: scale(1.03); filter: brightness(1.15); }
-      }
-
-      /* Premium Quest Cards styling */
       .chore-btn {
         width: 100%;
-        padding: 16px 20px;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 18px;
+        padding: 15px;
+        border: 3px solid #e2e8f0;
+        border-radius: 15px;
         cursor: pointer;
         font-size: 1.1rem;
-        font-weight: 700;
-        margin-bottom: 12px;
-        background: rgba(255, 255, 255, 0.04);
-        color: #f8fafc;
+        font-weight: bold;
+        margin-bottom: 10px;
+        background: white;
         text-align: left;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        display: block;
-        position: relative;
-        overflow: hidden;
+        transition: transform 0.1s;
       }
 
-      .chore-btn::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
-        transform: translateX(-100%);
-        transition: transform 0.5s;
-      }
-
-      .chore-btn:hover::before {
-        transform: translateX(100%);
-      }
-
-      .chore-btn:hover:not(:disabled) {
-        transform: translateY(-3px);
-        background: rgba(255, 255, 255, 0.08);
-        border-color: rgba(255, 255, 255, 0.2);
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25), 0 0 15px rgba(255, 255, 255, 0.08);
-      }
-
-      .chore-btn:active:not(:disabled) {
-        transform: translateY(-1px);
-        background: rgba(255, 255, 255, 0.05);
+      .chore-btn:active {
+        transform: scale(0.98);
       }
 
       .chore-btn:disabled {
-        background: rgba(255, 255, 255, 0.02);
-        border-color: rgba(255, 255, 255, 0.03);
-        color: #64748b;
+        background: #f1f5f9;
+        border-color: #cbd5e1;
+        color: #94a3b8;
         cursor: not-allowed;
-        opacity: 0.4;
-        box-shadow: none;
+        opacity: 0.7;
       }
 
-      /* Gold quest custom hover glow accents */
-      .chore-btn:not(.spending):hover:not(:disabled) {
-        border-color: #fbbf24;
-        box-shadow: 0 8px 25px rgba(251, 191, 36, 0.15), 0 0 15px rgba(251, 191, 36, 0.05);
-      }
-
-      /* Doom/spending quest lava styles */
       .chore-btn.spending {
-        background: rgba(239, 68, 68, 0.04);
-        border-color: rgba(239, 68, 68, 0.12);
-        color: #fca5a5;
-      }
-
-      .chore-btn.spending:hover:not(:disabled) {
-        background: rgba(239, 68, 68, 0.08);
-        border-color: #ef4444;
-        box-shadow: 0 8px 25px rgba(239, 68, 68, 0.2), 0 0 15px rgba(239, 68, 68, 0.08);
-        color: #fecaca;
+        border-color: var(--warning);
+        background: #fffcf0;
       }
 
       .history-item {
-        background: rgba(15, 23, 42, 0.35);
-        border: 1px solid rgba(255, 255, 255, 0.06);
-        padding: 16px;
-        border-radius: 16px;
+        background: rgba(248, 250, 252, 0.96);
+        padding: 15px;
+        border-radius: 12px;
         margin-bottom: 12px;
+        border-left: 6px solid var(--accent);
         position: relative;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        transition: all 0.3s;
-      }
-
-      .history-item:hover {
-        background: rgba(15, 23, 42, 0.45);
-        border-color: rgba(255, 255, 255, 0.12);
-        transform: translateX(4px);
       }
 
       .status-tag {
         font-size: 0.7rem;
-        padding: 4px 10px;
-        border-radius: 8px;
+        padding: 4px 8px;
+        border-radius: 6px;
         font-weight: 800;
         float: right;
         text-transform: uppercase;
-        letter-spacing: 0.5px;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.15);
       }
 
       .status-approved {
-        background: rgba(34, 197, 94, 0.15);
-        color: #4ade80;
-        border: 1px solid rgba(34, 197, 94, 0.3);
+        background: #dcfce7;
+        color: #166534;
       }
 
       .status-partial {
-        background: rgba(14, 165, 233, 0.15);
-        color: #38bdf8;
-        border: 1px solid rgba(14, 165, 233, 0.3);
-      }
-
-      .status-pending {
-        background: rgba(245, 158, 11, 0.15);
-        color: #fbbf24;
-        border: 1px solid rgba(245, 158, 11, 0.3);
-        animation: glowPulse 2s infinite alternate;
-      }
-
-      .status-declined {
-        background: rgba(239, 68, 68, 0.15);
-        color: #f87171;
-        border: 1px solid rgba(239, 68, 68, 0.3);
-      }
-
-      @keyframes glowPulse {
-        from { box-shadow: 0 0 4px rgba(245, 158, 11, 0.2); }
-        to { box-shadow: 0 0 12px rgba(245, 158, 11, 0.5); }
-      }
         background: #e0f2fe;
         color: #0369a1;
       }
@@ -1565,14 +1284,10 @@
       }];
       const defaultChildren = [{
         id: 'child1',
-        name: 'Dr. Plague',
-        goalName: '',
-        goalPrice: 0
+        name: 'Dr. Plague'
       }, {
         id: 'child2',
-        name: 'Dressy Girl',
-        goalName: '',
-        goalPrice: 0
+        name: 'Dressy Girl'
       }];
       let currentUser = null;
       let saveTimer = null;
@@ -1950,6 +1665,73 @@
         return '⭐';
       }
 
+      function updateUI() {
+        if (!state) return;
+        const now = new Date();
+        ['omni', 'zaia'].forEach(child => {
+          const items = state.history.filter(r => r.child === child);
+          const pendingVal = items.filter(i => i.status === 'pending').reduce((s, r) => s + r.price, 0);
+          document.getElementById(`${child}-pending`).innerText = `$${pendingVal.toFixed(2)}`;
+          document.getElementById(`${child}-balance`).innerText = `$${state.balances[child].toFixed(2)}`;
+          document.getElementById(`${child}-grand`).innerText = `$${state.totals[child].toFixed(2)}`;
+          // History List
+          const logArea = document.getElementById(`${child}-history`);
+          logArea.innerHTML = '';
+          [...items].reverse().slice(0, 15).forEach(r => {
+            const isPending = r.status === 'pending';
+            logArea.innerHTML += `
+              
+								<div class="history-item">
+									<span class="status-tag status-${r.status}">${r.status} ${r.earned ? '($'+r.earned.toFixed(2)+')' : ''}</span>
+									<strong>${r.name}</strong> ($${Math.abs(r.price)})
+									<br>
+										<small>${r.time}</small>
+										<div class="parent-actions">
+                    ${isPending ? `
+                      
+											<button class="rev-btn" style="background:var(--success)" onclick="reviewChore('${r.id}', 1, 'approved')">100%</button>
+											<button class="rev-btn" style="background:var(--info)" onclick="reviewChore('${r.id}', 0.5, 'partial')">50%</button>
+											<button class="rev-btn" style="background:var(--danger)" onclick="reviewChore('${r.id}', 0, 'declined')">Decline</button>` : 
+                    `
+											<button class="undo-btn" onclick="undoReview('${r.id}')">↩ Undo</button>
+											<button class="rev-btn" style="background:var(--lock)" onclick="archiveItem('${r.id}')">Clear</button>`}
+                
+										</div>
+									</div>`;
+          });
+          // Chore Buttons
+          const btnArea = document.getElementById(`${child}-chores`);
+          btnArea.innerHTML = '';
+          state.chores
+            .filter(c => c.target === 'both' || c.target === child)
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .forEach(c => {
+            const isExpired = c.dueDate && now > new Date(c.dueDate);
+            const b = document.createElement('button');
+            b.className = `chore-btn ${c.price < 0 ? 'spending' : ''}`;
+            const choreIcon = getChoreIcon(c.name);
+            let dueText = "";
+            if (c.dueDate) {
+              const d = new Date(c.dueDate);
+              dueText = `
+									<span class="due-label">Due: ${d.toLocaleDateString()} ${d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} ${isExpired ? '🚨 EXPIRED' : ''}</span>`;
+            }
+            b.innerHTML = `
+                
+									<div style="display:flex; justify-content:space-between; align-items:center;">
+										<span>${c.price < 0 ? '👹 ' : `${choreIcon} `}${c.name}
+										</span>
+										<span>$${Math.abs(c.price).toFixed(2)}</span>
+									</div>
+                ${dueText}`;
+            b.disabled = isExpired;
+            b.onclick = () => addRecord(child, c);
+            btnArea.appendChild(b);
+          });
+        });
+        renderMaster();
+      }
+
       function addRecord(child, chore) {
         triggerSplash(child, chore.price);
         state.history.push({
@@ -1971,10 +1753,8 @@
           item.status = statusName;
           const totalEarned = item.price * multiplier;
           item.earned = totalEarned;
-          if (totalEarned > 0) {
-            state.totals[item.child] = sanitizeNumber(state.totals[item.child], 0) + totalEarned;
-          }
-          state.balances[item.child] = sanitizeNumber(state.balances[item.child], 200) + totalEarned;
+          if (totalEarned > 0) state.totals[item.child] += totalEarned;
+          state.balances[item.child] += totalEarned;
           saveData();
           updateUI();
         }
@@ -1983,10 +1763,8 @@
       function undoReview(id) {
         const item = state.history.find(x => x.id === id);
         if (item && item.status !== 'pending') {
-          if (item.earned > 0) {
-            state.totals[item.child] = sanitizeNumber(state.totals[item.child], 0) - item.earned;
-          }
-          state.balances[item.child] = sanitizeNumber(state.balances[item.child], 200) - item.earned;
+          state.totals[item.child] -= item.earned;
+          state.balances[item.child] -= item.earned;
           item.status = 'pending';
           item.earned = 0;
           saveData();
@@ -2072,32 +1850,28 @@
         }
       }
       // --- Standard Helpers ---
-      // --- Standard Helpers & Goal Features ---
-      function triggerSplash(child, price, isGoalClaim = false) {
+      function triggerSplash(child, price) {
         const splash = document.getElementById('celebration');
         const container = document.getElementById('item-container');
         const title = document.getElementById('splash-title');
         const emojiMain = document.getElementById('splash-emojis');
-        const theme = getThemeForChild(child);
         container.innerHTML = '';
-        if (isGoalClaim) {
-          title.innerText = 'REWARD UNLOCKED!';
-          splash.className = 'theme-omni';
-          splash.style.background = 'radial-gradient(circle, rgba(251,191,36,0.3) 0%, rgba(15,23,42,0.95) 100%)';
-          emojiMain.innerText = '🎯🏆🎁✨';
-          spawnItems(['🎁', '🎯', '🏆', '💎', '✨', '👑', '🎉']);
-        } else if (price < 0) {
+        if (price < 0) {
           splash.className = 'theme-troll';
-          splash.style.background = '';
           title.innerText = 'TROLL TAX!';
           emojiMain.innerText = '🧌';
           spawnItems(itemsTroll);
         } else {
           title.innerText = 'WAY TO GO!';
-          splash.style.background = '';
-          splash.className = theme.accent === '#4e14e1' ? 'theme-zaia' : 'theme-omni';
-          emojiMain.innerText = theme.emoji;
-          spawnItems(theme.items);
+          if (child === 'omni') {
+            splash.className = 'theme-omni';
+            emojiMain.innerText = '🌀⚡🧬';
+            spawnItems(itemsO);
+          } else {
+            splash.className = 'theme-zaia';
+            emojiMain.innerText = '🌈🦄✨';
+            spawnItems(itemsZ);
+          }
         }
         splash.style.display = 'flex';
         setTimeout(() => {
@@ -2107,7 +1881,6 @@
 
       function spawnItems(list) {
         const container = document.getElementById('item-container');
-        if (!container) return;
         for (let i = 0; i < 30; i++) {
           const span = document.createElement('span');
           span.className = 'flying-item';
@@ -2122,75 +1895,28 @@
         }
       }
 
-      function toggleGoalEdit(childId, show) {
-        const display = document.getElementById(`goal-display-${childId}`);
-        const form = document.getElementById(`goal-form-${childId}`);
-        if (display && form) {
-          display.style.display = show ? 'none' : 'flex';
-          form.style.display = show ? 'block' : 'none';
+      function triggerSplash(child, price) {
+        const splash = document.getElementById('celebration');
+        const container = document.getElementById('item-container');
+        const title = document.getElementById('splash-title');
+        const emojiMain = document.getElementById('splash-emojis');
+        const theme = getThemeForChild(child);
+        container.innerHTML = '';
+        if (price < 0) {
+          splash.className = 'theme-troll';
+          title.innerText = 'TROLL TAX!';
+          emojiMain.innerText = '🧌';
+          spawnItems(itemsTroll);
+        } else {
+          title.innerText = 'WAY TO GO!';
+          splash.className = theme.accent === '#4e14e1' ? 'theme-zaia' : 'theme-omni';
+          emojiMain.innerText = theme.emoji;
+          spawnItems(theme.items);
         }
-      }
-
-      function saveGoal(childId) {
-        const nameInput = document.getElementById(`goal-name-input-${childId}`);
-        const priceInput = document.getElementById(`goal-price-input-${childId}`);
-        if (!nameInput || !priceInput) return;
-
-        const goalName = nameInput.value.trim();
-        const goalPrice = sanitizeNumber(priceInput.value, 0);
-
-        const child = getChildren().find(c => c.id === childId);
-        if (!child) return;
-
-        child.goalName = goalName;
-        child.goalPrice = goalPrice;
-
-        saveData();
-        updateUI();
-      }
-
-      function claimGoal(childId) {
-        const child = getChildren().find(c => c.id === childId);
-        if (!child) return;
-
-        const goalPrice = child.goalPrice || 0;
-        const goalName = child.goalName || 'Reward';
-        const balanceVal = sanitizeNumber(state.balances?.[child.id], 200);
-
-        if (balanceVal < goalPrice) {
-          alert("Insufficient balance to claim this reward!");
-          return;
-        }
-
-        if (!confirm(`Are you sure you want to claim "${goalName}" for $${goalPrice.toFixed(2)}?`)) {
-          return;
-        }
-
-        // Deduct balance
-        state.balances[child.id] = sanitizeNumber(balanceVal - goalPrice, 0);
-
-        // Append history item
-        const recordId = 'h_claim_' + Date.now();
-        const record = {
-          id: recordId,
-          child: child.id,
-          name: `Claimed Reward: ${goalName}`,
-          price: -goalPrice,
-          status: 'approved',
-          earned: -goalPrice,
-          time: new Date().toLocaleString()
-        };
-        state.history.push(record);
-
-        // Reset goal
-        child.goalName = '';
-        child.goalPrice = 0;
-
-        // Trigger celebration
-        triggerSplash(child.id, `Claimed ${goalName}!`, true);
-
-        saveData();
-        updateUI();
+        splash.style.display = 'flex';
+        setTimeout(() => {
+          splash.style.display = 'none';
+        }, 4000);
       }
 
       function openModal() {
@@ -2268,9 +1994,7 @@
 
         return children.map((child, index) => ({
           id: String(child?.id || ('child' + (index + 1))),
-          name: String(child?.name || ('Child ' + (index + 1))).trim() || ('Child ' + (index + 1)),
-          goalName: String(child?.goalName || ''),
-          goalPrice: sanitizeNumber(child?.goalPrice, 0)
+          name: String(child?.name || ('Child ' + (index + 1))).trim() || ('Child ' + (index + 1))
         }));
       }
 
@@ -2323,7 +2047,7 @@
       function sanitizeTotals(totals, history, children = getChildren()) {
         return children.reduce((acc, child) => {
           const approved = history
-            .filter(item => item.child === child.id && item.status !== 'pending' && item.earned > 0)
+            .filter(item => item.child === child.id && item.status !== 'pending')
             .reduce((sum, item) => sum + sanitizeNumber(item.earned, 0), 0);
           acc[child.id] = sanitizeNumber(totals?.[child.id], approved);
           return acc;
@@ -2366,9 +2090,7 @@
         const nextId = 'child' + Date.now();
         state.children.push({
           id: nextId,
-          name: `Child ${nextIndex}`,
-          goalName: '',
-          goalPrice: 0
+          name: `Child ${nextIndex}`
         });
         state.totals[nextId] = 0;
         state.balances[nextId] = 200;
@@ -2453,87 +2175,26 @@
           const column = document.createElement('div');
           column.className = 'column';
           column.style.borderTopColor = theme.accent;
-          const goalName = child.goalName || '';
-          const goalPrice = child.goalPrice || 0;
-          const hasGoal = goalPrice > 0;
-          const pct = hasGoal ? Math.min(100, Math.round((balanceVal / goalPrice) * 100)) : 0;
-          const radius = 42;
-          const circum = 2 * Math.PI * radius; // 263.89
-          const offset = hasGoal ? circum - (pct / 100) * circum : circum;
-          const gradientId = `grad-${child.id}`;
-          const canClaim = hasGoal && balanceVal >= goalPrice;
-
           column.innerHTML = `
-            <div style="font-size:3rem; font-weight:900; text-align:center; color:${theme.accent}; margin-bottom:15px;">${child.name}</div>
-            
+            <div style="font-size:3rem; font-weight:900; text-align:center; color:${theme.accent}">${child.name}</div>
             <div class="wallet-card">
-              <div class="left-stat" style="display:flex; flex-direction:column; gap:8px;">
-                <div>
-                  <span class="stat-val-large">$${balanceVal.toFixed(2)}</span>
-                  <span class="stat-label">Available Balance</span>
-                </div>
-                <div style="display:flex; gap:16px;">
-                  <div>
-                    <span class="stat-val-mid" style="font-size:1.1rem; color:var(--text-muted);">$${totalVal.toFixed(2)}</span>
-                    <span class="stat-label" style="font-size:0.55rem;">Lifetime</span>
-                  </div>
-                  <div>
-                    <span class="stat-val-mid" style="font-size:1.1rem; color:var(--warning);">$${pendingVal.toFixed(2)}</span>
-                    <span class="stat-label" style="font-size:0.55rem;">Pending</span>
-                  </div>
-                </div>
+              <div class="left-stat">
+                <span class="stat-val-large">$${totalVal.toFixed(2)}</span>
+                <span class="stat-label">Lifetime Earnings</span>
               </div>
-              
-              <div class="progress-ring-container">
-                <svg class="progress-ring" width="100" height="100">
-                  <defs>
-                    <linearGradient id="${gradientId}" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stop-color="${theme.accent}" />
-                      <stop offset="100%" stop-color="#fbbf24" />
-                    </linearGradient>
-                  </defs>
-                  <circle class="progress-ring__circle-bg" stroke="rgba(255,255,255,0.05)" stroke-width="8" fill="transparent" r="${radius}" cx="50" cy="50"/>
-                  <circle class="progress-ring__circle" stroke="url(#${gradientId})" stroke-width="8" fill="transparent" r="${radius}" cx="50" cy="50" style="stroke-dasharray: ${circum}; stroke-dashoffset: ${offset}; stroke-linecap: round; transition: stroke-dashoffset 0.6s cubic-bezier(0.4, 0, 0.2, 1); filter: drop-shadow(0 0 6px ${theme.accent}80);"/>
-                </svg>
-                <div class="progress-ring__text">
-                  <span class="progress-ring__percent">${hasGoal ? pct + '%' : '—'}</span>
-                  <span class="progress-ring__label">${hasGoal ? 'Goal' : 'No Goal'}</span>
-                </div>
+              <div class="middle-stat">
+                <span class="stat-val-mid">$${pendingVal.toFixed(2)}</span>
+                <span class="stat-label">Pending</span>
+              </div>
+              <div class="balance-container">
+                <span class="balance-label" style="font-size:0.5rem">BALANCE</span>
+                <span class="balance-value">$${balanceVal.toFixed(2)}</span>
               </div>
             </div>
-
-            <div class="goal-hub">
-              <div class="goal-display" id="goal-display-${child.id}">
-                <div style="max-width:65%;">
-                  <div class="goal-hub-title">Savings Goal</div>
-                  <div class="goal-prize" title="${goalName || 'No Goal Set'}">${goalName || 'None Set'}</div>
-                </div>
-                <div style="text-align:right; display:flex; flex-direction:column; align-items:flex-end; gap:4px;">
-                  <span class="goal-cost">${hasGoal ? '$' + goalPrice.toFixed(2) : '$0.00'}</span>
-                  <button class="goal-edit-btn" onclick="toggleGoalEdit('${child.id}', true)">Configure</button>
-                </div>
-              </div>
-              
-              <div class="goal-edit-form" id="goal-form-${child.id}" style="display:none;">
-                <div class="goal-hub-title" style="margin-bottom:6px;">Set Savings Goal</div>
-                <input type="text" id="goal-name-input-${child.id}" placeholder="e.g. Lego Star Wars Set" value="${goalName.replace(/"/g, '&quot;')}">
-                <input type="number" id="goal-price-input-${child.id}" placeholder="e.g. 50.00" value="${goalPrice || ''}" step="0.01" min="0">
-                <div style="display:flex; gap:8px; justify-content:flex-end;">
-                  <button class="goal-cancel-btn" onclick="toggleGoalEdit('${child.id}', false)">Cancel</button>
-                  <button class="goal-save-btn" onclick="saveGoal('${child.id}')">Save</button>
-                </div>
-              </div>
-              
-              ${canClaim ? `
-                <div style="margin-top:12px;">
-                  <button class="goal-claim-btn" onclick="claimGoal('${child.id}')">🎉 Claim Reward! ($${goalPrice.toFixed(2)})</button>
-                </div>
-              ` : ''}
-            </div>
-
             <div id="chores-${child.id}"></div>
             <h4>Activity Review</h4>
             <div id="history-${child.id}"></div>
+          `;
           dashboard.appendChild(column);
 
           const logArea = column.querySelector(`#history-${child.id}`);
