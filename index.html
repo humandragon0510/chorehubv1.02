@@ -1,542 +1,751 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Treasure List Fun</title>
-<style>
-:root{--text:#1e293b;--danger:#ef4444;--success:#22c55e;--warning:#f59e0b;--lock:#64748b;--info:#0ea5e9}
-[v-cloak]{display:none}
-body{font-family:'Segoe UI',sans-serif;background:#000;margin:0;padding:20px;overflow-x:hidden;color:var(--text);animation:rainbow 15s linear infinite}
-.container{max-width:1400px;margin:0 auto;position:relative;z-index:2}
-.container.blur{filter:blur(4px);pointer-events:none;user-select:none}
-#ambient-bg{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0}
-.ambient-item{position:absolute;font-size:5rem;filter:drop-shadow(0 0 20px #EFFF00) drop-shadow(0 0 40px #FFD700);opacity:.85;animation:float var(--dur) ease-in-out infinite alternate}
-.hero-shell{display:flex;justify-content:center;margin-bottom:18px}
-.hero-card{text-align:center;padding:24px 56px;min-width:min(800px,100%);max-width:100%;border:8px solid #fff;border-radius:40px;background:rgba(0,0,0,.7);box-shadow:0 0 50px rgba(0,0,0,.5)}
-.hero-row{display:flex;align-items:center;justify-content:center;gap:24px;flex-wrap:wrap}
-.hero-title{color:#fff;font-size:clamp(2.5rem,5vw,5rem);font-weight:900;line-height:1.1;text-transform:uppercase;animation:pulse 4s ease-in-out infinite alternate;letter-spacing:-2px;margin:0;font-family:'Arial Black',sans-serif}
-.hero-emoji{display:inline-block;font-size:3.75rem;animation:spin 12s linear infinite}
-.hero-subtitle{display:block;font-size:clamp(1.5rem,3vw,2.6rem);margin-top:14px;letter-spacing:.45em;font-weight:900;text-transform:uppercase;color:#fff;text-shadow:2px 2px 0 #009EDD,4px 4px 0 #BF00FF,0 0 20px #000}
-#celebration{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;text-align:center}
-.theme-omni{background:#000 radial-gradient(3px 3px at 20px 30px,#2dd4bf,transparent),radial-gradient(3px 3px at 40px 70px,#a855f7,transparent);animation:hyper .4s linear infinite}
-.theme-zaia{background:#000;animation:disco .3s infinite}
-.theme-troll{background:repeating-linear-gradient(45deg,#450a0a,#450a0a 10px,#7f1d1d 10px,#7f1d1d 20px);animation:troll .1s infinite}
-.giant-text{font-size:8rem;font-weight:900;background:linear-gradient(#fff,#fbbf24);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-stroke:3px #000;animation:rumble .1s infinite;z-index:1000;margin:0}
-.flying-item{position:absolute;font-size:6rem;pointer-events:none;animation:flyOut var(--d) linear infinite;z-index:50}
-@keyframes troll{to{background-position:10px 10px}}
-@keyframes disco{0%{background-color:#f0f}33%{background-color:#0ff}66%{background-color:#ff0}}
-@keyframes hyper{to{background-position:0 400px}}
-@keyframes rainbow{0%,100%{background-color:#f00}15%{background-color:#EFFF00}30%{background-color:#0f0}45%{background-color:#009EDD}60%{background-color:#139EFF}75%{background-color:#BF00FF}90%{background-color:#ec4899}}
-@keyframes pulse{from{transform:scale(1);filter:drop-shadow(0 0 10px rgba(255,255,255,.4))}to{transform:scale(1.05);filter:drop-shadow(0 0 30px rgba(255,255,255,.8))}}
-@keyframes spin{to{transform:rotate(360deg)}}
-@keyframes float{from{transform:translateY(0) scale(.95) rotate(-8deg)}to{transform:translateY(-20px) scale(1.05) rotate(8deg)}}
-@keyframes rumble{0%{transform:translate(3px,3px)}50%{transform:translate(-3px,-3px)}}
-@keyframes flyOut{0%{transform:scale(.5) translate(-50%,-50%);opacity:1;left:50%;top:55%}100%{transform:scale(3) translate(var(--tx),var(--ty)) rotate(var(--rot));opacity:0;left:50%;top:50%}}
-.panel{background:rgba(255,255,255,.96);margin-bottom:30px;padding:25px;border-radius:20px;box-shadow:0 10px 15px rgba(0,0,0,.1)}
-.lock-overlay{display:flex;align-items:center;justify-content:space-between;background:#f1f5f9;padding:15px 25px;border-radius:12px}
-.overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:20px}
-#passModal{background:rgba(0,0,0,.9);z-index:10001}
-.auth-overlay{z-index:20000;background:rgba(15,23,42,.76)}
-.modal-box{background:#fff;padding:30px;border-radius:20px;width:350px;max-width:100%;text-align:center}
-.auth-card{width:min(420px,100%);background:rgba(255,255,255,.97);border-radius:24px;padding:28px;box-shadow:0 20px 50px rgba(0,0,0,.28)}
-.auth-card h2{margin:0 0 8px}.auth-card p{margin:0 0 18px;color:#475569}
-.auth-card label{display:block;margin-bottom:6px;font-size:.82rem;font-weight:800;text-transform:uppercase;color:#475569}
-.auth-card input{width:100%;margin-bottom:14px;box-sizing:border-box}
-.auth-actions{display:flex;gap:10px;flex-wrap:wrap}
-.auth-link-btn{background:transparent;border:none;padding:0;margin-top:10px;color:var(--info);font-weight:700;cursor:pointer}
-.auth-primary,.auth-secondary{border:none;border-radius:10px;padding:10px 14px;font-weight:800;cursor:pointer}
-.auth-primary{background:var(--success);color:#fff}.auth-secondary{background:#e2e8f0;color:var(--text)}
-.auth-message,.msg{min-height:22px;margin-top:10px;font-size:.9rem;color:#475569}
-.err{color:#b91c1c!important}
-.dashboard{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:30px}
-.column{background:rgba(255,255,255,.96);border-radius:24px;padding:30px;border-top:12px solid}
-.child-name{font-size:3rem;font-weight:900;text-align:center}
-.wallet-card{background:rgba(248,250,252,.96);border-radius:15px;padding:20px;margin:10px 0;border:2px solid #e2e8f0;position:relative;display:flex;justify-content:space-between;align-items:center;min-height:100px}
-.left-stat{text-align:left;flex:1}.middle-stat{text-align:center;flex:1}
-.stat-val-large{font-size:2.2rem;font-weight:900;line-height:1}
-.stat-val-mid{font-size:1.8rem;font-weight:900;color:var(--warning);line-height:1}
-.stat-label{font-size:.65rem;color:#64748b;font-weight:800;text-transform:uppercase;letter-spacing:.5px;margin-top:5px;display:block}
-.balance-container{position:absolute;top:-10px;right:15px;text-align:right;background:var(--success);padding:8px 12px;border-radius:12px;box-shadow:0 4px 6px -1px rgba(0,0,0,.1);color:#fff}
-.balance-value{font-size:1.4rem;font-weight:900;display:block}
-.chore-btn{width:100%;padding:15px;border:3px solid #e2e8f0;border-radius:15px;cursor:pointer;font-size:1.1rem;font-weight:bold;margin-bottom:10px;background:#fff;text-align:left;transition:transform .1s}
-.chore-btn:active{transform:scale(.98)}
-.chore-btn:disabled{background:#f1f5f9;border-color:#cbd5e1;color:#94a3b8;cursor:not-allowed;opacity:.7}
-.chore-btn.spending{border-color:var(--warning);background:#fffcf0}
-.row{display:flex;justify-content:space-between;align-items:center}
-.history-item{background:rgba(248,250,252,.96);padding:15px;border-radius:12px;margin-bottom:12px;border-left:6px solid}
-.status-tag{font-size:.7rem;padding:4px 8px;border-radius:6px;font-weight:800;float:right;text-transform:uppercase}
-.status-approved{background:#dcfce7;color:#166534}.status-partial{background:#e0f2fe;color:#0369a1}
-.status-pending{background:#82FF59;color:#92400e}.status-declined{background:#fee2e2;color:#991b1b}
-.rev-btn{border:none;padding:10px 12px;border-radius:8px;cursor:pointer;font-weight:bold;color:#fff;margin-top:10px;font-size:.8rem;margin-right:5px}
-.undo-btn{background:#64748b;color:#fff;border:none;padding:5px 10px;border-radius:6px;cursor:pointer;font-size:.7rem;margin-top:10px}
-.master-table{width:100%;margin-top:15px;border-collapse:collapse}
-.master-table th,.master-table td{padding:8px;text-align:left;border-bottom:1px solid #eee}
-input,select{padding:8px;border:1px solid #ccc;border-radius:6px}
-.due-label{font-size:.7rem;color:#64748b;display:block;margin-top:4px}
-.top-bar{display:flex;justify-content:flex-end;align-items:center;gap:12px;margin-bottom:16px;position:relative;z-index:3}
-.session-badge{background:rgba(255,255,255,.92);border-radius:999px;padding:8px 14px;font-size:.85rem;font-weight:700}
-.session-btn{background:var(--info);color:#fff;border:none;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer}
-.box{margin-top:15px;background:#f8fafc;padding:15px;border-radius:15px}
-.flex{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
-.btn{padding:10px;color:#fff;border:none;border-radius:8px;cursor:pointer}
-.search-panel{background:rgba(255,255,255,.96);margin-bottom:20px;padding:18px 20px;border-radius:18px;box-shadow:0 10px 15px rgba(0,0,0,.1)}
-.search-controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-.search-input{flex:1 1 280px;min-width:220px;padding:12px 14px;border:2px solid #cbd5e1;border-radius:12px;font-size:1rem}
-.search-clear-btn{border:none;border-radius:12px;padding:12px 14px;font-weight:800;background:#e2e8f0;color:var(--text);cursor:pointer}
-.search-status{margin-top:10px;color:#475569;font-size:.9rem}
-.empty-search-state{margin:12px 0 4px;padding:12px 14px;border-radius:12px;background:#f8fafc;color:#64748b;font-weight:700;text-align:center}
-@media(max-width:900px){body{padding:14px}.top-bar{justify-content:center;flex-wrap:wrap}.lock-overlay{flex-direction:column;align-items:stretch;gap:12px;text-align:center}.dashboard{grid-template-columns:1fr;gap:18px}.wallet-card{flex-direction:column;align-items:stretch;gap:16px}.left-stat,.middle-stat{text-align:center}.balance-container{position:static;text-align:center;margin-top:8px}.hero-card{padding:18px 20px;border-width:6px;border-radius:24px}.hero-subtitle{letter-spacing:.18em}.search-controls{flex-direction:column;align-items:stretch}.search-clear-btn{width:100%}}
-@media(max-width:640px){body{padding:10px}.panel,.column{padding:16px;border-radius:18px}.hero-card{padding:14px 12px}.hero-row{gap:10px}.hero-emoji{font-size:2.4rem}.hero-subtitle{margin-top:10px;letter-spacing:.12em}.session-badge,.session-btn,.auth-primary,.auth-secondary{width:100%;text-align:center}.auth-card{padding:20px;border-radius:18px}.auth-actions{flex-direction:column}.giant-text{font-size:4rem}.stat-val-large{font-size:1.8rem}.stat-val-mid{font-size:1.4rem}.chore-btn{padding:13px;font-size:1rem}
-.master-table,.master-table tbody,.master-table td,.master-table tr{display:block;width:100%}.master-table thead{display:none}.master-table tr{margin-bottom:14px;padding:12px;background:#f8fafc;border-radius:14px;border:1px solid #e2e8f0}.master-table td{border-bottom:none;padding:6px 0}.master-table td input,.master-table td select,.master-table td button{width:100%}}
-@media(prefers-reduced-motion:reduce){body{animation:none;background:#1e3a8a}.hero-emoji,.hero-title,.ambient-item{animation:none}}
-</style>
-</head>
-<body>
-<div id="app" v-cloak>
-  <div id="ambient-bg"><div v-for="(a,i) in ambient" :key="i" class="ambient-item" :style="a.style">{{ a.icon }}</div></div>
-
-  <div v-if="authRequired" class="overlay auth-overlay">
-    <div class="auth-card">
-      <h2>Sign In</h2>
-      <p>Use your Supabase email and password to keep chores synced across devices.</p>
-      <label for="authEmail">Email</label>
-      <input type="email" id="authEmail" v-model="authEmail" placeholder="you@example.com" autocomplete="email">
-      <label for="authPassword">Password</label>
-      <input type="password" id="authPassword" v-model="authPassword" placeholder="Password" autocomplete="current-password" @keyup.enter="handleLogin">
-      <div class="auth-actions">
-        <button class="auth-primary" type="button" @click="handleLogin">Sign In</button>
-        <button class="auth-secondary" type="button" @click="handleSignup">Create Account</button>
-      </div>
-      <button class="auth-link-btn" type="button" @click="handlePasswordResetRequest">Forgot Password?</button>
-      <div v-if="showReset" style="margin-top:16px">
-        <label for="newPassword">New Password</label>
-        <input type="password" id="newPassword" v-model="newPassword" placeholder="Enter a new password" autocomplete="new-password">
-        <button class="auth-primary" type="button" @click="handlePasswordUpdate">Update Password</button>
-      </div>
-      <div class="auth-message" :class="{err:authError}">{{ authMessage }}</div>
-    </div>
-  </div>
-
-  <div v-if="splash.show" id="celebration" :class="'theme-'+splash.cls">
-    <div style="position:absolute;inset:0"><span v-for="(s,i) in splash.items" :key="i" class="flying-item" :style="s.style">{{ s.icon }}</span></div>
-    <div style="position:relative;z-index:100">
-      <h1 class="giant-text">{{ splash.title }}</h1>
-      <div style="font-size:8rem;margin-top:20px">{{ splash.emoji }}</div>
-    </div>
-  </div>
-
-<div v-if="showPassModal" id="passModal" class="overlay" @click.self="closeModal">
-  <div class="modal-box">
-    <h3>Parent Access</h3>
-    <input type="password" v-model="parentPasswordInput" style="width:80%;margin-bottom:10px" placeholder="Parent password" @keyup.enter="handleUnlockDashboard">
-    <div class="msg err">{{ passErr }}</div>
-    <button class="rev-btn" style="background:var(--success);padding:10px 20px" @click="handleUnlockDashboard">Unlock</button>
-    <button class="rev-btn" style="background:var(--lock);padding:10px 20px" @click="closeModal">Cancel</button>
-  </div>
-</div>
-
-
-  <div class="container" :class="{blur:authRequired}">
-    <div class="top-bar">
-      <div class="session-badge">{{ sessionText }}</div>
-      <button class="session-btn" type="button" @click="handleLogout">Log Out</button>
-    </div>
-    <div class="hero-shell"><div class="hero-card">
-      <div class="hero-row"><span class="hero-emoji">💰</span><h1 class="hero-title">{{ state.appTitle }}</h1><span class="hero-emoji" style="animation-delay:-6s">🌈</span></div>
-      <div class="hero-subtitle">{{ state.children.length }} {{ state.children.length === 1 ? 'Explorer' : 'Explorers' }}</div>
-    </div></div>
-
-    <div class="panel">
-      <div v-if="adminLocked" class="lock-overlay">
-        <span>🔒 Parent Dashboard Locked</span>
-        <button @click="showPassModal=true" style="padding:10px 20px;cursor:pointer;font-weight:bold">Unlock</button>
-      </div>
-      <div v-else>
-        <div class="row" style="flex-wrap:wrap;gap:10px">
-          <h2 style="margin:0">Parent Dashboard</h2>
-          <div class="flex" style="margin:0">
-            <button class="btn" style="background:var(--info)" @click="exportData">💾 Backup</button>
-            <button class="btn" style="background:var(--warning)" @click="$refs.restore.click()">Restore</button>
-            <button class="btn" style="background:var(--danger)" @click="resetEverything">Hard Reset</button>
-            <button class="btn" style="background:var(--lock)" @click="lockAdmin">🔒 Lock</button>
-          </div>
-        </div>
-        <div class="box" style="background:#f1f5f9"><strong>Quick Assign:</strong>
-          <div class="flex">
-            <input type="text" v-model="nc.name" placeholder="Chore Name" style="flex:2">
-            <input type="number" step="0.01" v-model="nc.price" placeholder="$" style="width:70px">
-            <input type="date" v-model="nc.date"><input type="time" v-model="nc.time">
-            <button class="btn" style="background:var(--success)" @click="addNewChore">Assign</button>
-          </div>
-        </div>
-        <div class="box"><strong>Parent Password:</strong>
-          <div class="flex">
-            <input type="password" v-model="newParentPass" placeholder="New parent password" style="flex:2">
-            <button class="btn" style="background:var(--lock)" @click="updateParentPassword">Update Password</button>
-          </div>
-          <div class="msg" :class="{err:parentPassErr}">{{ parentPassMsg }}</div>
-        </div>
-        <div class="box"><strong>App Configuration:</strong>
-          <div class="flex">
-            <input type="text" v-model="appTitleInput" placeholder="App title" style="flex:2">
-            <button class="btn" style="background:var(--info)" @click="updateAppTitle">Update Title</button>
-          </div>
-          <div v-for="(child,idx) in state.children" :key="child.id" class="flex">
-            <input type="text" v-model="child.name" style="flex:2">
-            <button class="btn" style="background:var(--danger)" :disabled="state.children.length<=1" @click="removeChild(child.id)">Remove</button>
-            <span style="align-self:center;color:#64748b;font-size:.85rem">Child {{ idx+1 }}</span>
-          </div>
-          <div style="margin-top:10px"><button class="btn" style="background:var(--success)" @click="addChild">Add Child</button></div>
-          <div class="msg" :class="{err:childMsgErr}">{{ childMsg }}</div>
-        </div>
-        <details style="margin-top:15px" open>
-          <summary style="cursor:pointer;font-weight:bold;color:#009EDD">Master Templates</summary>
-          <table class="master-table">
-            <thead><tr><th>Name</th><th>Price</th><th>Target</th><th>Due Date/Time</th><th>Action</th></tr></thead>
-            <tbody>
-              <tr v-if="!matchingMaster.length"><td colspan="5"><div class="empty-search-state">No master chore templates match this search.</div></td></tr>
-              <tr v-for="c in matchingMaster" :key="c.id">
-                <td><input type="text" v-model="c.name" style="width:100%"></td>
-                <td><input type="number" step="0.01" v-model.number="c.price" style="width:70px"></td>
-                <td><select v-model="c.target"><option value="both">Both</option><option v-for="k in state.children" :key="k.id" :value="k.id">{{ k.name }}</option></select></td>
-                <td><input type="datetime-local" v-model="c.dueDate"></td>
-                <td><button @click="remChoreType(c.id)" style="color:red;border:none;background:none;font-weight:bold;cursor:pointer">X</button></td>
-              </tr>
-            </tbody>
-          </table>
-        </details>
-      </div>
-    </div>
-
-    <div class="search-panel">
-      <div class="search-controls">
-        <input type="search" class="search-input" v-model="term" placeholder="Search chores by name or assigned child">
-        <button type="button" class="search-clear-btn" @click="term=''">Clear Search</button>
-      </div>
-      <div class="search-status">{{ searchStatusText }}</div>
-    </div>
-
-    <div class="dashboard">
-      <div v-for="child in state.children" :key="child.id" class="column" :style="{borderTopColor:th(child.id).a}">
-        <div class="child-name" :style="{color:th(child.id).a}">{{ child.name }}</div>
-        <div class="wallet-card">
-          <div class="left-stat"><span class="stat-val-large">${{ (state.totals[child.id]||0).toFixed(2) }}</span><span class="stat-label">Lifetime Earnings</span></div>
-          <div class="middle-stat"><span class="stat-val-mid">${{ pending(child.id).toFixed(2) }}</span><span class="stat-label">Pending</span></div>
-          <div class="balance-container"><span style="font-size:.5rem">BALANCE</span><span class="balance-value">${{ (state.balances[child.id]||0).toFixed(2) }}</span></div>
-        </div>
-        <div v-if="!choresFor(child.id).length" class="empty-search-state">No chores match this search right now.</div>
-        <button v-for="c in choresFor(child.id)" :key="c.id" class="chore-btn" :class="{spending:c.price<0}" :disabled="expired(c)" @click="addRecord(child.id,c)">
-          <div class="row"><span>{{ c.price<0 ? '👹' : icon(c.name) }} {{ c.name }}</span><span>${{ Math.abs(c.price).toFixed(2) }}</span></div>
-          <span v-if="c.dueDate" class="due-label">Due: {{ fmt(c.dueDate) }} {{ expired(c) ? '🚨 EXPIRED' : '' }}</span>
-        </button>
-        <h4>Activity Review</h4>
-        <div v-for="r in recent(child.id)" :key="r.id" class="history-item" :style="{borderLeftColor:th(child.id).a}">
-          <span class="status-tag" :class="'status-'+r.status">{{ r.status }} {{ r.earned ? '($'+r.earned.toFixed(2)+')' : '' }}</span>
-          <strong>{{ r.name }}</strong> (${{ Math.abs(r.price) }})<br><small>{{ r.time }}</small>
-          <div v-if="!adminLocked">
-            <template v-if="r.status==='pending'">
-              <button class="rev-btn" style="background:var(--success)" @click="reviewChore(r.id,1,'approved')">100%</button>
-              <button class="rev-btn" style="background:var(--info)" @click="reviewChore(r.id,0.5,'partial')">50%</button>
-              <button class="rev-btn" style="background:var(--danger)" @click="reviewChore(r.id,0,'declined')">Decline</button>
-            </template>
-            <template v-else>
-              <button class="undo-btn" @click="undoReview(r.id)">↩ Undo</button>
-              <button class="rev-btn" style="background:var(--lock)" @click="archiveItem(r.id)">Clear</button>
-            </template>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <input type="file" ref="restore" accept=".json,application/json" style="display:none" @change="restoreData">
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/vue@3.4.21/dist/vue.global.prod.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
-<script>
-const PASS = "parent1", V = "CHORE_STABLE_V2", DEFAULT_TITLE = 'Treasure List Fun';
-const SUPABASE_URL = 'https://kzynjfgnrhkxdmkauart.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt6eW5qZmducmhreGRta2F1YXJ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM5MjA5NTAsImV4cCI6MjA4OTQ5Njk1MH0.3lOTsZ1Kh-9swdAGR_A7XsO4rMOiipTMAkKHY5XBGB8';
-const APP_URL = 'https://humandragon0510.github.io/chorehubv1.02/';
-const sb = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
-
-const DEFAULTS = [["Washing Dirty Dishes",.4],["Put Away Clean Dishes",.4],["Take Kitchen Trash Out",.35],["Take Bathroom Trash Out",.35],["Take Office Trash Out",.35],["Take Craft Room Trash Out",.35],["Take trash to Curb on Monday evenings",.45],["Vacuum Living Room",.45],["Vacuum Kitchen",.4],["Vacuum Office",.4],["Vacuum Bedroom",.4],["Vacuum Craft Room",.45],["Gather and Collect Laundry",.5],["Wash Clothes",.6],["Move clothes to Dryer",.5],["Sort clothes from Dryer",.5],["Fold and put your clothes away",.65],["Clean and Pick up toys upstairs",.5],["Clean and Pick up Bedroom toys",.5],["Clean and Pick up Yard toys",.5],["Keep shoes clear of all doorways and put away",.45],["Wipe kitchen Counter Tops",.45],["Clean and Scrub toilet",.55],["Clean bathroom counter tops",.45],["Keep dirty clothes off bathroom floors",.45],["Keep video games and controllers put away",.45],["Wipe Dining Room Table and Clear off",.45],["Pick up dog poop",.6],["Pick up yard branches and sticks",.55],["Keep Hammock area clean",.5],["Pull weeds",.6],["Clean up creek",.7],["Clean up your Desk",.4],["Clean Bedroom everything off floor",.6],["Chop and cut Prickly bushes",.7],["Feed and Water dogs",.35],["Read a book",.35],["Shower at 7pm",.3],["Bedtime at 8pm",.3],["Wake up at 5 am",.3],["Sweep kitchen",.35],["Sweep upstairs living room",.4],["Sweep Bathroom",.35],["Sweep downstairs laundry and hallway",.4],["Windex Mirrors",.4],["Windex Windows",.45],["Lysol door and light switches",.5],["Clean and pick up your trash",.4],["Clean out toys and jackets from Car",.5],["Organize your charging cords in room",.4],["Complete Homework without stopping",.6],["Complete Homework by Tuesday",.6],["Make sure backpack is put away",.4],["Have Monday - Friday clothes ready",.4],["Brush your teeth and Floss",.35],["Delay in Schoolwork",0]];
-const THEMES = [
-  {a:'#009EDD',cls:'omni',emoji:'🌀⚡🧬',items:['🌀','🧪','🏎️','🌌','⚡','🧬','🪐']},
-  {a:'#4e14e1',cls:'zaia',emoji:'🌈🦄✨',items:['🦄','🌈','💃','✨','💖','🍭','⭐']},
-  {a:'#ec4899',cls:'omni',emoji:'💖✨🌟',items:['💖','🎀','✨','🌟','🦋','🍭']},
-  {a:'#16a34a',cls:'omni',emoji:'🌿🍀🌞',items:['🌿','🍀','🐸','🌳','🪴','🌞']}
-];
-const TROLL = ['💰','💸','💵','🧌'];
-const ICONS = [[['dish'],'🍽️'],[['trash'],'🗑️'],[['vacuum','sweep'],'🧹'],[['laundry','clothes','dryer'],'🧺'],[['bedroom','room','desk'],'🛏️'],[['bathroom','toilet','mirror'],'🛁'],[['dog'],'🐶'],[['yard','weed','creek','branch','bush'],'🌿'],[['book','homework','schoolwork'],'📚'],[['teeth','floss','shower'],'🪥'],[['bedtime','wake up'],'⏰'],[['car'],'🚗'],[['cord'],'🔌'],[['backpack'],'🎒'],[['toy'],'🧸'],[['table','counter'],'🧽']];
-
-const num = (v, f = 0) => { const n = Number(v); return Number.isFinite(n) ? n : f; };
-const defKids = () => [{id:'child1',name:'Dr. Plague'},{id:'child2',name:'Dressy Girl'}];
-const defChores = () => DEFAULTS.map((c, i) => ({id:'c'+i, name:c[0], price:c[1], target:'both', dueDate:''}));
-const rand = (a, b) => a + Math.random() * (b - a);
-
-// Validates any state-shaped object (remote, local, or restored backup) and migrates the old omni/zaia ids.
-function clean(r) {
-  r = r || {};
-  const kids = Array.isArray(r.children) && r.children.length
-    ? r.children.map((k, i) => ({id:String(k?.id || 'child'+(i+1)), name:String(k?.name || '').trim() || 'Child '+(i+1)}))
-    : defKids();
-  const ids = kids.map(k => k.id), leg = {omni:ids[0], zaia:ids[1] || ids[0]};
-  const legacy = (o, id) => o?.[id] ?? o?.[Object.keys(leg).find(k => leg[k] === id)];
-  const history = (Array.isArray(r.history) ? r.history : []).map((h, i) => ({
-    id:String(h?.id || 'h_r'+i+'_'+Date.now()),
-    child:ids.includes(h?.child) ? h.child : (leg[h?.child] || ids[0]),
-    name:String(h?.name || 'Restored Activity'), price:num(h?.price),
-    status:['pending','approved','partial','declined'].includes(h?.status) ? h.status : 'pending',
-    earned:num(h?.earned), time:String(h?.time || new Date().toLocaleString())
-  }));
-  const chores = Array.isArray(r.chores) ? r.chores.map((c, i) => ({
-    id:String(c?.id || 'c_r'+i+'_'+Date.now()), name:String(c?.name || 'Unnamed Chore'), price:num(c?.price),
-    target:c?.target === 'both' || ids.includes(c?.target) ? c.target : (leg[c?.target] || 'both'),
-    dueDate:typeof c?.dueDate === 'string' ? c.dueDate : ''
-  })) : defChores();
-  const totals = {}, balances = {};
-  ids.forEach(id => {
-    totals[id] = num(legacy(r.totals, id), history.filter(h => h.child === id && h.status !== 'pending').reduce((s, h) => s + h.earned, 0));
-    balances[id] = num(legacy(r.balances, id), 200);
-  });
-  return {
-    chores, history, totals, balances, children:kids,
-    appTitle:typeof r.appTitle === 'string' && r.appTitle.trim() ? r.appTitle.trim() : DEFAULT_TITLE,
-    parentPassword:typeof r.parentPassword === 'string' && r.parentPassword ? r.parentPassword : PASS
-  };
-}
-const read = k => { try { return JSON.parse(localStorage.getItem(V + k)); } catch { return null; } };
-const localState = () => clean({chores:read('_types'), history:read('_history'), totals:read('_totals'), balances:read('_balances'), children:read('_children'), appTitle:localStorage.getItem(V+'_appTitle'), parentPassword:localStorage.getItem(V+'_parentPassword')});
-const writeLocal = s => {
-  try {
-    localStorage.setItem(V+'_types', JSON.stringify(s.chores)); localStorage.setItem(V+'_history', JSON.stringify(s.history));
-    localStorage.setItem(V+'_totals', JSON.stringify(s.totals)); localStorage.setItem(V+'_balances', JSON.stringify(s.balances));
-    localStorage.setItem(V+'_children', JSON.stringify(s.children)); localStorage.setItem(V+'_appTitle', s.appTitle);
-    localStorage.setItem(V+'_parentPassword', s.parentPassword);
-  } catch (e) { console.error('Local save failed:', e); }
-};
-
-Vue.createApp({
-  data() {
-    return {
-      state:clean(), user:null, saveTimer:null, now:Date.now(), term:'',
-      authRequired:true, authEmail:'', authPassword:'', newPassword:'', showReset:false, authMessage:'', authError:false,
-      adminLocked:true, showPassModal:false, passInput:'', passErr:'',
-      nc:{name:'', price:'', date:'', time:''}, newParentPass:'', parentPassMsg:'', parentPassErr:false,
-      appTitleInput:'', childMsg:'', childMsgErr:false,
-      splash:{show:false, cls:'', title:'', emoji:'', items:[]},
-      ambient:Array.from({length:18}, () => {
-        const icon = ['💰','$','💵','✨','💎'][Math.floor(Math.random() * 5)];
-        return {icon, style:{left:rand(0,100)+'vw', top:rand(0,100)+'vh', '--dur':rand(8,18)+'s', ...(icon === '$' ? {color:'#00FF00', fontWeight:'bold'} : {})}};
-      })
-    };
-  },
-  computed: {
-    q() { return this.term.trim().toLowerCase(); },
-    sessionText() { return !sb ? 'Supabase not configured' : this.user ? 'Signed in: ' + this.user.email : 'Signed out'; },
-    matchingMaster() { return this.state.chores.filter(this.matches); },
-    searchStatusText() {
-      const n = this.matchingMaster.length;
-      return this.q ? `Showing ${n} ${n === 1 ? 'match' : 'matches'} for "${this.q}".` : `Showing all chores (${n} total).`;
-    }
-  },
-  watch: {
-    state: { deep:true, handler() { this.save(); } },
-    'state.appTitle': { immediate:true, handler(t) { document.title = t; this.appTitleInput = t; } }
-  },
-  mounted() {
-    setInterval(() => { this.now = Date.now(); }, 60000);
-    this.init().catch(e => this.setAuth(e.message || 'Failed to initialize app.', true));
-  },
-  methods: {
-    // ---------- helpers ----------
-    th(id) { return THEMES[Math.max(0, this.state.children.findIndex(k => k.id === id)) % THEMES.length]; },
-    pending(id) { return this.state.history.filter(h => h.child === id && h.status === 'pending').reduce((s, h) => s + h.price, 0); },
-    recent(id) { return this.state.history.filter(h => h.child === id).slice().reverse().slice(0, 15); },
-    icon(name) { const n = name.toLowerCase(); const hit = ICONS.find(([keys]) => keys.some(k => n.includes(k))); return hit ? hit[1] : '⭐'; },
-    fmt(d) { const x = new Date(d); return x.toLocaleDateString() + ' ' + x.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}); },
-    expired(c) { return !!c.dueDate && this.now > new Date(c.dueDate).getTime(); },
-    matches(c) {
-      if (!this.q) return true;
-      const who = c.target === 'both' ? 'both everyone all' : (this.state.children.find(k => k.id === c.target)?.name || '');
-      return (c.name + ' ' + who).toLowerCase().includes(this.q);
-    },
-    choresFor(id) {
-      return this.state.chores.filter(c => (c.target === 'both' || c.target === id) && this.matches(c)).sort((a, b) => a.name.localeCompare(b.name));
-    },
-    setAuth(msg, err = false) { this.authMessage = msg; this.authError = err; },
-    // ---------- persistence ----------
-    save() {
-      if (!this.user) return;
-      writeLocal(this.state);
-      clearTimeout(this.saveTimer);
-      this.saveTimer = setTimeout(() => this.persistNow().catch(e => console.error('Queued save failed:', e)), 300);
-    },
-    async persistNow() {
-      if (!sb || !this.user) return;
-      const { error } = await sb.from('app_state').upsert({user_id:this.user.id, state:JSON.parse(JSON.stringify(this.state)), updated_at:new Date().toISOString()}, {onConflict:'user_id'});
-      if (error) throw error;
-    },
-    async loadRemote() {
-      const { data, error } = await sb.from('app_state').select('state').eq('user_id', this.user.id).maybeSingle();
-      if (error) throw error;
-      if (data && data.state) this.state = clean(data.state);
-      else { this.state = localState(); await this.persistNow(); }
-    },
-    // ---------- auth ----------
-    async init() {
-      if (!sb) return this.setAuth('Supabase is not configured yet. Add your project URL and anon key.', true);
-      const { data } = await sb.auth.getSession();
-      this.user = data.session ? data.session.user : null;
-      sb.auth.onAuthStateChange((event, session) => {
-        this.user = session ? session.user : null;
-        if (event === 'PASSWORD_RECOVERY') { this.authRequired = true; this.showReset = true; this.setAuth('Enter your new password below.'); }
-      });
-      if (this.user) { await this.loadRemote(); this.authRequired = false; }
-    },
-    async handleLogin() {
-      if (!sb) return this.setAuth('Supabase is not configured.', true);
-      this.setAuth('Signing in...');
-      const { data, error } = await sb.auth.signInWithPassword({email:this.authEmail.trim(), password:this.authPassword});
-      if (error) return this.setAuth(error.message, true);
-      this.user = data.user;
-      try { await this.loadRemote(); } catch (e) { return this.setAuth(e.message, true); }
-      this.authRequired = false; this.authPassword = ''; this.setAuth('');
-    },
-    async handleSignup() {
-      if (!sb) return this.setAuth('Supabase is not configured.', true);
-      this.setAuth('Creating account...');
-      const { error } = await sb.auth.signUp({email:this.authEmail.trim(), password:this.authPassword, options:{emailRedirectTo:APP_URL}});
-      if (error) return this.setAuth(error.message, true);
-      this.setAuth('Account created. If email confirmation is enabled, verify your email and then sign in.');
-    },
-    async handlePasswordResetRequest() {
-      if (!sb) return;
-      const email = this.authEmail.trim();
-      if (!email) return this.setAuth('Enter your email first, then click Forgot Password.', true);
-      this.setAuth('Sending password reset email...');
-      const { error } = await sb.auth.resetPasswordForEmail(email, {redirectTo:APP_URL});
-      if (error) return this.setAuth(error.message, true);
-      this.setAuth('Password reset email sent. Open the link in your email to set a new password.');
-    },
-    async handlePasswordUpdate() {
-      if (!sb) return;
-      if (!this.newPassword) return this.setAuth('Enter a new password.', true);
-      this.setAuth('Updating password...');
-      const { error } = await sb.auth.updateUser({password:this.newPassword});
-      if (error) return this.setAuth(error.message, true);
-      this.showReset = false; this.newPassword = '';
-      this.setAuth('Password updated. You can now sign in with the new password.');
-    },
-    async handleLogout() {
-      if (!sb) return;
-      await sb.auth.signOut();
-      this.user = null; this.state = clean(); this.adminLocked = true; this.authRequired = true;
-    },
-    // ---------- parent lock ----------
-    closeModal() { this.showPassModal = false; this.passInput = ''; this.passErr = ''; },
-    submitPass() {
-      if (this.passInput === this.state.parentPassword) { this.adminLocked = false; this.closeModal(); }
-      else this.passErr = 'Wrong password. Try again.';
-    },
-    lockAdmin() {
-      try { localStorage.setItem(V+'_lock_backup', JSON.stringify({savedAt:new Date().toISOString(), state:this.state})); } catch {}
-      this.adminLocked = true;
-    },
-    updateParentPassword() {
-      const p = this.newParentPass.trim();
-      this.parentPassErr = !p;
-      if (!p) { this.parentPassMsg = 'Enter a new parent password first.'; return; }
-      this.state.parentPassword = p; this.newParentPass = ''; this.parentPassMsg = 'Parent password updated.';
-    },
-    // ---------- chores ----------
-    addRecord(child, chore) {
-      this.triggerSplash(child, chore.price);
-      this.state.history.push({id:'h'+Date.now(), child, name:chore.name, price:chore.price, status:'pending', earned:0, time:new Date().toLocaleString()});
-    },
-    reviewChore(id, mult, status) {
-      const h = this.state.history.find(x => x.id === id);
-      if (!h || h.status !== 'pending') return;
-      const earned = h.price * mult;
-      h.status = status; h.earned = earned;
-      if (earned > 0) this.state.totals[h.child] += earned;
-      this.state.balances[h.child] += earned;
-    },
-    undoReview(id) {
-      const h = this.state.history.find(x => x.id === id);
-      if (!h || h.status === 'pending') return;
-      if (h.earned > 0) this.state.totals[h.child] -= h.earned;
-      this.state.balances[h.child] -= h.earned;
-      h.status = 'pending'; h.earned = 0;
-    },
-    archiveItem(id) { this.state.history = this.state.history.filter(x => x.id !== id); },
-    addNewChore() {
-      const { name, price, date, time } = this.nc;
-      if (!name.trim() || price === '' || !Number.isFinite(Number(price))) return;
-      this.state.chores.push({id:'c'+Date.now(), name:name.trim(), price:Number(price), target:'both', dueDate:date ? date + 'T' + (time || '23:59') : ''});
-      this.nc = {name:'', price:'', date:'', time:''};
-    },
-    remChoreType(id) { if (confirm('Delete this chore template?')) this.state.chores = this.state.chores.filter(c => c.id !== id); },
-    // ---------- children / title ----------
-    childNote(msg, err = false) { this.childMsg = msg; this.childMsgErr = err; },
-    updateAppTitle() { this.state.appTitle = clean({appTitle:this.appTitleInput}).appTitle; this.childNote('App title updated.'); },
-    addChild() {
-      const id = 'child' + Date.now();
-      this.state.children.push({id, name:'Child ' + (this.state.children.length + 1)});
-      this.state.totals[id] = 0; this.state.balances[id] = 200;
-      this.childNote('Child added.');
-    },
-    removeChild(id) {
-      if (this.state.children.length <= 1) return this.childNote('At least one child is required.', true);
-      if (!confirm('Remove this child? Their activity history will be removed and their assigned chores will reset to Both.')) return;
-      this.state.children = this.state.children.filter(k => k.id !== id);
-      this.state.history = this.state.history.filter(h => h.child !== id);
-      this.state.chores.forEach(c => { if (c.target === id) c.target = 'both'; });
-      delete this.state.totals[id]; delete this.state.balances[id];
-      this.childNote('Child removed.');
-    },
-    // ---------- backup / restore / reset ----------
-    async exportData() {
-      const text = JSON.stringify(this.state, null, 2);
-      const name = `chore_backup_${new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-')}.json`;
-      try {
-        const url = URL.createObjectURL(new Blob([text], {type:'application/json'}));
-        const a = Object.assign(document.createElement('a'), {href:url, download:name});
-        document.body.appendChild(a); a.click(); a.remove();
-        setTimeout(() => URL.revokeObjectURL(url), 1000);
-      } catch (e) {
-        try { await navigator.clipboard.writeText(text); alert('Download was blocked, so the backup JSON was copied to your clipboard instead.'); }
-        catch { alert('Backup could not be downloaded automatically in this browser.'); }
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Treasure List Fun</title>
+    <style>
+      :root {
+        --omni: #009EDD;
+        --zaia: #4e14e1;
+        --bg: #00000000;
+        --card: #ffffff;
+        --text: #1e293b;
+        --danger: #ef4444;
+        --success: #22c55e;
+        --warning: #f59e0b;
+        --disabled: #cbd5e1;
+        --lock: #64748b;
+        --info: #0ea5e9;
       }
-    },
-    async restoreData(ev) {
-      const file = ev.target.files && ev.target.files[0];
-      if (!file) return;
-      try { this.state = clean(JSON.parse(await file.text())); alert('Backup restored successfully.'); }
-      catch (e) { console.error(e); alert('Restore failed. Please choose a valid backup JSON file.'); }
-      finally { ev.target.value = ''; }
-    },
-    resetEverything() {
-      if (!confirm('Hard reset all chore data to defaults?')) return;
-      this.state = clean(); this.lockAdmin();
-    },
-    // ---------- celebration ----------
-    triggerSplash(child, price) {
-      const troll = price < 0, t = this.th(child), pool = troll ? TROLL : t.items;
-      this.splash = {
-        show:true, cls:troll ? 'troll' : t.cls, title:troll ? 'TROLL TAX!' : 'WAY TO GO!', emoji:troll ? '🧌' : t.emoji,
-        items:Array.from({length:30}, () => {
-          const ang = Math.random() * Math.PI * 2, dist = rand(600, 1400);
-          return {icon:pool[Math.floor(Math.random() * pool.length)], style:{'--tx':Math.cos(ang) * dist + 'px', '--ty':Math.sin(ang) * dist + 'px', '--rot':rand(0, 720) + 'deg', '--d':rand(.5, 1) + 's'}};
-        })
-      };
-      clearTimeout(this.splashTimer);
-      this.splashTimer = setTimeout(() => { this.splash.show = false; }, 4000);
-    }
-  }
-}).mount('#app');
-</script>
-</body>
-</html>
+
+      body {
+        font-family: 'Segoe UI', sans-serif;
+        background: #000;
+        margin: 0;
+        padding: 20px;
+        overflow-x: hidden;
+        color: var(--text);
+        animation: rainbowBackground 15s linear infinite;
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 2;
+      }
+
+      #ambient-bg {
+        position: fixed;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .ambient-item {
+        position: absolute;
+        font-size: 5rem;
+        filter: drop-shadow(0 0 20px #EFFF00) drop-shadow(0 0 40px #FFD700);
+        opacity: 0.85;
+        animation: ambientFloat var(--dur) ease-in-out infinite alternate;
+      }
+
+      .hero-shell {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 18px;
+      }
+
+      .hero-card {
+        position: relative;
+        text-align: center;
+        padding: 24px 56px;
+        min-width: min(800px, 100%);
+        max-width: 100%;
+        border: 8px solid white;
+        border-radius: 40px;
+        background: rgba(0, 0, 0, 0.7);
+        box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+      }
+
+      .hero-row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 24px;
+        flex-wrap: wrap;
+      }
+
+      .hero-title {
+        color: white;
+        font-size: clamp(2.5rem, 5vw, 5rem);
+        font-weight: 900;
+        line-height: 1.1;
+        text-transform: uppercase;
+        animation: gentlePulse 4s ease-in-out infinite alternate;
+        letter-spacing: -2px;
+        margin: 0;
+        font-family: 'Arial Black', sans-serif;
+      }
+
+      .hero-emoji {
+        display: inline-block;
+        font-size: 3.75rem;
+        animation: slowSpin 12s linear infinite;
+      }
+
+      .hero-subtitle {
+        display: block;
+        font-size: clamp(1.5rem, 3vw, 2.6rem);
+        margin-top: 14px;
+        letter-spacing: 0.45em;
+        font-weight: 900;
+        text-transform: uppercase;
+        color: #FFFFFF;
+        text-shadow: 2px 2px 0 #009EDD, 4px 4px 0 #BF00FF, 0 0 20px rgba(0, 0, 0, 1);
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+        -webkit-background-clip: text;
+        background-clip: text;
+        animation: shine 3s linear infinite;
+      }
+
+      /* --- CELEBRATIONS & TROLL TAX --- */
+      #celebration {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 9999;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        text-align: center;
+      }
+
+      .theme-omni {
+        background: #000;
+        animation: hyperSpeed 0.4s linear infinite;
+        background-image: radial-gradient(3px 3px at 20px 30px, #2dd4bf, rgba(0, 0, 0, 0)), radial-gradient(3px 3px at 40px 70px, #a855f7, rgba(0, 0, 0, 0));
+      }
+
+      .theme-zaia {
+        background: #000;
+        animation: disco 0.3s infinite;
+      }
+
+      .theme-troll {
+        background: #450a0a;
+        background-image: repeating-linear-gradient(45deg, #450a0a, #450a0a 10px, #7f1d1d 10px, #7f1d1d 20px);
+        animation: trollShake 0.1s infinite;
+      }
+
+      @keyframes trollShake {
+        0% { background-position: 0 0; }
+        100% { background-position: 10px 10px; }
+      }
+
+      @keyframes disco {
+        0% { background-color: #ff00ff; }
+        33% { background-color: #00ffff; }
+        66% { background-color: #ffff00; }
+      }
+
+      @keyframes hyperSpeed {
+        from { background-position: 0 0; }
+        to { background-position: 0 400px; }
+      }
+
+      @keyframes rainbowBackground {
+        0% { background-color: #ff0000; }
+        15% { background-color: #EFFF00; }
+        30% { background-color: #00FF00; }
+        45% { background-color: #009EDD; }
+        60% { background-color: #139EFF; }
+        75% { background-color: #BF00FF; }
+        90% { background-color: #ec4899; }
+        100% { background-color: #ff0000; }
+      }
+
+      @keyframes gentlePulse {
+        from { transform: scale(1); filter: drop-shadow(0 0 10px rgba(255,255,255,0.4)); }
+        to { transform: scale(1.05); filter: drop-shadow(0 0 30px rgba(255,255,255,0.8)); }
+      }
+
+      @keyframes slowSpin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+
+      @keyframes shine {
+        0% { background-position: -100%; }
+        100% { background-position: 100%; }
+      }
+
+      @keyframes ambientFloat {
+        from { transform: translateY(0) scale(0.95) rotate(-8deg); }
+        to { transform: translateY(-20px) scale(1.05) rotate(8deg); }
+      }
+
+      .giant-text {
+        font-size: 8rem;
+        font-weight: 900;
+        background: linear-gradient(#fff, #fbbf24);
+        -webkit-background-clip: text;
+        color: transparent;
+        -webkit-text-stroke: 3px #000;
+        animation: rumble 0.1s infinite;
+        z-index: 1000;
+      }
+
+      @keyframes rumble {
+        0% { transform: translate(3px, 3px); }
+        50% { transform: translate(-3px, -3px); }
+      }
+
+      .flying-item {
+        position: absolute;
+        font-size: 6rem;
+        pointer-events: none;
+        animation: flyOut var(--d) linear infinite;
+        z-index: 50;
+      }
+
+      @keyframes flyOut {
+        0% {
+          transform: scale(0.5) translate(-50%, -50%);
+          opacity: 1;
+          left: 50%;
+          top: 55%;
+        }
+        100% {
+          transform: scale(3) translate(var(--tx), var(--ty)) rotate(var(--rot));
+          opacity: 0;
+          left: 50%;
+          top: 50%;
+        }
+      }
+
+      /* --- UI ELEMENTS --- */
+      .panel {
+        background: rgba(255, 255, 255, 0.96);
+        margin-bottom: 30px;
+        padding: 25px;
+        border-radius: 20px;
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .lock-overlay {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: #f1f5f9;
+        padding: 15px 25px;
+        border-radius: 12px;
+      }
+
+      #passModal {
+        display: flex;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.9);
+        z-index: 10001;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .modal-box {
+        background: white;
+        padding: 30px;
+        border-radius: 20px;
+        width: 350px;
+        text-align: center;
+      }
+
+      .dashboard {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 30px;
+      }
+
+      .column {
+        background: rgba(255, 255, 255, 0.96);
+        border-radius: 24px;
+        padding: 30px;
+        border-top: 12px solid var(--accent);
+      }
+
+      .wallet-card {
+        background: rgba(248, 250, 252, 0.96);
+        border-radius: 15px;
+        padding: 20px;
+        margin: 10px 0;
+        border: 2px solid #e2e8f0;
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        min-height: 100px;
+      }
+
+      .left-stat {
+        text-align: left;
+        flex: 1;
+      }
+
+      .middle-stat {
+        text-align: center;
+        flex: 1;
+      }
+
+      .stat-val-large {
+        font-size: 2.2rem;
+        font-weight: 900;
+        color: var(--text);
+        line-height: 1;
+      }
+
+      .stat-val-mid {
+        font-size: 1.8rem;
+        font-weight: 900;
+        color: var(--warning);
+        line-height: 1;
+      }
+
+      .stat-label {
+        font-size: 0.65rem;
+        color: #64748b;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-top: 5px;
+        display: block;
+      }
+
+      .balance-container {
+        position: absolute;
+        top: -10px;
+        right: 15px;
+        text-align: right;
+        background: var(--success);
+        padding: 8px 12px;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        color: white;
+      }
+
+      .balance-value {
+        font-size: 1.4rem;
+        font-weight: 900;
+        display: block;
+      }
+
+      .chore-btn {
+        width: 100%;
+        padding: 15px;
+        border: 3px solid #e2e8f0;
+        border-radius: 15px;
+        cursor: pointer;
+        font-size: 1.1rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+        background: white;
+        text-align: left;
+        transition: transform 0.1s;
+      }
+
+      .chore-btn:active {
+        transform: scale(0.98);
+      }
+
+      .chore-btn:disabled {
+        background: #f1f5f9;
+        border-color: #cbd5e1;
+        color: #94a3b8;
+        cursor: not-allowed;
+        opacity: 0.7;
+      }
+
+      .chore-btn.spending {
+        border-color: var(--warning);
+        background: #fffcf0;
+      }
+
+      .history-item {
+        background: rgba(248, 250, 252, 0.96);
+        padding: 15px;
+        border-radius: 12px;
+        margin-bottom: 12px;
+        position: relative;
+      }
+
+      .status-tag {
+        font-size: 0.7rem;
+        padding: 4px 8px;
+        border-radius: 6px;
+        font-weight: 800;
+        float: right;
+        text-transform: uppercase;
+      }
+
+      .status-approved { background: #dcfce7; color: #166534; }
+	.status-partial { background: #e0f2fe; color: #0369a1; }
+.status-pending { background: #82FF59; color: #92400e; }
+.status-declined { background: #fee2e2; color: #991b1b; }
+.rev-btn {
+border: none;
+padding: 10px 12px;
+border-radius: 8px;
+cursor: pointer;
+font-weight: bold;
+color: white;
+margin-top: 10px;
+font-size: 0.8rem;
+margin-right: 5px;
+}
+.undo-btn {
+background: #64748b;
+color: white;
+border: none;
+padding: 5px 10px;
+border-radius: 6px;
+cursor: pointer;
+font-size: 0.7rem;
+margin-top: 10px;
+}
+.master-table {
+width: 100%;
+margin-top: 15px;
+border-collapse: collapse;
+}
+.master-table th,
+.master-table td {
+padding: 8px;
+text-align: left;
+border-bottom: 1px solid #eee;
+}
+input,
+select {
+padding: 8px;
+border: 1px solid #ccc;
+border-radius: 6px;
+}
+.due-label {
+font-size: 0.7rem;
+color: #64748b;
+display: block;
+margin-top: 4px;
+}
+.top-bar {
+display: flex;
+justify-content: flex-end;
+align-items: center;
+gap: 12px;
+margin-bottom: 16px;
+position: relative;
+z-index: 3;
+}
+.session-badge {
+background: rgba(255, 255, 255, 0.92);
+border-radius: 999px;
+padding: 8px 14px;
+font-size: 0.85rem;
+font-weight: 700;
+}
+.session-btn {
+background: var(--info);
+color: white;
+border: none;
+border-radius: 10px;
+padding: 10px 14px;
+font-weight: 700;
+cursor: pointer;
+}
+.auth-overlay {
+position: fixed;
+inset: 0;
+z-index: 20000;
+display: flex;
+align-items: center;
+justify-content: center;
+padding: 20px;
+background: rgba(15, 23, 42, 0.76);
+}
+.auth-card {
+width: min(420px, 100%);
+background: rgba(255, 255, 255, 0.97);
+border-radius: 24px;
+padding: 28px;
+box-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
+}
+.auth-card h2 { margin-top: 0; margin-bottom: 8px; }
+.auth-card p { margin-top: 0; margin-bottom: 18px; color: #475569; }
+.auth-card label {
+display: block;
+margin-bottom: 6px;
+font-size: 0.82rem;
+font-weight: 800;
+text-transform: uppercase;
+color: #475569;
+}
+.auth-card input { width: 100%; margin-bottom: 14px; box-sizing: border-box; }
+.auth-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.auth-link-btn {
+background: transparent;
+border: none;
+padding: 0;
+margin-top: 10px;
+color: var(--info);
+font-weight: 700;
+cursor: pointer;
+}
+.auth-primary,
+.auth-secondary {
+border: none;
+border-radius: 10px;
+padding: 10px 14px;
+font-weight: 800;
+cursor: pointer;
+}
+.auth-primary { background: var(--success); color: white; }
+.auth-secondary { background: #e2e8f0; color: var(--text); }
+.auth-message { min-height: 22px; margin-top: 14px; font-size: 0.9rem; color: #475569; }
+.blur-container {
+filter: blur(4px);
+pointer-events: none;
+user-select: none;
+}
+.search-panel {
+background: rgba(255, 255, 255, 0.96);
+margin-bottom: 20px;
+padding: 18px 20px;
+border-radius: 18px;
+box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+.search-controls {
+display: flex;
+gap: 12px;
+align-items: center;
+flex-wrap: wrap;
+}
+.search-input {
+flex: 1 1 280px;
+min-width: 220px;
+padding: 12px 14px;
+border: 2px solid #cbd5e1;
+border-radius: 12px;
+font-size: 1rem;
+}
+.search-clear-btn {
+border: none;
+border-radius: 12px;
+padding: 12px 14px;
+font-weight: 800;
+background: #e2e8f0;
+color: var(--text);
+cursor: pointer;
+}
+.search-status { margin-top: 10px; color: #475569; font-size: 0.9rem; }
+.empty-search-state {
+margin: 12px 0 4px;
+padding: 12px 14px;
+border-radius: 12px;
+background: #f8fafc;
+color: #64748b;
+font-weight: 700;
+text-align: center;
+}
+@media (max-width: 900px) {
+body { padding: 14px; }
+.top-bar { justify-content: center; flex-wrap: wrap; }
+.lock-overlay { flex-direction: column; align-items: stretch; gap: 12px; text-align: center; }
+.dashboard { grid-template-columns: 1fr; gap: 18px; }
+.wallet-card { flex-direction: column; align-items: stretch; gap: 16px; }
+.left-stat, .middle-stat { text-align: center; }
+.balance-container { position: static; text-align: center; margin-top: 8px; }
+.hero-card { padding: 18px 20px; border-width: 6px; border-radius: 24px; }
+.hero-subtitle { letter-spacing: 0.18em; }
+.search-controls { flex-direction: column; align-items: stretch; }
+.search-clear-btn { width: 100%; }
+}
+@media (max-width: 640px) {
+body { padding: 10px; }
+.panel, .column { padding: 16px; border-radius: 18px; }
+.hero-card { padding: 14px 12px; }
+.hero-row { gap: 10px; }
+.hero-emoji { font-size: 2.4rem; }
+.hero-subtitle { margin-top: 10px; letter-spacing: 0.12em; }
+.session-badge, .session-btn { width: 100%; text-align: center; }
+.auth-card { padding: 20px; border-radius: 18px; }
+.auth-actions { flex-direction: column; }
+.auth-primary, .auth-secondary { width: 100%; }
+.modal-box { width: calc(100vw - 20px); padding: 20px; }
+.stat-val-large { font-size: 1.8rem; }
+.stat-val-mid { font-size: 1.4rem; }
+.chore-btn { padding: 13px; font-size: 1rem; }
+.master-table, .master-table thead, .master-table tbody, .master-table th, .master-table td, .master-table tr {
+display: block; width: 100%;
+}
+.master-table thead { display: none; }
+.master-table tr { margin-bottom: 14px; padding: 12px; background: #f8fafc; border-radius: 14px; border: 1px solid #e2e8f0; }
+.master-table td { border-bottom: none; padding: 6px 0; }
+.master-table td input, .master-table td select, .master-table td button { width: 100%; }
+.master-table td button { padding: 10px; }
+.history-item { padding: 12px; }
+}
+Sign In
+Use your Supabase email and password to keep chores synced across devices.
+Email
+Password
+<button class="auth-primary" type="button" @click="handleLogin">Sign In
+<button class="auth-secondary" type="button" @click="handleSignup">Create Account
+
+<button class="auth-link-btn" type="button" @click="handlePasswordResetRequest">Forgot Password?
+New Password
+<button class="auth-primary" type="button" @click="handlePasswordUpdate">Update Password
+
+{{ authMessage }}
+
+WAY TO GO!
+
+
+Parent Access
+<input type="password" v-model="passInput" style="width:80%; margin-bottom:20px;" @keyup.enter="submitPass">
+<button class="rev-btn" style="background:var(--success); padding:10px 20px;" @click="submitPass">Unlock
+<button class="rev-btn" style="background:var(--lock); padding:10px 20px;" @click="showPassModal = false; passInput = ''">Cancel
+
+{{ sessionText }}
+<button class="session-btn" type="button" @click="handleLogout">Log Out
+💰
+{{ state?.appTitle }}
+🌈
+
+{{ state?.children?.length }} {{ state?.children?.length === 1 ? 'Explorer' : 'Explorers' }}
+
+🔒 Parent Dashboard Locked
+<button @click="showPassModal = true" style="padding:10px 20px; cursor:pointer; font-weight:bold;">Unlock
+
+
+
+Parent Dashboard
+
+<button @click="exportData" style="background:var(--info); color:white; border:none; padding:8px 15px; border-radius:8px; cursor:pointer;">💾 Backup
+<button @click="triggerRestore" style="background:var(--warning); color:white; border:none; padding:8px 15px; border-radius:8px; cursor:pointer;">Restore
+<button @click="resetEverything" style="background:var(--danger); color:white; border:none; padding:8px 15px; border-radius:8px; cursor:pointer;">Hard Reset
+<button @click="adminLocked = false">🔒 Lock
+
+
+
+Quick Assign:
+
+
+
+
+
+<button @click="addNewChore" style="padding:10px; background:var(--success); color:white; border:none; border-radius:8px; cursor:pointer;">Assign
+
+
+
+Parent Password:
+
+
+<button @click="updateParentPassword" style="padding:10px; background:var(--lock); color:white; border:none; border-radius:8px; cursor:pointer;">Update Password
+
+{{ parentPassMsg }}
+
+
+App Configuration:
+
+
+<button @click="updateAppTitle" style="padding:10px; background:var(--info); color:white; border:none; border-radius:8px; cursor:pointer;">Update Title
+
+
+
+<input type="text" v-model="child.name" @change="saveData" style="flex:2">
+<button type="button" @click="removeChild(child.id)" :disabled="state?.children?.length <= 1" style="padding:10px; background:var(--danger); color:white; border:none; border-radius:8px; cursor:pointer;">Remove
+Child {{ idx + 1 }}
+
+
+
+<button @click="addChild" style="padding:10px; background:var(--success); color:white; border:none; border-radius:8px; cursor:pointer;">Add Child
+
+{{ childrenConfigMsg }}
+
+
+Master Templates
+
+Name
+	Price
+	Target
+	Due Date/Time
+	Action
+<input type="text" v-model="c.name" @change="saveData" style="width:100%">
+	<input type="number" step="0.01" v-model.number="c.price" @change="saveData" style="width:60px">
+		<input type="datetime-local" v-model="c.dueDate" @change="saveData">
+	<button @click="remChoreType(c.id)" style="color:red; border:none; background:none; font-weight:bold; cursor:pointer;">X
+No master chore templates match this search.
+
+<button type="button" class="search-clear-btn" @click="choreSearchTerm = ''">Clear Search
+
+{{ searchStatusText }}
+{{ child.name }}
+
+
+${{ (state?.totals?.[child.id] || 0).toFixed(2) }}
+Lifetime Earnings
+
+
+${{ getPendingValue(child.id).toFixed(2) }}
+Pending
+
+
+BALANCE
+${{ (state?.balances?.[child.id] || 0).toFixed(2) }}
+
+No chores match this search right now.
+<button v-for="c in getMatchingChoresForChild(child.id)" :key="c.id" :class="['chore-btn', { spending: c.price < 0 }]" :disabled="isChoreExpired(c)" @click="addRecord(child.id, c)">
+
+{{ c.price < 0 ? '👹 ' : ${getChoreIcon(c.name)}  }}{{ c.name }}
+${{ Math.abs(c.price).toFixed(2) }}
+
+
+Due: {{ formatDueDate(c.dueDate) }} {{ isChoreExpired(c) ? '🚨 EXPIRED' : '' }}
+
+
+Activity Review
+
+
+{{ r.status }} {{ r.earned ? '($'+r.earned.toFixed(2)+')' : '' }}
+{{ r.name }} (${{ Math.abs(r.price) }})
+
+
+{{ r.time }}
+
+
+<button class="rev-btn" style="background:var(--success)" @click="reviewChore(r.id, 1, 'approved')">100%
+<button class="rev-btn" style="background:var(--info)" @click="reviewChore(r.id, 0.5, 'partial')">50%
+<button class="rev-btn" style="background:var(--danger)" @click="reviewChore(r.id, 0, 'declined')">Decline
+
+
+<button class="undo-btn" @click="undoReview(r.id)">↩ Undo
+<button class="rev-btn" style="background:var(--lock)" @click="archiveItem(r.id)">Clear
+
+
+
+
+
+
+<input type="file" id="restore Input" accept=".json,application/json" style="display:none" @change="restoreData">
+const PASS = "parent1";
+const V_KEY = "CHORE_STABLE_V2";
+const SUPABASE_URL = 'supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt6eW5qZmducmhreGRta2F1YXJ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM5MjA5NTAsImV4cCI6MjA4OTQ5Njk1MH0.3lOTsZ1Kh-9swdAGR_A7XsO4rMOiipTMAkKHY5XBGB8';
+const APP_URL = 'github.io';
+
