@@ -145,19 +145,37 @@
       }
 
       @keyframes trollShake {
-        0% { background-position: 0 0; }
-        100% { background-position: 10px 10px; }
+        0% {
+          background-position: 0 0;
+        }
+
+        100% {
+          background-position: 10px 10px;
+        }
       }
 
       @keyframes disco {
-        0% { background-color: #ff00ff; }
-        33% { background-color: #00ffff; }
-        66% { background-color: #ffff00; }
+        0% {
+          background-color: #ff00ff;
+        }
+
+        33% {
+          background-color: #00ffff;
+        }
+
+        66% {
+          background-color: #ffff00;
+        }
       }
 
       @keyframes hyperSpeed {
-        from { background-position: 0 0; }
-        to { background-position: 0 400px; }
+        from {
+          background-position: 0 0;
+        }
+
+        to {
+          background-position: 0 400px;
+        }
       }
 
       @keyframes rainbowBackground {
@@ -203,8 +221,13 @@
       }
 
       @keyframes rumble {
-        0% { transform: translate(3px, 3px); }
-        50% { transform: translate(-3px, -3px); }
+        0% {
+          transform: translate(3px, 3px);
+        }
+
+        50% {
+          transform: translate(-3px, -3px);
+        }
       }
 
       .flying-item {
@@ -222,6 +245,7 @@
           left: 50%;
           top: 55%;
         }
+
         100% {
           transform: scale(3) translate(var(--tx), var(--ty)) rotate(var(--rot));
           opacity: 0;
@@ -231,6 +255,15 @@
       }
 
       /* --- UI ELEMENTS --- */
+      body.admin-locked .admin-content,
+      body.admin-locked .parent-actions {
+        display: none !important;
+      }
+
+      body.admin-unlocked .lock-overlay {
+        display: none !important;
+      }
+
       .panel {
         background: rgba(255, 255, 255, 0.96);
         margin-bottom: 30px;
@@ -249,7 +282,7 @@
       }
 
       #passModal {
-        display: flex;
+        display: none;
         position: fixed;
         top: 0;
         left: 0;
@@ -280,6 +313,14 @@
         border-radius: 24px;
         padding: 30px;
         border-top: 12px solid var(--accent);
+      }
+
+      .omni-side {
+        --accent: var(--omni);
+      }
+
+      .zaia-side {
+        --accent: var(--zaia);
       }
 
       .wallet-card {
@@ -383,6 +424,7 @@
         padding: 15px;
         border-radius: 12px;
         margin-bottom: 12px;
+        border-left: 6px solid var(--accent);
         position: relative;
       }
 
@@ -395,357 +437,2024 @@
         text-transform: uppercase;
       }
 
-      .status-approved { background: #dcfce7; color: #166534; }
-	.status-partial { background: #e0f2fe; color: #0369a1; }
-.status-pending { background: #82FF59; color: #92400e; }
-.status-declined { background: #fee2e2; color: #991b1b; }
-.rev-btn {
-border: none;
-padding: 10px 12px;
-border-radius: 8px;
-cursor: pointer;
-font-weight: bold;
-color: white;
-margin-top: 10px;
-font-size: 0.8rem;
-margin-right: 5px;
-}
-.undo-btn {
-background: #64748b;
-color: white;
-border: none;
-padding: 5px 10px;
-border-radius: 6px;
-cursor: pointer;
-font-size: 0.7rem;
-margin-top: 10px;
-}
-.master-table {
-width: 100%;
-margin-top: 15px;
-border-collapse: collapse;
-}
-.master-table th,
-.master-table td {
-padding: 8px;
-text-align: left;
-border-bottom: 1px solid #eee;
-}
-input,
-select {
-padding: 8px;
-border: 1px solid #ccc;
-border-radius: 6px;
-}
-.due-label {
-font-size: 0.7rem;
-color: #64748b;
-display: block;
-margin-top: 4px;
-}
-.top-bar {
-display: flex;
-justify-content: flex-end;
-align-items: center;
-gap: 12px;
-margin-bottom: 16px;
-position: relative;
-z-index: 3;
-}
-.session-badge {
-background: rgba(255, 255, 255, 0.92);
-border-radius: 999px;
-padding: 8px 14px;
-font-size: 0.85rem;
-font-weight: 700;
-}
-.session-btn {
-background: var(--info);
-color: white;
-border: none;
-border-radius: 10px;
-padding: 10px 14px;
-font-weight: 700;
-cursor: pointer;
-}
-.auth-overlay {
-position: fixed;
-inset: 0;
-z-index: 20000;
-display: flex;
-align-items: center;
-justify-content: center;
-padding: 20px;
-background: rgba(15, 23, 42, 0.76);
-}
-.auth-card {
-width: min(420px, 100%);
-background: rgba(255, 255, 255, 0.97);
-border-radius: 24px;
-padding: 28px;
-box-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
-}
-.auth-card h2 { margin-top: 0; margin-bottom: 8px; }
-.auth-card p { margin-top: 0; margin-bottom: 18px; color: #475569; }
-.auth-card label {
-display: block;
-margin-bottom: 6px;
-font-size: 0.82rem;
-font-weight: 800;
-text-transform: uppercase;
-color: #475569;
-}
-.auth-card input { width: 100%; margin-bottom: 14px; box-sizing: border-box; }
-.auth-actions { display: flex; gap: 10px; flex-wrap: wrap; }
-.auth-link-btn {
-background: transparent;
-border: none;
-padding: 0;
-margin-top: 10px;
-color: var(--info);
-font-weight: 700;
-cursor: pointer;
-}
-.auth-primary,
-.auth-secondary {
-border: none;
-border-radius: 10px;
-padding: 10px 14px;
-font-weight: 800;
-cursor: pointer;
-}
-.auth-primary { background: var(--success); color: white; }
-.auth-secondary { background: #e2e8f0; color: var(--text); }
-.auth-message { min-height: 22px; margin-top: 14px; font-size: 0.9rem; color: #475569; }
-.blur-container {
-filter: blur(4px);
-pointer-events: none;
-user-select: none;
-}
-.search-panel {
-background: rgba(255, 255, 255, 0.96);
-margin-bottom: 20px;
-padding: 18px 20px;
-border-radius: 18px;
-box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-}
-.search-controls {
-display: flex;
-gap: 12px;
-align-items: center;
-flex-wrap: wrap;
-}
-.search-input {
-flex: 1 1 280px;
-min-width: 220px;
-padding: 12px 14px;
-border: 2px solid #cbd5e1;
-border-radius: 12px;
-font-size: 1rem;
-}
-.search-clear-btn {
-border: none;
-border-radius: 12px;
-padding: 12px 14px;
-font-weight: 800;
-background: #e2e8f0;
-color: var(--text);
-cursor: pointer;
-}
-.search-status { margin-top: 10px; color: #475569; font-size: 0.9rem; }
-.empty-search-state {
-margin: 12px 0 4px;
-padding: 12px 14px;
-border-radius: 12px;
-background: #f8fafc;
-color: #64748b;
-font-weight: 700;
-text-align: center;
-}
-@media (max-width: 900px) {
-body { padding: 14px; }
-.top-bar { justify-content: center; flex-wrap: wrap; }
-.lock-overlay { flex-direction: column; align-items: stretch; gap: 12px; text-align: center; }
-.dashboard { grid-template-columns: 1fr; gap: 18px; }
-.wallet-card { flex-direction: column; align-items: stretch; gap: 16px; }
-.left-stat, .middle-stat { text-align: center; }
-.balance-container { position: static; text-align: center; margin-top: 8px; }
-.hero-card { padding: 18px 20px; border-width: 6px; border-radius: 24px; }
-.hero-subtitle { letter-spacing: 0.18em; }
-.search-controls { flex-direction: column; align-items: stretch; }
-.search-clear-btn { width: 100%; }
-}
-@media (max-width: 640px) {
-body { padding: 10px; }
-.panel, .column { padding: 16px; border-radius: 18px; }
-.hero-card { padding: 14px 12px; }
-.hero-row { gap: 10px; }
-.hero-emoji { font-size: 2.4rem; }
-.hero-subtitle { margin-top: 10px; letter-spacing: 0.12em; }
-.session-badge, .session-btn { width: 100%; text-align: center; }
-.auth-card { padding: 20px; border-radius: 18px; }
-.auth-actions { flex-direction: column; }
-.auth-primary, .auth-secondary { width: 100%; }
-.modal-box { width: calc(100vw - 20px); padding: 20px; }
-.stat-val-large { font-size: 1.8rem; }
-.stat-val-mid { font-size: 1.4rem; }
-.chore-btn { padding: 13px; font-size: 1rem; }
-.master-table, .master-table thead, .master-table tbody, .master-table th, .master-table td, .master-table tr {
-display: block; width: 100%;
-}
-.master-table thead { display: none; }
-.master-table tr { margin-bottom: 14px; padding: 12px; background: #f8fafc; border-radius: 14px; border: 1px solid #e2e8f0; }
-.master-table td { border-bottom: none; padding: 6px 0; }
-.master-table td input, .master-table td select, .master-table td button { width: 100%; }
-.master-table td button { padding: 10px; }
-.history-item { padding: 12px; }
-}
-Sign In
-Use your Supabase email and password to keep chores synced across devices.
-Email
-Password
-<button class="auth-primary" type="button" @click="handleLogin">Sign In
-<button class="auth-secondary" type="button" @click="handleSignup">Create Account
-
-<button class="auth-link-btn" type="button" @click="handlePasswordResetRequest">Forgot Password?
-New Password
-<button class="auth-primary" type="button" @click="handlePasswordUpdate">Update Password
-
-{{ authMessage }}
-
-WAY TO GO!
-
-
-Parent Access
-<input type="password" v-model="passInput" style="width:80%; margin-bottom:20px;" @keyup.enter="submitPass">
-<button class="rev-btn" style="background:var(--success); padding:10px 20px;" @click="submitPass">Unlock
-<button class="rev-btn" style="background:var(--lock); padding:10px 20px;" @click="showPassModal = false; passInput = ''">Cancel
-
-{{ sessionText }}
-<button class="session-btn" type="button" @click="handleLogout">Log Out
-💰
-{{ state?.appTitle }}
-🌈
-
-{{ state?.children?.length }} {{ state?.children?.length === 1 ? 'Explorer' : 'Explorers' }}
-
-🔒 Parent Dashboard Locked
-<button @click="showPassModal = true" style="padding:10px 20px; cursor:pointer; font-weight:bold;">Unlock
-
-
-
-Parent Dashboard
-
-<button @click="exportData" style="background:var(--info); color:white; border:none; padding:8px 15px; border-radius:8px; cursor:pointer;">💾 Backup
-<button @click="triggerRestore" style="background:var(--warning); color:white; border:none; padding:8px 15px; border-radius:8px; cursor:pointer;">Restore
-<button @click="resetEverything" style="background:var(--danger); color:white; border:none; padding:8px 15px; border-radius:8px; cursor:pointer;">Hard Reset
-<button @click="adminLocked = true">🔒 Lock
-
-
-
-Quick Assign:
-
-
-
-
-
-<button @click="addNewChore" style="padding:10px; background:var(--success); color:white; border:none; border-radius:8px; cursor:pointer;">Assign
-
-
-
-Parent Password:
-
-
-<button @click="updateParentPassword" style="padding:10px; background:var(--lock); color:white; border:none; border-radius:8px; cursor:pointer;">Update Password
-
-{{ parentPassMsg }}
-
-
-App Configuration:
-
-
-<button @click="updateAppTitle" style="padding:10px; background:var(--info); color:white; border:none; border-radius:8px; cursor:pointer;">Update Title
-
-
-
-<input type="text" v-model="child.name" @change="saveData" style="flex:2">
-<button type="button" @click="removeChild(child.id)" :disabled="state?.children?.length <= 1" style="padding:10px; background:var(--danger); color:white; border:none; border-radius:8px; cursor:pointer;">Remove
-Child {{ idx + 1 }}
-
-
-
-<button @click="addChild" style="padding:10px; background:var(--success); color:white; border:none; border-radius:8px; cursor:pointer;">Add Child
-
-{{ childrenConfigMsg }}
-
-
-Master Templates
-
-Name
-	Price
-	Target
-	Due Date/Time
-	Action
-<input type="text" v-model="c.name" @change="saveData" style="width:100%">
-	<input type="number" step="0.01" v-model.number="c.price" @change="saveData" style="width:60px">
-		<input type="datetime-local" v-model="c.dueDate" @change="saveData">
-	<button @click="remChoreType(c.id)" style="color:red; border:none; background:none; font-weight:bold; cursor:pointer;">X
-No master chore templates match this search.
-
-<button type="button" class="search-clear-btn" @click="choreSearchTerm = ''">Clear Search
-
-{{ searchStatusText }}
-{{ child.name }}
-
-
-${{ (state?.totals?.[child.id] || 0).toFixed(2) }}
-Lifetime Earnings
-
-
-${{ getPendingValue(child.id).toFixed(2) }}
-Pending
-
-
-BALANCE
-${{ (state?.balances?.[child.id] || 0).toFixed(2) }}
-
-No chores match this search right now.
-<button v-for="c in getMatchingChoresForChild(child.id)" :key="c.id" :class="['chore-btn', { spending: c.price < 0 }]" :disabled="isChoreExpired(c)" @click="addRecord(child.id, c)">
-
-{{ c.price < 0 ? '👹 ' : ${getChoreIcon(c.name)}  }}{{ c.name }}
-${{ Math.abs(c.price).toFixed(2) }}
-
-
-Due: {{ formatDueDate(c.dueDate) }} {{ isChoreExpired(c) ? '🚨 EXPIRED' : '' }}
-
-
-Activity Review
-
-
-{{ r.status }} {{ r.earned ? '($'+r.earned.toFixed(2)+')' : '' }}
-{{ r.name }} (${{ Math.abs(r.price) }})
-
-
-{{ r.time }}
-
-
-<button class="rev-btn" style="background:var(--success)" @click="reviewChore(r.id, 1, 'approved')">100%
-<button class="rev-btn" style="background:var(--info)" @click="reviewChore(r.id, 0.5, 'partial')">50%
-<button class="rev-btn" style="background:var(--danger)" @click="reviewChore(r.id, 0, 'declined')">Decline
-
-
-<button class="undo-btn" @click="undoReview(r.id)">↩ Undo
-<button class="rev-btn" style="background:var(--lock)" @click="archiveItem(r.id)">Clear
-
-
-
-
-
-
-<input type="file" id="restoreInput" accept=".json,application/json" style="display:none" @change="restoreData">
-const PASS = "parent1";
-const V_KEY = "CHORE_STABLE_V2";
-const SUPABASE_URL = 'supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt6eW5qZmducmhreGRta2F1YXJ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM5MjA5NTAsImV4cCI6MjA4OTQ5Njk1MH0.3lOTsZ1Kh-9swdAGR_A7XsO4rMOiipTMAkKHY5XBGB8';
-const APP_URL = 'github.io';
-
+      .status-approved {
+        background: #dcfce7;
+        color: #166534;
+      }
+
+      .status-partial {
+        background: #e0f2fe;
+        color: #0369a1;
+      }
+
+      .status-pending {
+        background: #82FF59;
+        color: #92400e;
+      }
+
+      .rev-btn {
+        border: none;
+        padding: 10px 12px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        color: white;
+        margin-top: 10px;
+        font-size: 0.8rem;
+        margin-right: 5px;
+      }
+
+      .undo-btn {
+        background: #64748b;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.7rem;
+        margin-top: 10px;
+      }
+
+      .master-table {
+        width: 100%;
+        margin-top: 15px;
+        border-collapse: collapse;
+      }
+
+      .master-table th,
+      .master-table td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+      }
+
+      input,
+      select {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+      }
+
+      .due-label {
+        font-size: 0.7rem;
+        color: #64748b;
+        display: block;
+        margin-top: 4px;
+      }
+
+      .top-bar {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+        position: relative;
+        z-index: 3;
+      }
+
+      .session-badge {
+        background: rgba(255, 255, 255, 0.92);
+        border-radius: 999px;
+        padding: 8px 14px;
+        font-size: 0.85rem;
+        font-weight: 700;
+      }
+
+      .session-btn {
+        background: var(--info);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 10px 14px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .auth-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 20000;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        background: rgba(15, 23, 42, 0.76);
+      }
+
+      .auth-card {
+        width: min(420px, 100%);
+        background: rgba(255, 255, 255, 0.97);
+        border-radius: 24px;
+        padding: 28px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
+      }
+
+      .auth-card h2 {
+        margin-top: 0;
+        margin-bottom: 8px;
+      }
+
+      .auth-card p {
+        margin-top: 0;
+        margin-bottom: 18px;
+        color: #475569;
+      }
+
+      .auth-card label {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 0.82rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        color: #475569;
+      }
+
+      .auth-card input {
+        width: 100%;
+        margin-bottom: 14px;
+      }
+
+      .auth-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .auth-link-btn {
+        background: transparent;
+        border: none;
+        padding: 0;
+        margin-top: 10px;
+        color: var(--info);
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .auth-primary,
+      .auth-secondary {
+        border: none;
+        border-radius: 10px;
+        padding: 10px 14px;
+        font-weight: 800;
+        cursor: pointer;
+      }
+
+      .auth-primary {
+        background: var(--success);
+        color: white;
+      }
+
+      .auth-secondary {
+        background: #e2e8f0;
+        color: var(--text);
+      }
+
+      .auth-message {
+        min-height: 22px;
+        margin-top: 14px;
+        font-size: 0.9rem;
+        color: #475569;
+      }
+
+      body.auth-required .container {
+        filter: blur(4px);
+        pointer-events: none;
+        user-select: none;
+      }
+
+      .search-panel {
+        background: rgba(255, 255, 255, 0.96);
+        margin-bottom: 20px;
+        padding: 18px 20px;
+        border-radius: 18px;
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .search-controls {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      .search-input {
+        flex: 1 1 280px;
+        min-width: 220px;
+        padding: 12px 14px;
+        border: 2px solid #cbd5e1;
+        border-radius: 12px;
+        font-size: 1rem;
+      }
+
+      .search-clear-btn {
+        border: none;
+        border-radius: 12px;
+        padding: 12px 14px;
+        font-weight: 800;
+        background: #e2e8f0;
+        color: var(--text);
+        cursor: pointer;
+      }
+
+      .search-status {
+        margin-top: 10px;
+        color: #475569;
+        font-size: 0.9rem;
+      }
+
+      .empty-search-state {
+        margin: 12px 0 4px;
+        padding: 12px 14px;
+        border-radius: 12px;
+        background: #f8fafc;
+        color: #64748b;
+        font-weight: 700;
+        text-align: center;
+      }
+
+      @media (max-width: 900px) {
+        body {
+          padding: 14px;
+        }
+
+        .top-bar {
+          justify-content: center;
+          flex-wrap: wrap;
+        }
+
+        .lock-overlay {
+          flex-direction: column;
+          align-items: stretch;
+          gap: 12px;
+          text-align: center;
+        }
+
+        .dashboard {
+          grid-template-columns: 1fr;
+          gap: 18px;
+        }
+
+        .wallet-card {
+          flex-direction: column;
+          align-items: stretch;
+          gap: 16px;
+        }
+
+        .left-stat,
+        .middle-stat {
+          text-align: center;
+        }
+
+        .balance-container {
+          position: static;
+          text-align: center;
+          margin-top: 8px;
+        }
+
+        .hero-card {
+          padding: 18px 20px;
+          border-width: 6px;
+          border-radius: 24px;
+        }
+
+        .hero-subtitle {
+          letter-spacing: 0.18em;
+        }
+
+        .search-controls {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .search-clear-btn {
+          width: 100%;
+        }
+      }
+
+      @media (max-width: 640px) {
+        body {
+          padding: 10px;
+        }
+
+        .container {
+          max-width: 100%;
+        }
+
+        .panel,
+        .column {
+          padding: 16px;
+          border-radius: 18px;
+        }
+
+        .hero-card {
+          padding: 14px 12px;
+        }
+
+        .hero-row {
+          gap: 10px;
+        }
+
+        .hero-emoji {
+          font-size: 2.4rem;
+        }
+
+        .hero-subtitle {
+          margin-top: 10px;
+          letter-spacing: 0.12em;
+        }
+
+        .session-badge,
+        .session-btn {
+          width: 100%;
+          text-align: center;
+        }
+
+        .auth-card {
+          padding: 20px;
+          border-radius: 18px;
+        }
+
+        .auth-actions {
+          flex-direction: column;
+        }
+
+        .auth-primary,
+        .auth-secondary {
+          width: 100%;
+        }
+
+        .modal-box {
+          width: calc(100vw - 20px);
+          padding: 20px;
+        }
+
+        .stat-val-large {
+          font-size: 1.8rem;
+        }
+
+        .stat-val-mid {
+          font-size: 1.4rem;
+        }
+
+        .chore-btn {
+          padding: 13px;
+          font-size: 1rem;
+        }
+
+        .master-table,
+        .master-table thead,
+        .master-table tbody,
+        .master-table th,
+        .master-table td,
+        .master-table tr {
+          display: block;
+          width: 100%;
+        }
+
+        .master-table thead {
+          display: none;
+        }
+
+        .master-table tr {
+          margin-bottom: 14px;
+          padding: 12px;
+          background: #f8fafc;
+          border-radius: 14px;
+          border: 1px solid #e2e8f0;
+        }
+
+        .master-table td {
+          border-bottom: none;
+          padding: 6px 0;
+        }
+
+        .master-table td input,
+        .master-table td select,
+        .master-table td button {
+          width: 100%;
+        }
+
+        .master-table td button {
+          padding: 10px;
+        }
+
+        .history-item {
+          padding: 12px;
+        }
+      }
+    </style>
+  </head>
+  <body class="admin-locked auth-required">
+    <div class="auth-overlay" id="authOverlay">
+      <div class="auth-card">
+        <h2>Sign In</h2>
+        <p>Use your Supabase email and password to keep chores synced across devices.</p>
+        <label for="authEmail">Email</label>
+        <input type="email" id="authEmail" placeholder="you@example.com" autocomplete="email">
+        <label for="authPassword">Password</label>
+        <input type="password" id="authPassword" placeholder="Password" autocomplete="current-password">
+        <div class="auth-actions">
+          <button class="auth-primary" type="button" onclick="handleLogin()">Sign In</button>
+          <button class="auth-secondary" type="button" onclick="handleSignup()">Create Account</button>
+        </div>
+        <button class="auth-link-btn" type="button" onclick="handlePasswordResetRequest()">Forgot Password?</button>
+        <div id="resetPasswordBox" style="display:none; margin-top:16px;">
+          <label for="newPassword">New Password</label>
+          <input type="password" id="newPassword" placeholder="Enter a new password" autocomplete="new-password">
+          <button class="auth-primary" type="button" onclick="handlePasswordUpdate()">Update Password</button>
+        </div>
+        <div class="auth-message" id="authMessage"></div>
+      </div>
+    </div>
+    <div id="ambient-bg"></div>
+    <div id="celebration">
+      <div id="item-container"></div>
+      <div class="splash-content">
+        <h1 class="giant-text" id="splash-title">WAY TO GO!</h1>
+        <div id="splash-emojis" style="font-size: 8rem; margin-top: 20px;"></div>
+      </div>
+    </div>
+    <div id="passModal">
+      <div class="modal-box">
+        <h3>Parent Access</h3>
+        <input type="password" id="passInput" style="width:80%; margin-bottom:20px;">
+        <button class="rev-btn" style="background:var(--success); padding:10px 20px;" onclick="submitPass()">Unlock</button>
+        <button class="rev-btn" style="background:var(--lock); padding:10px 20px;" onclick="closeModal()">Cancel</button>
+      </div>
+    </div>
+    <div class="container">
+      <div class="top-bar">
+        <div class="session-badge" id="sessionInfo">Connecting...</div>
+        <button class="session-btn" type="button" onclick="handleLogout()">Log Out</button>
+      </div>
+      <div class="hero-shell">
+        <div class="hero-card">
+          <div class="hero-row">
+            <span class="hero-emoji">💰</span>
+            <h1 class="hero-title" id="appTitleDisplay">Treasure List Fun</h1>
+            <span class="hero-emoji" style="animation-delay:-6s;">🌈</span>
+          </div>
+          <div class="hero-subtitle" id="appSubtitleDisplay">Quest Board</div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="lock-overlay">
+          <span>🔒 Parent Dashboard Locked</span>
+          <button onclick="openModal()" style="padding:10px 20px; cursor:pointer; font-weight:bold;">Unlock</button>
+        </div>
+        <div class="admin-content">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h2 style="margin:0">Parent Dashboard</h2>
+            <div style="display:flex; gap:10px;">
+              <button onclick="exportData()" style="background:var(--info); color:white; border:none; padding:8px 15px; border-radius:8px; cursor:pointer;">💾 Backup</button>
+              <button onclick="triggerRestore()" style="background:var(--warning); color:white; border:none; padding:8px 15px; border-radius:8px; cursor:pointer;">Restore</button>
+              <button onclick="resetEverything()" style="background:var(--danger); color:white; border:none; padding:8px 15px; border-radius:8px; cursor:pointer;">Hard Reset</button>
+              <button onclick="lockAdmin()">🔒 Lock</button>
+            </div>
+          </div>
+          <div style="margin-top:20px; background:#f1f5f9; padding:15px; border-radius:15px;">
+            <strong>Quick Assign:</strong>
+            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+              <input type="text" id="custName" placeholder="Chore Name" style="flex:2">
+              <input type="number" id="custPrice" placeholder="$" style="width:60px">
+              <input type="date" id="custDate">
+              <input type="time" id="custTime">
+              <button onclick="addNewChore()" style="padding:10px; background:var(--success); color:white; border:none; border-radius:8px; cursor:pointer;">Assign</button>
+            </div>
+          </div>
+          <div style="margin-top:15px; background:#f8fafc; padding:15px; border-radius:15px;">
+            <strong>Parent Password:</strong>
+            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+              <input type="password" id="newParentPass" placeholder="New parent password" style="flex:2">
+              <button onclick="updateParentPassword()" style="padding:10px; background:var(--lock); color:white; border:none; border-radius:8px; cursor:pointer;">Update Password</button>
+            </div>
+            <div id="parentPassMsg" style="margin-top:8px; font-size:0.85rem; color:#475569;"></div>
+          </div>
+          <div style="margin-top:15px; background:#f8fafc; padding:15px; border-radius:15px;">
+            <strong>App Configuration:</strong>
+            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+              <input type="text" id="appTitleInput" placeholder="App title" style="flex:2">
+              <button onclick="updateAppTitle()" style="padding:10px; background:var(--info); color:white; border:none; border-radius:8px; cursor:pointer;">Update Title</button>
+            </div>
+            <div id="childrenConfigList" style="margin-top:12px;"></div>
+            <div style="margin-top:10px;">
+              <button onclick="addChild()" style="padding:10px; background:var(--success); color:white; border:none; border-radius:8px; cursor:pointer;">Add Child</button>
+            </div>
+            <div id="childrenConfigMsg" style="margin-top:8px; font-size:0.85rem; color:#475569;"></div>
+          </div>
+          <details style="margin-top:15px;" open>
+            <summary style="cursor:pointer; font-weight:bold; color:var(--omni)">Master Templates</summary>
+            <table class="master-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Price</th>
+                  <th>Target</th>
+                  <th>Due Date/Time</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="master-body"></tbody>
+            </table>
+          </details>
+        </div>
+      </div>
+      <div class="search-panel">
+        <div class="search-controls">
+          <input type="search" id="choreSearchInput" class="search-input" placeholder="Search chores by name or assigned child" oninput="updateChoreSearch(this.value)">
+          <button type="button" class="search-clear-btn" onclick="clearChoreSearch()">Clear Search</button>
+        </div>
+        <div class="search-status" id="choreSearchStatus">Showing all chores.</div>
+      </div>
+      <div class="dashboard" id="childDashboard"></div>
+    </div>
+    <input type="file" id="restoreInput" accept=".json,application/json" style="display:none" onchange="restoreData(event)">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+      const PASS = "parent1";
+      const V_KEY = "CHORE_STABLE_V2";
+      const LOCK_BACKUP_KEY = V_KEY + '_lock_backup';
+      const SUPABASE_URL = 'https://kzynjfgnrhkxdmkauart.supabase.co';
+      const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt6eW5qZmducmhreGRta2F1YXJ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM5MjA5NTAsImV4cCI6MjA4OTQ5Njk1MH0.3lOTsZ1Kh-9swdAGR_A7XsO4rMOiipTMAkKHY5XBGB8';
+      const APP_URL = 'https://humandragon0510.github.io/chorehubv1.02/';
+      const supabaseClient = window.supabase && SUPABASE_URL.startsWith('https://') && !SUPABASE_ANON_KEY.includes('PASTE_')
+        ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+        : null;
+      const defaultList = [{
+        name: "Washing Dirty Dishes",
+        price: 0.40,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Put Away Clean Dishes",
+        price: 0.40,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Take Kitchen Trash Out",
+        price: 0.35,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Take Bathroom Trash Out",
+        price: 0.35,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Take Office Trash Out",
+        price: 0.35,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Take Craft Room Trash Out",
+        price: 0.35,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Take trash to Curb on Monday evenings",
+        price: 0.45,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Vaccum Living Room",
+        price: 0.45,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Vaccum Kitchen",
+        price: 0.40,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Vaccum Office",
+        price: 0.40,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Vaccum Bedroom",
+        price: 0.40,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Vaccum Craft Room",
+        price: 0.45,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Gather and Collect Laundry",
+        price: 0.50,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Wash Clothes",
+        price: 0.60,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Move clothes to Dryer",
+        price: 0.50,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Sort clothes from Dryer",
+        price: 0.50,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Fold and put your clothes away",
+        price: 0.65,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Clean and Pick up toys upstairs",
+        price: 0.50,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Clean and Pick up Bedroom toys",
+        price: 0.50,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Clean and Pick up Yard toys",
+        price: 0.50,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Keep shoes clear of all doorways and put away",
+        price: 0.45,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Wipe kitchen Counter Tops",
+        price: 0.45,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Clean and Scrub toilet",
+        price: 0.55,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Clean bathroom counter tops",
+        price: 0.45,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Keep dirty clothes off bathroom floors",
+        price: 0.45,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Keep video games and controllers put away",
+        price: 0.45,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Wipe Dining Room Table and Clear off",
+        price: 0.45,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Pick up dog poop",
+        price: 0.60,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Pick up yard branches and sticks",
+        price: 0.55,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Keep Hammock area clean",
+        price: 0.50,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Pull weeds",
+        price: 0.60,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Clean up creek",
+        price: 0.70,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Clean up your Desk",
+        price: 0.40,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Clean Bedroom everything off floor",
+        price: 0.60,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Chop and cut Prickly bushes",
+        price: 0.70,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Feed and Water dogs",
+        price: 0.35,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Read a book",
+        price: 0.35,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Shower at 7pm",
+        price: 0.30,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Bedtime at 8pm",
+        price: 0.30,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Wake up at 5 am",
+        price: 0.30,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Sweep kitchen",
+        price: 0.35,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Sweep upstairs living room",
+        price: 0.40,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Sweep Bathroom",
+        price: 0.35,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Sweep downstairs laundry and hallway",
+        price: 0.40,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Windex Mirrors",
+        price: 0.40,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Windew Windows",
+        price: 0.45,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Lysol door and light switches",
+        price: 0.50,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Clean and pick up your trash",
+        price: 0.40,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Clean out toys and jackets from Car",
+        price: 0.50,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Organize your charging cords in room",
+        price: 0.40,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Complete Homework without stopping",
+        price: 0.60,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Complete Homework by Tuesday",
+        price: 0.60,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Make sure backpack is put away",
+        price: 0.40,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Have Monday - Friday clothes ready",
+        price: 0.40,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Brush your teeth and Floss",
+        price: 0.35,
+        target: 'both',
+        dueDate: ''
+      }, {
+        name: "Delay in Schoolwork",
+        price: 0,
+        target: 'both',
+        dueDate: ''
+      }];
+      const DEFAULT_APP_TITLE = 'Treasure List Fun';
+      const itemsO = ['🌀', '🧪', '🏎️', '🌌', '⚡', '🧬', '🪐'];
+      const itemsZ = ['🦄', '🌈', '💃', '✨', '💖', '🍭', '⭐'];
+      const itemsTroll = ['💰', '💸', '💵', '🧌'];
+      const childThemes = [{
+        accent: '#009EDD',
+        items: itemsO,
+        emoji: '🌀⚡🧬'
+      }, {
+        accent: '#4e14e1',
+        items: itemsZ,
+        emoji: '🌈🦄✨'
+      }, {
+        accent: '#ec4899',
+        items: ['💖', '🎀', '✨', '🌟', '🦋', '🍭'],
+        emoji: '💖✨🌟'
+      }, {
+        accent: '#16a34a',
+        items: ['🌿', '🍀', '🐸', '🌳', '🪴', '🌞'],
+        emoji: '🌿🍀🌞'
+      }];
+      const defaultChildren = [{
+        id: 'child1',
+        name: 'Dr. Plague'
+      }, {
+        id: 'child2',
+        name: 'Dressy Girl'
+      }];
+      let currentUser = null;
+      let saveTimer = null;
+      let state = null;
+      let choreSearchTerm = '';
+
+      function saveData() {
+        if (!state) return;
+        localStorage.setItem(V_KEY + '_types', JSON.stringify(state.chores));
+        localStorage.setItem(V_KEY + '_history', JSON.stringify(state.history));
+        localStorage.setItem(V_KEY + '_totals', JSON.stringify(state.totals));
+        localStorage.setItem(V_KEY + '_balances', JSON.stringify(state.balances));
+        localStorage.setItem(V_KEY + '_parentPassword', getParentPassword());
+        localStorage.setItem(V_KEY + '_children', JSON.stringify(getChildren()));
+        localStorage.setItem(V_KEY + '_appTitle', getAppTitle());
+        queueRemoteSave();
+      }
+
+      function saveLockBackup() {
+        if (!state) return;
+        const payload = {
+          savedAt: new Date().toISOString(),
+          state: JSON.parse(JSON.stringify(state))
+        };
+        localStorage.setItem(LOCK_BACKUP_KEY, JSON.stringify(payload));
+      }
+
+      function loadLocalState() {
+        const base = buildDefaultState();
+        const children = sanitizeChildren(JSON.parse(localStorage.getItem(V_KEY + '_children')) || base.children);
+        const history = sanitizeHistory(JSON.parse(localStorage.getItem(V_KEY + '_history')) || [], children);
+        return {
+          chores: sanitizeChoresWithChildren(JSON.parse(localStorage.getItem(V_KEY + '_types')) || base.chores, children),
+          history,
+          totals: sanitizeTotals(JSON.parse(localStorage.getItem(V_KEY + '_totals')) || base.totals, history, children),
+          balances: sanitizeBalances(JSON.parse(localStorage.getItem(V_KEY + '_balances')) || base.balances, children),
+          parentPassword: localStorage.getItem(V_KEY + '_parentPassword') || PASS,
+          children,
+          appTitle: localStorage.getItem(V_KEY + '_appTitle') || base.appTitle
+        };
+      }
+
+      function normalizeSearchTerm(value) {
+        return String(value || '').trim().toLowerCase();
+      }
+
+      function getChoreSearchStatus(matches) {
+        if (!choreSearchTerm) {
+          return `Showing all chores (${matches} total).`;
+        }
+        return `Showing ${matches} ${matches === 1 ? 'match' : 'matches'} for "${choreSearchTerm}".`;
+      }
+
+      function updateSearchStatus(matchCount = state?.chores?.length || 0) {
+        const node = document.getElementById('choreSearchStatus');
+        if (!node) return;
+        node.innerText = getChoreSearchStatus(matchCount);
+      }
+
+      function choreMatchesSearch(chore) {
+        if (!choreSearchTerm) return true;
+        const assignedChild = chore.target === 'both'
+          ? 'both everyone all'
+          : (getChildren().find(child => child.id === chore.target)?.name || '');
+        const searchableText = `${chore.name} ${assignedChild}`.toLowerCase();
+        return searchableText.includes(choreSearchTerm);
+      }
+
+      function updateChoreSearch(value) {
+        choreSearchTerm = normalizeSearchTerm(value);
+        updateUI();
+      }
+
+      function clearChoreSearch() {
+        choreSearchTerm = '';
+        const input = document.getElementById('choreSearchInput');
+        if (input) input.value = '';
+        updateUI();
+      }
+
+      function getParentPassword() {
+        return state && state.parentPassword ? state.parentPassword : PASS;
+      }
+
+      function getAppTitle() {
+        return state && state.appTitle ? state.appTitle : DEFAULT_APP_TITLE;
+      }
+
+      function getChildren() {
+        return state && Array.isArray(state.children) && state.children.length ? state.children : defaultChildren;
+      }
+
+      function getThemeForChild(childId) {
+        const index = getChildren().findIndex(child => child.id === childId);
+        return childThemes[(index >= 0 ? index : 0) % childThemes.length];
+      }
+
+      function buildTotalsForChildren(children, source = {}) {
+        return children.reduce((acc, child) => {
+          acc[child.id] = sanitizeNumber(source[child.id], 0);
+          return acc;
+        }, {});
+      }
+
+      function buildBalancesForChildren(children, source = {}) {
+        return children.reduce((acc, child) => {
+          acc[child.id] = sanitizeNumber(source[child.id], 200);
+          return acc;
+        }, {});
+      }
+
+      function setParentPasswordMessage(message, isError = false) {
+        const node = document.getElementById('parentPassMsg');
+        if (!node) return;
+        node.innerText = message || '';
+        node.style.color = isError ? '#b91c1c' : '#475569';
+      }
+
+      function setAuthMessage(message, isError = false) {
+        const node = document.getElementById('authMessage');
+        if (!node) return;
+        node.innerText = message || '';
+        node.style.color = isError ? '#b91c1c' : '#475569';
+      }
+
+      function showPasswordResetBox(show) {
+        const box = document.getElementById('resetPasswordBox');
+        if (!box) return;
+        box.style.display = show ? 'block' : 'none';
+      }
+
+      function updateSessionBadge() {
+        const node = document.getElementById('sessionInfo');
+        if (!node) return;
+        if (!supabaseClient) {
+          node.innerText = 'Supabase not configured';
+          return;
+        }
+        node.innerText = currentUser ? `Signed in: ${currentUser.email}` : 'Signed out';
+      }
+
+      function setAuthRequired(required) {
+        document.body.classList.toggle('auth-required', required);
+        document.getElementById('authOverlay').style.display = required ? 'flex' : 'none';
+        updateSessionBadge();
+      }
+
+      async function loadRemoteState() {
+        const { data, error } = await supabaseClient
+          .from('app_state')
+          .select('state')
+          .eq('user_id', currentUser.id)
+          .maybeSingle();
+
+        if (error) throw error;
+
+        if (data && data.state) {
+          const remoteState = data.state;
+          const sanitizedChildren = sanitizeChildren(remoteState.children);
+          const sanitizedHistory = sanitizeHistory(remoteState.history, sanitizedChildren);
+          state = {
+            chores: sanitizeChoresWithChildren(remoteState.chores, sanitizedChildren),
+            history: sanitizedHistory,
+            totals: sanitizeTotals(remoteState.totals, sanitizedHistory, sanitizedChildren),
+            balances: sanitizeBalances(remoteState.balances, sanitizedChildren),
+            children: sanitizedChildren,
+            appTitle: sanitizeAppTitle(remoteState.appTitle),
+            parentPassword: typeof remoteState.parentPassword === 'string' && remoteState.parentPassword ? remoteState.parentPassword : PASS
+          };
+        } else {
+          state = loadLocalState();
+          await persistStateNow();
+        }
+
+        localStorage.setItem(V_KEY + '_types', JSON.stringify(state.chores));
+        localStorage.setItem(V_KEY + '_history', JSON.stringify(state.history));
+        localStorage.setItem(V_KEY + '_totals', JSON.stringify(state.totals));
+        localStorage.setItem(V_KEY + '_balances', JSON.stringify(state.balances));
+        localStorage.setItem(V_KEY + '_parentPassword', getParentPassword());
+        localStorage.setItem(V_KEY + '_children', JSON.stringify(getChildren()));
+        localStorage.setItem(V_KEY + '_appTitle', getAppTitle());
+      }
+
+      async function persistStateNow() {
+        if (!supabaseClient || !currentUser || !state) return;
+        const { error } = await supabaseClient
+          .from('app_state')
+          .upsert({
+            user_id: currentUser.id,
+            state,
+            updated_at: new Date().toISOString()
+          }, {
+            onConflict: 'user_id'
+          });
+
+        if (error) {
+          console.error('Supabase save failed:', error);
+          throw error;
+        }
+      }
+
+      function queueRemoteSave() {
+        if (!supabaseClient || !currentUser || !state) return;
+        clearTimeout(saveTimer);
+        saveTimer = setTimeout(() => {
+          persistStateNow().catch(err => console.error('Queued save failed:', err));
+        }, 300);
+      }
+
+      async function handleLogin() {
+        if (!supabaseClient) {
+          setAuthMessage('Add your Supabase URL and anon key in index.html first.', true);
+          return;
+        }
+
+        const email = document.getElementById('authEmail').value.trim();
+        const password = document.getElementById('authPassword').value;
+        setAuthMessage('Signing in...');
+
+        const { data, error } = await supabaseClient.auth.signInWithPassword({
+          email,
+          password
+        });
+
+        if (error) {
+          setAuthMessage(error.message, true);
+          return;
+        }
+
+        currentUser = data.user;
+        await loadRemoteState();
+        setAuthRequired(false);
+        updateUI();
+        setAuthMessage('');
+      }
+
+      async function handleSignup() {
+        if (!supabaseClient) {
+          setAuthMessage('Add your Supabase URL and anon key in index.html first.', true);
+          return;
+        }
+
+        const email = document.getElementById('authEmail').value.trim();
+        const password = document.getElementById('authPassword').value;
+        setAuthMessage('Creating account...');
+
+        const { error } = await supabaseClient.auth.signUp({
+          email,
+          password,
+          options: {
+            emailRedirectTo: APP_URL
+          }
+        });
+
+        if (error) {
+          setAuthMessage(error.message, true);
+          return;
+        }
+
+        setAuthMessage('Account created. If email confirmation is enabled, verify email and then sign in.');
+      }
+
+      async function handlePasswordResetRequest() {
+        if (!supabaseClient) {
+          setAuthMessage('Add your Supabase URL and anon key in index.html first.', true);
+          return;
+        }
+
+        const email = document.getElementById('authEmail').value.trim();
+        if (!email) {
+          setAuthMessage('Enter your email first, then click Forgot Password.', true);
+          return;
+        }
+
+        setAuthMessage('Sending password reset email...');
+        const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+          redirectTo: APP_URL
+        });
+
+        if (error) {
+          setAuthMessage(error.message, true);
+          return;
+        }
+
+        setAuthMessage('Password reset email sent. Open the link in your email to set a new password.');
+      }
+
+      async function handlePasswordUpdate() {
+        if (!supabaseClient) return;
+        const newPassword = document.getElementById('newPassword').value;
+        if (!newPassword) {
+          setAuthMessage('Enter a new password.', true);
+          return;
+        }
+
+        setAuthMessage('Updating password...');
+        const { error } = await supabaseClient.auth.updateUser({
+          password: newPassword
+        });
+
+        if (error) {
+          setAuthMessage(error.message, true);
+          return;
+        }
+
+        showPasswordResetBox(false);
+        document.getElementById('newPassword').value = '';
+        setAuthMessage('Password updated. You can now sign in with the new password.');
+      }
+
+      async function handleLogout() {
+        if (!supabaseClient) return;
+        await supabaseClient.auth.signOut();
+        currentUser = null;
+        state = buildDefaultState();
+        setAuthRequired(true);
+        updateUI();
+      }
+
+      async function initializeApp() {
+        state = loadLocalState();
+
+        if (!supabaseClient) {
+          setAuthMessage('Supabase is not configured yet. Add your project URL and anon key.', true);
+          setAuthRequired(true);
+          updateUI();
+          return;
+        }
+
+        const { data, error } = await supabaseClient.auth.getSession();
+        if (error) {
+          console.error('Session load failed:', error);
+        }
+
+        currentUser = data.session ? data.session.user : null;
+
+        supabaseClient.auth.onAuthStateChange(async (event, session) => {
+          currentUser = session ? session.user : null;
+          if (event === 'PASSWORD_RECOVERY') {
+            setAuthRequired(true);
+            showPasswordResetBox(true);
+            setAuthMessage('Enter your new password below.');
+          }
+          updateSessionBadge();
+        });
+
+        if (currentUser) {
+          await loadRemoteState();
+          setAuthRequired(false);
+        } else {
+          setAuthRequired(true);
+        }
+
+        updateUI();
+      }
+
+      function getChoreIcon(name) {
+        const lowerName = name.toLowerCase();
+        if (lowerName.includes('dish')) return '🍽️';
+        if (lowerName.includes('trash')) return '🗑️';
+        if (lowerName.includes('vaccum') || lowerName.includes('sweep')) return '🧹';
+        if (lowerName.includes('laundry') || lowerName.includes('clothes') || lowerName.includes('dryer')) return '🧺';
+        if (lowerName.includes('bedroom') || lowerName.includes('room') || lowerName.includes('desk')) return '🛏️';
+        if (lowerName.includes('bathroom') || lowerName.includes('toilet') || lowerName.includes('mirror')) return '🛁';
+        if (lowerName.includes('dog')) return '🐶';
+        if (lowerName.includes('yard') || lowerName.includes('weed') || lowerName.includes('creek') || lowerName.includes('branch') || lowerName.includes('bush')) return '🌿';
+        if (lowerName.includes('book') || lowerName.includes('homework') || lowerName.includes('schoolwork')) return '📚';
+        if (lowerName.includes('teeth') || lowerName.includes('floss') || lowerName.includes('shower')) return '🪥';
+        if (lowerName.includes('bedtime') || lowerName.includes('wake up')) return '⏰';
+        if (lowerName.includes('car')) return '🚗';
+        if (lowerName.includes('cord')) return '🔌';
+        if (lowerName.includes('backpack')) return '🎒';
+        if (lowerName.includes('toy')) return '🧸';
+        if (lowerName.includes('table') || lowerName.includes('counter')) return '🧽';
+        return '⭐';
+      }
+
+      function updateUI() {
+        if (!state) return;
+        const now = new Date();
+        ['omni', 'zaia'].forEach(child => {
+          const items = state.history.filter(r => r.child === child);
+          const pendingVal = items.filter(i => i.status === 'pending').reduce((s, r) => s + r.price, 0);
+          document.getElementById(`${child}-pending`).innerText = `$${pendingVal.toFixed(2)}`;
+          document.getElementById(`${child}-balance`).innerText = `$${state.balances[child].toFixed(2)}`;
+          document.getElementById(`${child}-grand`).innerText = `$${state.totals[child].toFixed(2)}`;
+          // History List
+          const logArea = document.getElementById(`${child}-history`);
+          logArea.innerHTML = '';
+          [...items].reverse().slice(0, 15).forEach(r => {
+            const isPending = r.status === 'pending';
+            logArea.innerHTML += `
+              
+								<div class="history-item">
+									<span class="status-tag status-${r.status}">${r.status} ${r.earned ? '($'+r.earned.toFixed(2)+')' : ''}</span>
+									<strong>${r.name}</strong> ($${Math.abs(r.price)})
+									<br>
+										<small>${r.time}</small>
+										<div class="parent-actions">
+                    ${isPending ? `
+                      
+											<button class="rev-btn" style="background:var(--success)" onclick="reviewChore('${r.id}', 1, 'approved')">100%</button>
+											<button class="rev-btn" style="background:var(--info)" onclick="reviewChore('${r.id}', 0.5, 'partial')">50%</button>
+											<button class="rev-btn" style="background:var(--danger)" onclick="reviewChore('${r.id}', 0, 'declined')">Decline</button>` : 
+                    `
+											<button class="undo-btn" onclick="undoReview('${r.id}')">↩ Undo</button>
+											<button class="rev-btn" style="background:var(--lock)" onclick="archiveItem('${r.id}')">Clear</button>`}
+                
+										</div>
+									</div>`;
+          });
+          // Chore Buttons
+          const btnArea = document.getElementById(`${child}-chores`);
+          btnArea.innerHTML = '';
+          state.chores
+            .filter(c => c.target === 'both' || c.target === child)
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .forEach(c => {
+            const isExpired = c.dueDate && now > new Date(c.dueDate);
+            const b = document.createElement('button');
+            b.className = `chore-btn ${c.price < 0 ? 'spending' : ''}`;
+            const choreIcon = getChoreIcon(c.name);
+            let dueText = "";
+            if (c.dueDate) {
+              const d = new Date(c.dueDate);
+              dueText = `
+									<span class="due-label">Due: ${d.toLocaleDateString()} ${d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} ${isExpired ? '🚨 EXPIRED' : ''}</span>`;
+            }
+            b.innerHTML = `
+                
+									<div style="display:flex; justify-content:space-between; align-items:center;">
+										<span>${c.price < 0 ? '👹 ' : `${choreIcon} `}${c.name}
+										</span>
+										<span>$${Math.abs(c.price).toFixed(2)}</span>
+									</div>
+                ${dueText}`;
+            b.disabled = isExpired;
+            b.onclick = () => addRecord(child, c);
+            btnArea.appendChild(b);
+          });
+        });
+        renderMaster();
+      }
+
+      function addRecord(child, chore) {
+        triggerSplash(child, chore.price);
+        state.history.push({
+          id: 'h' + Date.now(),
+          child,
+          name: chore.name,
+          price: chore.price,
+          status: 'pending',
+          earned: 0,
+          time: new Date().toLocaleString()
+        });
+        saveData();
+        updateUI();
+      }
+
+      function reviewChore(id, multiplier, statusName) {
+        const item = state.history.find(x => x.id === id);
+        if (item && item.status === 'pending') {
+          item.status = statusName;
+          const totalEarned = item.price * multiplier;
+          item.earned = totalEarned;
+          if (totalEarned > 0) state.totals[item.child] += totalEarned;
+          state.balances[item.child] += totalEarned;
+          saveData();
+          updateUI();
+        }
+      }
+
+      function undoReview(id) {
+        const item = state.history.find(x => x.id === id);
+        if (item && item.status !== 'pending') {
+          state.totals[item.child] -= item.earned;
+          state.balances[item.child] -= item.earned;
+          item.status = 'pending';
+          item.earned = 0;
+          saveData();
+          updateUI();
+        }
+      }
+
+      function archiveItem(id) {
+        state.history = state.history.filter(x => x.id !== id);
+        saveData();
+        updateUI();
+      }
+      // --- Parent Logic ---
+      function addNewChore() {
+        const n = document.getElementById('custName').value,
+          p = document.getElementById('custPrice').value;
+        const d = document.getElementById('custDate').value,
+          t = document.getElementById('custTime').value;
+        if (n && p) {
+          let combinedDue = "";
+          if (d) combinedDue = d + (t ? "T" + t : "T23:59"); // Default to end of day if time missing
+          state.chores.push({
+            id: 'c' + Date.now(),
+            name: n,
+            price: parseFloat(p),
+            target: 'both',
+            dueDate: combinedDue
+          });
+          saveData();
+          updateUI();
+          document.getElementById('custName').value = '';
+          document.getElementById('custPrice').value = '';
+          document.getElementById('custDate').value = '';
+          document.getElementById('custTime').value = '';
+        }
+      }
+
+      function renderMaster() {
+        const body = document.getElementById('master-body');
+        body.innerHTML = '';
+        state.chores.forEach(c => {
+          // Format date for the input field (YYYY-MM-DDTHH:MM)
+          const dateVal = c.dueDate ? c.dueDate : '';
+          body.innerHTML += `
+									<tr>
+										<td>
+											<input type="text" value="${c.name}" onchange="editMaster('${c.id}', 'name', this.value)" style="width:100%">
+											</td>
+											<td>
+												<input type="number" value="${c.price}" onchange="editMaster('${c.id}', 'price', this.value)" style="width:60px">
+												</td>
+												<td>
+													<select onchange="editMaster('${c.id}', 'target', this.value)">
+														<option value="both" ${c.target==='both'?'selected':''}>Both</option>
+														<option value="omni" ${c.target==='omni'?'selected':''}>Omni</option>
+														<option value="zaia" ${c.target==='zaia'?'selected':''}>Zaia</option>
+													</select>
+												</td>
+												<td>
+													<input type="datetime-local" value="${dateVal}" onchange="editMaster('${c.id}', 'dueDate', this.value)">
+													</td>
+													<td>
+														<button onclick="remChoreType('${c.id}')" style="color:red; border:none; background:none; font-weight:bold; cursor:pointer;">X</button>
+													</td>
+												</tr>`;
+        });
+      }
+
+      function editMaster(id, f, v) {
+        const c = state.chores.find(x => x.id === id);
+        if (c) {
+          c[f] = (f === 'price' ? parseFloat(v) : v);
+          saveData();
+          updateUI();
+        }
+      }
+
+      function remChoreType(id) {
+        if (confirm("Delete?")) {
+          state.chores = state.chores.filter(c => c.id !== id);
+          saveData();
+          updateUI();
+        }
+      }
+      // --- Standard Helpers ---
+      function triggerSplash(child, price) {
+        const splash = document.getElementById('celebration');
+        const container = document.getElementById('item-container');
+        const title = document.getElementById('splash-title');
+        const emojiMain = document.getElementById('splash-emojis');
+        container.innerHTML = '';
+        if (price < 0) {
+          splash.className = 'theme-troll';
+          title.innerText = 'TROLL TAX!';
+          emojiMain.innerText = '🧌';
+          spawnItems(itemsTroll);
+        } else {
+          title.innerText = 'WAY TO GO!';
+          if (child === 'omni') {
+            splash.className = 'theme-omni';
+            emojiMain.innerText = '🌀⚡🧬';
+            spawnItems(itemsO);
+          } else {
+            splash.className = 'theme-zaia';
+            emojiMain.innerText = '🌈🦄✨';
+            spawnItems(itemsZ);
+          }
+        }
+        splash.style.display = 'flex';
+        setTimeout(() => {
+          splash.style.display = 'none';
+        }, 4000);
+      }
+
+      function spawnItems(list) {
+        const container = document.getElementById('item-container');
+        for (let i = 0; i < 30; i++) {
+          const span = document.createElement('span');
+          span.className = 'flying-item';
+          span.innerText = list[Math.floor(Math.random() * list.length)];
+          const angle = Math.random() * Math.PI * 2;
+          const dist = 600 + Math.random() * 800;
+          span.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
+          span.style.setProperty('--ty', Math.sin(angle) * dist + 'px');
+          span.style.setProperty('--rot', (Math.random() * 720) + 'deg');
+          span.style.setProperty('--d', (Math.random() * 0.5 + 0.5) + 's');
+          container.appendChild(span);
+        }
+      }
+
+      function triggerSplash(child, price) {
+        const splash = document.getElementById('celebration');
+        const container = document.getElementById('item-container');
+        const title = document.getElementById('splash-title');
+        const emojiMain = document.getElementById('splash-emojis');
+        const theme = getThemeForChild(child);
+        container.innerHTML = '';
+        if (price < 0) {
+          splash.className = 'theme-troll';
+          title.innerText = 'TROLL TAX!';
+          emojiMain.innerText = '🧌';
+          spawnItems(itemsTroll);
+        } else {
+          title.innerText = 'WAY TO GO!';
+          splash.className = theme.accent === '#4e14e1' ? 'theme-zaia' : 'theme-omni';
+          emojiMain.innerText = theme.emoji;
+          spawnItems(theme.items);
+        }
+        splash.style.display = 'flex';
+        setTimeout(() => {
+          splash.style.display = 'none';
+        }, 4000);
+      }
+
+      function openModal() {
+        document.getElementById('passModal').style.display = 'flex';
+      }
+
+      function closeModal() {
+        document.getElementById('passModal').style.display = 'none';
+        document.getElementById('passInput').value = '';
+      }
+
+      function submitPass() {
+        if (document.getElementById('passInput').value === getParentPassword()) {
+          document.body.className = 'admin-unlocked';
+          closeModal();
+          updateUI();
+          setParentPasswordMessage('');
+        }
+      }
+
+      function updateParentPassword() {
+        const input = document.getElementById('newParentPass');
+        const newPassword = input.value.trim();
+        if (!newPassword) {
+          setParentPasswordMessage('Enter a new parent password first.', true);
+          return;
+        }
+
+        state.parentPassword = newPassword;
+        saveData();
+        input.value = '';
+        setParentPasswordMessage('Parent password updated.');
+      }
+
+      function lockAdmin() {
+        saveLockBackup();
+        document.body.className = 'admin-locked';
+      }
+
+      function triggerRestore() {
+        const input = document.getElementById('restoreInput');
+        input.value = '';
+        input.click();
+      }
+
+      function buildDefaultState() {
+        const children = defaultChildren.map(child => ({ ...child }));
+        return {
+          chores: defaultList.map((c, i) => ({
+            ...c,
+            id: 'c' + i
+          })),
+          history: [],
+          totals: buildTotalsForChildren(children),
+          balances: buildBalancesForChildren(children),
+          parentPassword: PASS,
+          children,
+          appTitle: DEFAULT_APP_TITLE
+        };
+      }
+
+      function sanitizeNumber(value, fallback = 0) {
+        const num = Number(value);
+        return Number.isFinite(num) ? num : fallback;
+      }
+
+      function sanitizeAppTitle(title) {
+        return typeof title === 'string' && title.trim() ? title.trim() : DEFAULT_APP_TITLE;
+      }
+
+      function sanitizeChildren(children) {
+        if (!Array.isArray(children) || !children.length) {
+          return defaultChildren.map(child => ({ ...child }));
+        }
+
+        return children.map((child, index) => ({
+          id: String(child?.id || ('child' + (index + 1))),
+          name: String(child?.name || ('Child ' + (index + 1))).trim() || ('Child ' + (index + 1))
+        }));
+      }
+
+      function sanitizeChores(chores) {
+        if (!Array.isArray(chores)) return buildDefaultState().chores;
+
+        const validTargets = new Set(['both', ...getChildren().map(child => child.id)]);
+        return chores.map((chore, index) => ({
+          id: String(chore?.id || ('c_restore_' + index + '_' + Date.now())),
+          name: String(chore?.name || 'Unnamed Chore'),
+          price: sanitizeNumber(chore?.price, 0),
+          target: validTargets.has(chore?.target) ? chore.target : 'both',
+          dueDate: typeof chore?.dueDate === 'string' ? chore.dueDate : ''
+        }));
+      }
+
+      function sanitizeChoresWithChildren(chores, children) {
+        if (!Array.isArray(chores)) return buildDefaultState().chores;
+
+        const validTargets = new Set(['both', ...children.map(child => child.id)]);
+        return chores.map((chore, index) => ({
+          id: String(chore?.id || ('c_restore_' + index + '_' + Date.now())),
+          name: String(chore?.name || 'Unnamed Chore'),
+          price: sanitizeNumber(chore?.price, 0),
+          target: validTargets.has(chore?.target) ? chore.target : 'both',
+          dueDate: typeof chore?.dueDate === 'string' ? chore.dueDate : ''
+        }));
+      }
+
+      function sanitizeHistory(history, children = getChildren()) {
+        if (!Array.isArray(history)) return [];
+
+        const validIds = children.map(child => child.id);
+        const legacyMap = {
+          omni: validIds[0] || 'child1',
+          zaia: validIds[1] || validIds[0] || 'child1'
+        };
+
+        return history.map((item, index) => ({
+          id: String(item?.id || ('h_restore_' + index + '_' + Date.now())),
+          child: validIds.includes(item?.child) ? item.child : (legacyMap[item?.child] || validIds[0]),
+          name: String(item?.name || 'Restored Activity'),
+          price: sanitizeNumber(item?.price, 0),
+          status: ['pending', 'approved', 'partial', 'declined'].includes(item?.status) ? item.status : 'pending',
+          earned: sanitizeNumber(item?.earned, 0),
+          time: String(item?.time || new Date().toLocaleString())
+        }));
+      }
+
+      function sanitizeTotals(totals, history, children = getChildren()) {
+        return children.reduce((acc, child) => {
+          const approved = history
+            .filter(item => item.child === child.id && item.status !== 'pending')
+            .reduce((sum, item) => sum + sanitizeNumber(item.earned, 0), 0);
+          acc[child.id] = sanitizeNumber(totals?.[child.id], approved);
+          return acc;
+        }, {});
+      }
+
+      function sanitizeBalances(balances, children = getChildren()) {
+        return children.reduce((acc, child) => {
+          acc[child.id] = sanitizeNumber(balances?.[child.id], 200);
+          return acc;
+        }, {});
+      }
+
+      function setChildrenConfigMessage(message, isError = false) {
+        const node = document.getElementById('childrenConfigMsg');
+        if (!node) return;
+        node.innerText = message || '';
+        node.style.color = isError ? '#b91c1c' : '#475569';
+      }
+
+      function updateAppTitle() {
+        const input = document.getElementById('appTitleInput');
+        const nextTitle = sanitizeAppTitle(input.value);
+        state.appTitle = nextTitle;
+        saveData();
+        updateUI();
+        setChildrenConfigMessage('App title updated.');
+      }
+
+      function updateChildName(childId, value) {
+        const child = getChildren().find(entry => entry.id === childId);
+        if (!child) return;
+        child.name = value.trim() || child.name;
+        saveData();
+        updateUI();
+      }
+
+      function addChild() {
+        const nextIndex = getChildren().length + 1;
+        const nextId = 'child' + Date.now();
+        state.children.push({
+          id: nextId,
+          name: `Child ${nextIndex}`
+        });
+        state.totals[nextId] = 0;
+        state.balances[nextId] = 200;
+        saveData();
+        updateUI();
+        setChildrenConfigMessage('Child added.');
+      }
+
+      function removeChild(childId) {
+        if (getChildren().length <= 1) {
+          setChildrenConfigMessage('At least one child is required.', true);
+          return;
+        }
+        if (!confirm('Remove this child? Their activity history will be removed and their assigned quests will reset to Both.')) return;
+
+        state.children = state.children.filter(child => child.id !== childId);
+        state.history = state.history.filter(item => item.child !== childId);
+        state.chores = state.chores.map(chore => chore.target === childId ? { ...chore, target: 'both' } : chore);
+        delete state.totals[childId];
+        delete state.balances[childId];
+        state.totals = sanitizeTotals(state.totals, state.history, state.children);
+        state.balances = sanitizeBalances(state.balances, state.children);
+        saveData();
+        updateUI();
+        setChildrenConfigMessage('Child removed.');
+      }
+
+      function renderChildrenConfig() {
+        const list = document.getElementById('childrenConfigList');
+        if (!list) return;
+        list.innerHTML = '';
+
+        getChildren().forEach((child, index) => {
+          const row = document.createElement('div');
+          row.style.cssText = 'display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;';
+
+          const input = document.createElement('input');
+          input.type = 'text';
+          input.value = child.name;
+          input.style.flex = '2';
+          input.addEventListener('change', () => updateChildName(child.id, input.value));
+
+          const removeButton = document.createElement('button');
+          removeButton.type = 'button';
+          removeButton.textContent = 'Remove';
+          removeButton.dataset.childId = child.id;
+          removeButton.style.cssText = 'padding:10px; background:var(--danger); color:white; border:none; border-radius:8px; cursor:pointer;';
+          removeButton.disabled = getChildren().length <= 1;
+
+          const label = document.createElement('span');
+          label.style.cssText = 'align-self:center; color:#64748b; font-size:0.85rem;';
+          label.textContent = `Child ${index + 1}`;
+
+          row.appendChild(input);
+          row.appendChild(removeButton);
+          row.appendChild(label);
+          list.appendChild(row);
+        });
+      }
+
+      document.addEventListener('click', event => {
+        const target = event.target;
+        if (!(target instanceof HTMLElement)) return;
+        if (target.matches('#childrenConfigList button[data-child-id]')) {
+          removeChild(target.dataset.childId);
+        }
+      });
+
+      function renderDashboard() {
+        const now = new Date();
+        const dashboard = document.getElementById('childDashboard');
+        if (!dashboard) return;
+        dashboard.innerHTML = '';
+
+        getChildren().forEach(child => {
+          const theme = getThemeForChild(child.id);
+          const items = state.history.filter(r => r.child === child.id);
+          const pendingVal = items.filter(i => i.status === 'pending').reduce((s, r) => s + r.price, 0);
+          const totalVal = sanitizeNumber(state.totals?.[child.id], 0);
+          const balanceVal = sanitizeNumber(state.balances?.[child.id], 200);
+
+          const column = document.createElement('div');
+          column.className = 'column';
+          column.style.borderTopColor = theme.accent;
+          column.innerHTML = `
+            <div style="font-size:3rem; font-weight:900; text-align:center; color:${theme.accent}">${child.name}</div>
+            <div class="wallet-card">
+              <div class="left-stat">
+                <span class="stat-val-large">$${totalVal.toFixed(2)}</span>
+                <span class="stat-label">Lifetime Earnings</span>
+              </div>
+              <div class="middle-stat">
+                <span class="stat-val-mid">$${pendingVal.toFixed(2)}</span>
+                <span class="stat-label">Pending</span>
+              </div>
+              <div class="balance-container">
+                <span class="balance-label" style="font-size:0.5rem">BALANCE</span>
+                <span class="balance-value">$${balanceVal.toFixed(2)}</span>
+              </div>
+            </div>
+            <div id="chores-${child.id}"></div>
+            <h4>Activity Review</h4>
+            <div id="history-${child.id}"></div>
+          `;
+          dashboard.appendChild(column);
+
+          const logArea = column.querySelector(`#history-${child.id}`);
+          [...items].reverse().slice(0, 15).forEach(r => {
+            const isPending = r.status === 'pending';
+            logArea.innerHTML += `
+              <div class="history-item">
+                <span class="status-tag status-${r.status}">${r.status} ${r.earned ? '($'+r.earned.toFixed(2)+')' : ''}</span>
+                <strong>${r.name}</strong> ($${Math.abs(r.price)})
+                <br>
+                <small>${r.time}</small>
+                <div class="parent-actions">
+                  ${isPending ? `
+                    <button class="rev-btn" style="background:var(--success)" onclick="reviewChore('${r.id}', 1, 'approved')">100%</button>
+                    <button class="rev-btn" style="background:var(--info)" onclick="reviewChore('${r.id}', 0.5, 'partial')">50%</button>
+                    <button class="rev-btn" style="background:var(--danger)" onclick="reviewChore('${r.id}', 0, 'declined')">Decline</button>` :
+                    `
+                    <button class="undo-btn" onclick="undoReview('${r.id}')">↩ Undo</button>
+                    <button class="rev-btn" style="background:var(--lock)" onclick="archiveItem('${r.id}')">Clear</button>`}
+                </div>
+              </div>`;
+          });
+
+          const btnArea = column.querySelector(`#chores-${child.id}`);
+          const matchingChores = state.chores
+            .filter(c => c.target === 'both' || c.target === child.id)
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .filter(choreMatchesSearch);
+
+          if (!matchingChores.length) {
+            btnArea.innerHTML = `<div class="empty-search-state">No chores match this search right now.</div>`;
+          }
+
+          matchingChores
+            .forEach(c => {
+              const isExpired = c.dueDate && now > new Date(c.dueDate);
+              const b = document.createElement('button');
+              b.className = `chore-btn ${c.price < 0 ? 'spending' : ''}`;
+              const choreIcon = getChoreIcon(c.name);
+              let dueText = "";
+              if (c.dueDate) {
+                const d = new Date(c.dueDate);
+                dueText = `<span class="due-label">Due: ${d.toLocaleDateString()} ${d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} ${isExpired ? '🚨 EXPIRED' : ''}</span>`;
+              }
+              b.innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <span>${c.price < 0 ? '👹 ' : `${choreIcon} `}${c.name}</span>
+                  <span>$${Math.abs(c.price).toFixed(2)}</span>
+                </div>
+                ${dueText}`;
+              b.disabled = isExpired;
+              b.onclick = () => addRecord(child.id, c);
+              btnArea.appendChild(b);
+            });
+        });
+      }
+
+      function updateUI() {
+        if (!state) return;
+        document.title = getAppTitle();
+        const titleNode = document.getElementById('appTitleDisplay');
+        const subtitleNode = document.getElementById('appSubtitleDisplay');
+        const titleInput = document.getElementById('appTitleInput');
+        const searchInput = document.getElementById('choreSearchInput');
+        if (titleNode) titleNode.innerText = getAppTitle();
+        if (subtitleNode) subtitleNode.innerText = `${getChildren().length} ${getChildren().length === 1 ? 'Explorer' : 'Explorers'}`;
+        if (titleInput) titleInput.value = getAppTitle();
+        if (searchInput) searchInput.value = choreSearchTerm;
+        renderChildrenConfig();
+        renderDashboard();
+        renderMaster();
+        updateSearchStatus(state.chores.filter(choreMatchesSearch).length);
+      }
+
+      function renderMaster() {
+        const body = document.getElementById('master-body');
+        body.innerHTML = '';
+
+        const matchingChores = state.chores.filter(choreMatchesSearch);
+        if (!matchingChores.length) {
+          body.innerHTML = `
+            <tr>
+              <td colspan="5">
+                <div class="empty-search-state">No master chore templates match this search.</div>
+              </td>
+            </tr>`;
+          return;
+        }
+
+        matchingChores.forEach(c => {
+          const dateVal = c.dueDate ? c.dueDate : '';
+          const childOptions = getChildren()
+            .map(child => `<option value="${child.id}" ${c.target===child.id?'selected':''}>${child.name}</option>`)
+            .join('');
+          body.innerHTML += `
+            <tr>
+              <td>
+                <input type="text" value="${c.name}" onchange="editMaster('${c.id}', 'name', this.value)" style="width:100%">
+              </td>
+              <td>
+                <input type="number" value="${c.price}" onchange="editMaster('${c.id}', 'price', this.value)" style="width:60px">
+              </td>
+              <td>
+                <select onchange="editMaster('${c.id}', 'target', this.value)">
+                  <option value="both" ${c.target==='both'?'selected':''}>Both</option>
+                  ${childOptions}
+                </select>
+              </td>
+              <td>
+                <input type="datetime-local" value="${dateVal}" onchange="editMaster('${c.id}', 'dueDate', this.value)">
+              </td>
+              <td>
+                <button onclick="remChoreType('${c.id}')" style="color:red; border:none; background:none; font-weight:bold; cursor:pointer;">X</button>
+              </td>
+            </tr>`;
+        });
+      }
+
+      async function restoreData(event) {
+        const file = event.target.files && event.target.files[0];
+        if (!file) return;
+
+        try {
+          const rawText = await file.text();
+          const parsed = JSON.parse(rawText);
+          const restoredChildren = sanitizeChildren(parsed.children);
+          const restoredHistory = sanitizeHistory(parsed.history, restoredChildren);
+
+          state = {
+            chores: sanitizeChoresWithChildren(parsed.chores, restoredChildren),
+            history: restoredHistory,
+            totals: sanitizeTotals(parsed.totals, restoredHistory, restoredChildren),
+            balances: sanitizeBalances(parsed.balances, restoredChildren),
+            children: restoredChildren,
+            appTitle: sanitizeAppTitle(parsed.appTitle),
+            parentPassword: typeof parsed.parentPassword === 'string' && parsed.parentPassword ? parsed.parentPassword : PASS
+          };
+
+          saveData();
+          updateUI();
+          alert('Backup restored successfully.');
+        } catch (err) {
+          console.error('Restore failed:', err);
+          alert('Restore failed. Please choose a valid backup JSON file.');
+        } finally {
+          event.target.value = '';
+        }
+      }
+
+      function resetEverything() {
+        if (!confirm("Hard reset all chore data to defaults?")) return;
+
+        localStorage.removeItem(V_KEY + '_types');
+        localStorage.removeItem(V_KEY + '_history');
+        localStorage.removeItem(V_KEY + '_totals');
+        localStorage.removeItem(V_KEY + '_balances');
+
+        state = buildDefaultState();
+
+        saveData();
+        updateUI();
+        lockAdmin();
+      }
+
+      async function exportData() {
+        const backupText = JSON.stringify(state, null, 2);
+        const fileName = `chore_backup_${new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-')}.json`;
+
+        try {
+          if (window.showSaveFilePicker) {
+            const handle = await window.showSaveFilePicker({
+              suggestedName: fileName,
+              types: [{
+                description: 'JSON Files',
+                accept: {
+                  'application/json': ['.json']
+                }
+              }]
+            });
+            const writable = await handle.createWritable();
+            await writable.write(backupText);
+            await writable.close();
+            alert('Backup saved.');
+            return;
+          }
+
+          const blob = new Blob([backupText], {
+            type: 'application/json'
+          });
+          const url = URL.createObjectURL(blob);
+          const downloadAnchorNode = document.createElement('a');
+          downloadAnchorNode.href = url;
+          downloadAnchorNode.download = fileName;
+          downloadAnchorNode.style.display = 'none';
+          document.body.appendChild(downloadAnchorNode);
+          downloadAnchorNode.click();
+          setTimeout(() => {
+            downloadAnchorNode.remove();
+            URL.revokeObjectURL(url);
+          }, 100);
+          return;
+        } catch (err) {
+          console.error('Backup download failed:', err);
+        }
+
+        try {
+          if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(backupText);
+            alert('Backup download was blocked, so the backup JSON was copied to the clipboard instead.');
+            return;
+          }
+        } catch (err) {
+          console.error('Clipboard backup failed:', err);
+        }
+
+        const backupWindow = window.open('', '_blank');
+        if (backupWindow) {
+          backupWindow.document.write(`<pre>${backupText.replace(/[&<>]/g, m => ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;'
+          })[m])}</pre>`);
+          backupWindow.document.close();
+          alert('Backup opened in a new tab. Save that page as a .json file.');
+          return;
+        }
+
+        alert('Backup could not be downloaded automatically in this browser.');
+      }
+
+      function spawnAmbientItems() {
+        const container = document.getElementById('ambient-bg');
+        if (!container) return;
+        container.innerHTML = '';
+
+        const icons = ['💰', '$', '💵', '✨', '💎'];
+        for (let i = 0; i < 18; i++) {
+          const item = document.createElement('div');
+          item.className = 'ambient-item';
+          item.innerText = icons[Math.floor(Math.random() * icons.length)];
+          item.style.left = Math.random() * 100 + 'vw';
+          item.style.top = Math.random() * 100 + 'vh';
+          item.style.transform = `rotate(${Math.random() * 360}deg)`;
+          item.style.setProperty('--dur', (8 + Math.random() * 10) + 's');
+          if (item.innerText === '$') {
+            item.style.color = '#00FF00';
+            item.style.fontWeight = 'bold';
+          }
+          container.appendChild(item);
+        }
+      }
+
+      spawnAmbientItems();
+      initializeApp().catch(err => {
+        console.error('App initialization failed:', err);
+        setAuthMessage(err.message || 'Failed to initialize app.', true);
+        setAuthRequired(true);
+      });
+      // Auto-refresh UI every minute to check for expired chores
+      setInterval(updateUI, 60000);
+    </script>
+  </body>
+</html>
