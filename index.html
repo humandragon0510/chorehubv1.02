@@ -86,6 +86,12 @@ input,select{padding:8px;border:1px solid #ccc;border-radius:6px}
 .search-clear-btn{border:none;border-radius:12px;padding:12px 14px;font-weight:800;background:#e2e8f0;color:var(--text);cursor:pointer}
 .search-status{margin-top:10px;color:#475569;font-size:.9rem}
 .empty-search-state{margin:12px 0 4px;padding:12px 14px;border-radius:12px;background:#f8fafc;color:#64748b;font-weight:700;text-align:center}
+.room-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px;margin-bottom:10px}
+.room-tile{display:flex;flex-direction:column;align-items:center;gap:4px;padding:16px 8px;border:3px solid #e2e8f0;border-radius:18px;background:#fff;cursor:pointer;font-size:1rem;font-weight:800;color:var(--text);transition:transform .1s}
+.room-tile:active{transform:scale(.97)}.room-tile:disabled{opacity:.45;cursor:not-allowed}
+.room-tile .room-ico{font-size:2.4rem}.room-tile small{color:#64748b;font-weight:600}
+.room-back{border:none;border-radius:12px;padding:10px 14px;margin-bottom:12px;background:#e2e8f0;font-weight:800;cursor:pointer;color:var(--text)}
+.room-tag{font-size:.7rem;color:#64748b;display:block;margin-top:4px}
 @media(max-width:900px){body{padding:14px}.top-bar{justify-content:center;flex-wrap:wrap}.lock-overlay{flex-direction:column;align-items:stretch;gap:12px;text-align:center}.dashboard{grid-template-columns:1fr;gap:18px}.wallet-card{flex-direction:column;align-items:stretch;gap:16px}.left-stat,.middle-stat{text-align:center}.balance-container{position:static;text-align:center;margin-top:8px}.hero-card{padding:18px 20px;border-width:6px;border-radius:24px}.hero-subtitle{letter-spacing:.18em}.search-controls{flex-direction:column;align-items:stretch}.search-clear-btn{width:100%}}
 @media(max-width:640px){body{padding:10px}.panel,.column{padding:16px;border-radius:18px}.hero-card{padding:14px 12px}.hero-row{gap:10px}.hero-emoji{font-size:2.4rem}.hero-subtitle{margin-top:10px;letter-spacing:.12em}.session-badge,.session-btn,.auth-primary,.auth-secondary{width:100%;text-align:center}.auth-card{padding:20px;border-radius:18px}.auth-actions{flex-direction:column}.giant-text{font-size:4rem}.stat-val-large{font-size:1.8rem}.stat-val-mid{font-size:1.4rem}.chore-btn{padding:13px;font-size:1rem}
 .master-table,.master-table tbody,.master-table td,.master-table tr{display:block;width:100%}.master-table thead{display:none}.master-table tr{margin-bottom:14px;padding:12px;background:#f8fafc;border-radius:14px;border:1px solid #e2e8f0}.master-table td{border-bottom:none;padding:6px 0}.master-table td input,.master-table td select,.master-table td button{width:100%}}
@@ -165,6 +171,7 @@ input,select{padding:8px;border:1px solid #ccc;border-radius:6px}
           <div class="flex">
             <input type="text" v-model="nc.name" placeholder="Chore Name" style="flex:2">
             <input type="number" step="0.01" v-model="nc.price" placeholder="$" style="width:70px">
+            <select v-model="nc.room"><option value="">Other</option><option v-for="r in state.rooms" :key="r.id" :value="r.id">{{ r.name }}</option></select>
             <input type="date" v-model="nc.date"><input type="time" v-model="nc.time">
             <button class="btn" style="background:var(--success)" @click="addNewChore">Assign</button>
           </div>
@@ -189,16 +196,25 @@ input,select{padding:8px;border:1px solid #ccc;border-radius:6px}
           <div style="margin-top:10px"><button class="btn" style="background:var(--success)" @click="addChild">Add Child</button></div>
           <div class="msg" :class="{err:childMsgErr}">{{ childMsg }}</div>
         </div>
+        <div class="box"><strong>Rooms:</strong>
+          <div v-for="r in state.rooms" :key="r.id" class="flex">
+            <input type="text" v-model="r.icon" style="width:50px;text-align:center">
+            <input type="text" v-model="r.name" style="flex:2">
+            <button class="btn" style="background:var(--danger)" @click="removeRoom(r.id)">Remove</button>
+          </div>
+          <div style="margin-top:10px"><button class="btn" style="background:var(--success)" @click="addRoom">Add Room</button></div>
+        </div>
         <details style="margin-top:15px" open>
           <summary style="cursor:pointer;font-weight:bold;color:#009EDD">Master Templates</summary>
           <table class="master-table">
-            <thead><tr><th>Name</th><th>Price</th><th>Target</th><th>Due Date/Time</th><th>Action</th></tr></thead>
+            <thead><tr><th>Name</th><th>Price</th><th>Target</th><th>Room</th><th>Due Date/Time</th><th>Action</th></tr></thead>
             <tbody>
-              <tr v-if="!matchingMaster.length"><td colspan="5"><div class="empty-search-state">No master chore templates match this search.</div></td></tr>
+              <tr v-if="!matchingMaster.length"><td colspan="6"><div class="empty-search-state">No master chore templates match this search.</div></td></tr>
               <tr v-for="c in matchingMaster" :key="c.id">
                 <td><input type="text" v-model="c.name" style="width:100%"></td>
                 <td><input type="number" step="0.01" v-model.number="c.price" style="width:70px"></td>
                 <td><select v-model="c.target"><option value="both">Both</option><option v-for="k in state.children" :key="k.id" :value="k.id">{{ k.name }}</option></select></td>
+                <td><select v-model="c.room"><option value="">Other</option><option v-for="r in state.rooms" :key="r.id" :value="r.id">{{ r.name }}</option></select></td>
                 <td><input type="datetime-local" v-model="c.dueDate"></td>
                 <td><button @click="remChoreType(c.id)" style="color:red;border:none;background:none;font-weight:bold;cursor:pointer">X</button></td>
               </tr>
@@ -224,11 +240,20 @@ input,select{padding:8px;border:1px solid #ccc;border-radius:6px}
           <div class="middle-stat"><span class="stat-val-mid">${{ pending(child.id).toFixed(2) }}</span><span class="stat-label">Pending</span></div>
           <div class="balance-container"><span style="font-size:.5rem">BALANCE</span><span class="balance-value">${{ (state.balances[child.id]||0).toFixed(2) }}</span></div>
         </div>
+        <div v-if="!q && openRoom[child.id]==null" class="room-grid">
+          <button v-for="r in roomTiles(child.id)" :key="r.id" class="room-tile" :disabled="!r.count" @click="openRoom[child.id]=r.id">
+            <span class="room-ico">{{ r.icon }}</span><span>{{ r.name }}</span><small>{{ r.count }} {{ r.count===1 ? 'chore' : 'chores' }}</small>
+          </button>
+        </div>
+        <template v-else>
+        <button v-if="!q" class="room-back" @click="openRoom[child.id]=null">← All rooms: {{ roomName(openRoom[child.id]) }}</button>
         <div v-if="!choresFor(child.id).length" class="empty-search-state">No chores match this search right now.</div>
         <button v-for="c in choresFor(child.id)" :key="c.id" class="chore-btn" :class="{spending:c.price<0}" :disabled="expired(c)" @click="addRecord(child.id,c)">
           <div class="row"><span>{{ c.price<0 ? '👹' : icon(c.name) }} {{ c.name }}</span><span>${{ Math.abs(c.price).toFixed(2) }}</span></div>
+          <span v-if="q" class="room-tag">{{ roomName(c.room) }}</span>
           <span v-if="c.dueDate" class="due-label">Due: {{ fmt(c.dueDate) }} {{ expired(c) ? '🚨 EXPIRED' : '' }}</span>
         </button>
+        </template>
         <h4>Activity Review</h4>
         <div v-for="r in recent(child.id)" :key="r.id" class="history-item" :style="{borderLeftColor:th(child.id).a}">
           <span class="status-tag" :class="'status-'+r.status">{{ r.status }} {{ r.earned ? '($'+r.earned.toFixed(2)+')' : '' }}</span>
@@ -270,9 +295,14 @@ const THEMES = [
 const TROLL = ['💰','💸','💵','🧌'];
 const ICONS = [[['dish'],'🍽️'],[['trash'],'🗑️'],[['vacuum','sweep'],'🧹'],[['laundry','clothes','dryer'],'🧺'],[['bedroom','room','desk'],'🛏️'],[['bathroom','toilet','mirror'],'🛁'],[['dog'],'🐶'],[['yard','weed','creek','branch','bush'],'🌿'],[['book','homework','schoolwork'],'📚'],[['teeth','floss','shower'],'🪥'],[['bedtime','wake up'],'⏰'],[['car'],'🚗'],[['cord'],'🔌'],[['backpack'],'🎒'],[['toy'],'🧸'],[['table','counter'],'🧽']];
 
+const DEFAULT_ROOMS = [['kitchen','Kitchen','🍳'],['upbath','Upstairs Bathroom','🚿'],['downbath','Downstairs Bathroom','🚽'],['laundry','Laundry Room','🧺'],['living','Living Room','🛋️'],['yard','Yard','🌳'],['garage','Garage','🚗'],['storage','Storage Room','📦'],['bedroom','Bedroom','🛏️'],['stairs','Stairs','🪜']];
+// Used once to sort chores that have no room yet (old saves, backups, defaults). Parents can change any of them.
+const ROOM_RULES = [['upbath',['bathroom','toilet','mirror','teeth','shower']],['kitchen',['dish','kitchen']],['bedroom',['bedroom','desk','clothes ready','bedtime','wake up','backpack','cords']],['laundry',['laundry','clothes','dryer']],['yard',['yard','weed','creek','branch','bush','hammock','dog','curb']],['garage',[' car']],['stairs',['stairs ']],['living',['living','dining','toys','video games','shoes','table','counter']]];
+const guessRoom = (name, ids) => { const n = ' ' + String(name).toLowerCase(); const hit = ROOM_RULES.find(([id, keys]) => ids.includes(id) && keys.some(k => n.includes(k))); return hit ? hit[0] : ''; };
+const defRooms = () => DEFAULT_ROOMS.map(r => ({id:r[0], name:r[1], icon:r[2]}));
 const num = (v, f = 0) => { const n = Number(v); return Number.isFinite(n) ? n : f; };
 const defKids = () => [{id:'child1',name:'Dr. Plague'},{id:'child2',name:'Dressy Girl'}];
-const defChores = () => DEFAULTS.map((c, i) => ({id:'c'+i, name:c[0], price:c[1], target:'both', dueDate:''}));
+const defChores = () => DEFAULTS.map((c, i) => ({id:'c'+i, name:c[0], price:c[1], target:'both', room:guessRoom(c[0], DEFAULT_ROOMS.map(r => r[0])), dueDate:''}));
 const rand = (a, b) => a + Math.random() * (b - a);
 
 // Validates any state-shaped object (remote, local, or restored backup) and migrates the old omni/zaia ids.
@@ -290,9 +320,14 @@ function clean(r) {
     status:['pending','approved','partial','declined'].includes(h?.status) ? h.status : 'pending',
     earned:num(h?.earned), time:String(h?.time || new Date().toLocaleString())
   }));
+  const rooms = Array.isArray(r.rooms)
+    ? r.rooms.map((x, i) => ({id:String(x?.id || 'room'+i), name:String(x?.name || '').trim() || 'Room '+(i+1), icon:String(x?.icon || '🏠')}))
+    : defRooms();
+  const roomIds = rooms.map(x => x.id);
   const chores = Array.isArray(r.chores) ? r.chores.map((c, i) => ({
     id:String(c?.id || 'c_r'+i+'_'+Date.now()), name:String(c?.name || 'Unnamed Chore'), price:num(c?.price),
     target:c?.target === 'both' || ids.includes(c?.target) ? c.target : (leg[c?.target] || 'both'),
+    room:roomIds.includes(c?.room) ? c.room : (c?.room === undefined ? guessRoom(c?.name || '', roomIds) : ''),
     dueDate:typeof c?.dueDate === 'string' ? c.dueDate : ''
   })) : defChores();
   const totals = {}, balances = {};
@@ -301,18 +336,18 @@ function clean(r) {
     balances[id] = num(legacy(r.balances, id), 200);
   });
   return {
-    chores, history, totals, balances, children:kids,
+    chores, history, totals, balances, children:kids, rooms,
     appTitle:typeof r.appTitle === 'string' && r.appTitle.trim() ? r.appTitle.trim() : DEFAULT_TITLE,
     parentPassword:typeof r.parentPassword === 'string' && r.parentPassword ? r.parentPassword : PASS
   };
 }
 const read = k => { try { return JSON.parse(localStorage.getItem(V + k)); } catch { return null; } };
-const localState = () => clean({chores:read('_types'), history:read('_history'), totals:read('_totals'), balances:read('_balances'), children:read('_children'), appTitle:localStorage.getItem(V+'_appTitle'), parentPassword:localStorage.getItem(V+'_parentPassword')});
+const localState = () => clean({chores:read('_types'), history:read('_history'), totals:read('_totals'), balances:read('_balances'), children:read('_children'), rooms:read('_rooms'), appTitle:localStorage.getItem(V+'_appTitle'), parentPassword:localStorage.getItem(V+'_parentPassword')});
 const writeLocal = s => {
   try {
     localStorage.setItem(V+'_types', JSON.stringify(s.chores)); localStorage.setItem(V+'_history', JSON.stringify(s.history));
     localStorage.setItem(V+'_totals', JSON.stringify(s.totals)); localStorage.setItem(V+'_balances', JSON.stringify(s.balances));
-    localStorage.setItem(V+'_children', JSON.stringify(s.children)); localStorage.setItem(V+'_appTitle', s.appTitle);
+    localStorage.setItem(V+'_children', JSON.stringify(s.children)); localStorage.setItem(V+'_rooms', JSON.stringify(s.rooms)); localStorage.setItem(V+'_appTitle', s.appTitle);
     localStorage.setItem(V+'_parentPassword', s.parentPassword);
   } catch (e) { console.error('Local save failed:', e); }
 };
@@ -323,7 +358,7 @@ Vue.createApp({
       state:clean(), user:null, saveTimer:null, now:Date.now(), term:'',
       authRequired:true, authEmail:'', authPassword:'', newPassword:'', showReset:false, authMessage:'', authError:false,
       adminLocked:true, showPassModal:false, passInput:'', passErr:'',
-      nc:{name:'', price:'', date:'', time:''}, newParentPass:'', parentPassMsg:'', parentPassErr:false,
+      openRoom:{}, nc:{name:'', price:'', date:'', time:'', room:''}, newParentPass:'', parentPassMsg:'', parentPassErr:false,
       appTitleInput:'', childMsg:'', childMsgErr:false,
       splash:{show:false, cls:'', title:'', emoji:'', items:[]},
       ambient:Array.from({length:18}, () => {
@@ -363,7 +398,8 @@ Vue.createApp({
       return (c.name + ' ' + who).toLowerCase().includes(this.q);
     },
     choresFor(id) {
-      return this.state.chores.filter(c => (c.target === 'both' || c.target === id) && this.matches(c)).sort((a, b) => a.name.localeCompare(b.name));
+      const room = this.openRoom[id];
+      return this.state.chores.filter(c => (c.target === 'both' || c.target === id) && this.matches(c) && (this.q || room == null || c.room === room)).sort((a, b) => a.name.localeCompare(b.name));
     },
     setAuth(msg, err = false) { this.authMessage = msg; this.authError = err; },
     // ---------- persistence ----------
@@ -472,10 +508,10 @@ Vue.createApp({
     },
     archiveItem(id) { this.state.history = this.state.history.filter(x => x.id !== id); },
     addNewChore() {
-      const { name, price, date, time } = this.nc;
+      const { name, price, date, time, room } = this.nc;
       if (!name.trim() || price === '' || !Number.isFinite(Number(price))) return;
-      this.state.chores.push({id:'c'+Date.now(), name:name.trim(), price:Number(price), target:'both', dueDate:date ? date + 'T' + (time || '23:59') : ''});
-      this.nc = {name:'', price:'', date:'', time:''};
+      this.state.chores.push({id:'c'+Date.now(), name:name.trim(), price:Number(price), target:'both', room, dueDate:date ? date + 'T' + (time || '23:59') : ''});
+      this.nc = {name:'', price:'', date:'', time:'', room};
     },
     remChoreType(id) { if (confirm('Delete this chore template?')) this.state.chores = this.state.chores.filter(c => c.id !== id); },
     // ---------- children / title ----------
@@ -495,6 +531,22 @@ Vue.createApp({
       this.state.chores.forEach(c => { if (c.target === id) c.target = 'both'; });
       delete this.state.totals[id]; delete this.state.balances[id];
       this.childNote('Child removed.');
+    },
+    // ---------- rooms ----------
+    roomName(id) { const r = this.state.rooms.find(x => x.id === id); return r ? r.name : 'Other'; },
+    roomTiles(childId) {
+      const mine = this.state.chores.filter(c => c.target === 'both' || c.target === childId);
+      const tiles = this.state.rooms.map(r => ({...r, count:mine.filter(c => c.room === r.id).length}));
+      const other = mine.filter(c => !c.room).length;
+      if (other) tiles.push({id:'', name:'Other', icon:'⭐', count:other});
+      return tiles;
+    },
+    addRoom() { this.state.rooms.push({id:'room' + Date.now(), name:'New Room', icon:'🏠'}); },
+    removeRoom(id) {
+      if (!confirm('Remove this room? Its chores will move to "Other".')) return;
+      this.state.rooms = this.state.rooms.filter(r => r.id !== id);
+      this.state.chores.forEach(c => { if (c.room === id) c.room = ''; });
+      Object.keys(this.openRoom).forEach(k => { if (this.openRoom[k] === id) this.openRoom[k] = null; });
     },
     // ---------- backup / restore / reset ----------
     async exportData() {
